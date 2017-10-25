@@ -1,0 +1,262 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+/****util ****/
+.bordered {
+  border: 2px solid black;
+  border-collapse: collapse;
+}
+
+.confirm-button {
+  font-size: 1.5em;
+  width: 225px;
+  height: 45px;
+  border-radius: 15px;
+  background-color: blue;
+  color: lightgrey;
+}
+
+/**** header-section ******/
+header {
+  height: 10vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header nav {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+}
+header nav button {
+  max-width: 200px;
+  flex-grow: 1;
+  font-size: 1.4em;
+}
+header .resource-view {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+}
+header .resource-view div {
+  flex-grow: 1;
+  max-width: 150px;
+  border: 1px black solid;
+  margin-left: 1px;
+  margin-right: 1px;
+}
+/**** content-section ******/
+.container {
+  display: flex;
+}
+.building-menu {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  position: relative;
+  background-color: grey;
+  flex-shrink: 2;
+}
+.building-menu .building{
+  box-sizing: border-box;
+  height: 100px;
+  margin: 0px;
+  flex-basis: 50%;
+  padding-left: 2.5%;
+  padding-right: 2.5%;
+}
+.building-menu .building:hover{
+  background-color: whitesmoke;
+}
+main {
+  flex-basis: 100%;
+  min-height: 70vh;
+}
+/****** stats-overview/compare *******/
+.stats-overview{
+  border: 1px solid black;
+  display: inline-flex;
+  flex-direction: column;
+}
+.stats-entry {
+  display: flex;
+  width: 200px;
+  border: 1px solid grey;
+}
+.stats-entry div {
+  flex-grow: 1;
+  border: 1px solid black;
+  flex-basis: 50%;
+  text-align: center;
+}
+.stats-entry:nth-child(odd) {
+  background-color: grey;
+}
+.stats-compare {
+  width: 300px;
+}
+.stats-compare-entry {
+  width: auto;
+}
+.stats-compare-entry div {
+  flex-basis: 25%px;
+  flex-grow: 1;
+}
+
+.stats-compare-header {
+  background-color: lightgray;
+  display: flex;
+}
+.stats-compare-header div {
+  flex-grow: 1;
+  flex-basis: 25%;
+  text-align: center;
+  border: 1px solid black;
+}
+.stats-compare-even {
+  background-color: yellow;
+}
+
+.stats-compare-better {
+  background-color: ForestGreen;
+}
+
+.stats-compare-worse {
+  background-color: DarkRed;
+}
+/*** Survivor selection***/
+.survivors-selection-panel .stats-overview {
+  display: flex;
+  flex-direction: row;
+}
+.survivors-selection-panel .survivor-panel{
+  border: 1px solid blueviolet;
+  margin: 5px;
+}
+.survivors-selection-panel .survivor-picture{
+  width: 100px;
+  height: 100px;
+  background-color: Magenta ;
+  border: 1px dotted black;
+  margin: 5px;
+}
+.survivors-selection-panel .personal-panel {
+  display: flex;
+}
+.survivors-selection-panel .stats-entry {
+  display: flex;
+  flex-direction: column;
+}
+.survivors-selection-panel {
+  width: 50%;
+  min-width: 500px;
+}
+.survivors-selection-panel .survivor-panel:hover {
+  outline-style: outset;
+  outline-color: royalblue;
+  background-color: lightgray;
+}
+
+/******** location selection *********/
+.location-selection-panel {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 50%;
+}
+.location-selection-row {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.location-entry {
+  border: 1px solid black;
+  flex-grow: 1;
+  /*background-color: red;*/
+  width: 100px;
+  height: 100px;
+  background-color: Magenta;
+  background-image: url("../assets/images/location-farm.jpg");
+  background-size: cover;
+}
+.location-entry.empty {
+  flex-grow: 1;
+}
+/*** location-attributes ***/
+.location-attributes-panel {
+  background-color: lightgrey;
+  display: flex;
+  flex-direction: column;
+}
+.location-attributes-entry {
+  display: flex;
+  display-direction: row;
+  border: 1px solid black;
+}
+.location-attributes-entry div{
+  flex-grow: 1;
+  flex-basis: 200px;
+  margin: 5px;
+}
+.location-attributes-entry:nth-child(odd){
+  background-color: grey;
+}
+.location-attributes-name {
+  text-align: right;
+}
+
+/*** mission selectiin ***/
+.mission-selection-panel {
+  display: flex;
+}
+.mission-selection-panel > div{
+  /*! display: flex; */
+  height: 100%;
+}
+.mission-selection-active-location-attributes{
+  display: flex;
+  flex-direction: column;
+}
+
+.mission-selection-location-name {
+  text-align: left;
+  font-size: 2em;
+  margin: 5px;
+}
+.mission-selection-panel .mission-selection-active-location {
+  margin: 25px;
+}
+.mission-selection-panel .location-selection-panel,.mission-selection-panel .location-attributes-panel {
+  height: 100%;
+}
+.mission-selection-panel .location-attributes-panel {
+  min-width: 375px;
+}
+.mission-selection-panel .location-selection-panel .location-entry{
+  width: 175px;
+  height: 125px;
+}
+.mission-selection-panel .location-entry:hover{
+    box-shadow: inset 0 0 0 1000px  rgba(35, 252, 0, 0.3);
+}
+.mission-selection-active-selection {
+    box-shadow: inset 0 0 0 1000px  rgba(35, 252, 0, 0.3);
+}
+.survivor-mission-selection-panel {
+  display: flex;
+  flex-direction: row;
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+
+.survivor-mission-selection-panel > div {
+  border: 1px solid black;
+  width: 33%;
+}
+.survivor-mission-selection-panel .survivors-selection-panel{
+  border: 1px solid black;
+}
+#content {
+  overflow-y: scroll;
+}

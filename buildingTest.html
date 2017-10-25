@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <script src="js/Util.js"></script>
+    <script src="js/building.js"></script>
+    <script>
+        (function(){
+            window.addEventListener('load', event => {
+                var b = new Building("test1", "My first Building");
+                console.log(b);
+                b.name("Changed Name");
+                b.description("Hallo Welt");
+                console.log(b);
+                console.log("description of b: " + b.description());
+            });
+        }());
+    </script>
+</head>
+<body>
+
+</body>
+</html>

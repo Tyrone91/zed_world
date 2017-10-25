@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <script src="js/encounter.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/enemy.js"></script>
+    <script src="js/survivor.js"></script>
+    <script src="js/stats.js"></script>
+    <script src="js/location.js"></script>
+    <script>
+        window.addEventListener('load', event => {
+            function zombies(count, options){
+                const res = [];
+                for(let i = 0; i < count; ++i){
+                    res.push(new Zombie());
+                }
+                return res;
+            }
+
+            player = new Survivor("player", "Developer"); //global for testing
+            surv1 = new Survivor("surv1", "Peter");
+            surv2 = new Survivor("surv1", "Max");
+            surv3 = new Survivor("surv1", "Georg");
+            party = [player, surv1, surv2, surv3];
+            player.stats().accuracy(70);
+            surv1.stats().optimalRange(Range.of(5,50)).accuracy(10).speed(10).damage(Range.of(1,1)); //bad assault rifle
+            surv2.stats().optimalRange(Range.of(65,90)).accuracy(80).speed(1).damage(Range.of(2,10)); //sniper
+            surv3.stats().optimalRange(Range.of(10,20)).accuracy(90).speed(1).damage(Range.of(10,15)); //flamethrower
+            environment = new Location("loc1", "Test Arena").baseVisibilityReduction(40);
+            encounter = new Encounter(party, zombies(15) ,environment);
+            encounter.addListener({
+                onRoundEnd: function(encounter, summary){
+                    console.log(summary);
+                },
+                onSurvivorAttack: function(encounter, summary){
+                    const missed = "[" + (summary.missed ? "MISSED" : "HITS") + "]";
+                    console.log("Survivor " + summary.survivor.name() + " attacks at range "+summary.range+". Optional range is "+summary.optimalRange.toString()+"with base accuracy of "+summary.survivor.stats().accuracy()+"% Hitchance " + summary.hitchance + "%. " + missed + " raw: " + summary.missed);
+                },
+                onDamage: function(encounter, aggressor, target, damage){
+                    console.log(aggressor.name() + " inflicted "+damage+" damage");
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <p>
+        Hello World
+    </p>
+</body>
+</html>

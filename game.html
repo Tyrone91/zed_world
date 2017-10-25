@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="css/game.css" type="text/css"/>
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+
+    <script src="js/building.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/loot.js"></script>
+    <script src="js/building-viewer.js"></script>
+    <script src="js/resource-viewer.js"></script>
+    <script src="js/context.js"></script>
+    <script src="js/camp.js"></script>
+    <script src="js/mission.js"></script>
+    <script src="js/survivor.js"></script>
+    <script src="js/gamemath.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/enemy.js"></script>
+    <script src="js/location.js"></script>
+    <script src="js/stats.js"></script>
+    <script src="js/encounter.js"></script>
+    <script src="js/loottable.js"></script>
+    <script src="js/weapongenerator.js"></script>
+
+
+    <script>
+        window.GameContext = new Context();
+        DEFAULT_COMMON_LOOT_TABLE = new LootTable();
+        function Bundle(){
+            const self = this;
+            this._loot = [];
+            this.addItem = function(item){
+                self._loot.push(item);
+            };
+            this.open = function(){
+                const res = [];
+                self._loot.forEach( loot => res.push(loot() ));
+                return res;
+            };
+        }
+        function initCommonLootTable(){
+            const weaponTable = new LootTable();
+            weaponTable.addLoot( () => WeaponGenerator.randomAk47(1), 10, "AK47");
+            weaponTable.addLoot( () => WeaponGenerator.randomM4(1), 10, "M4");
+            weaponTable.addLoot( () => WeaponGenerator.randomHuntingRifle(1), 5, "Hunting-Rifle");
+            console.log("Weapon table");
+            weaponTable.dropChanceList().forEach( entry => console.log(entry.toString()));
+
+            const weaponCache = new LootTable();
+            weaponCache.addLoot( () => [weaponTable.roll(), weaponTable.roll()], 100, "Small Cache");
+            weaponCache.addLoot( () => [weaponTable.roll(), weaponTable.roll(),  weaponTable.roll()], 50, "Medium Cache");
+            weaponCache.addLoot( () => [weaponTable.roll(), weaponTable.roll(),  weaponTable.roll(),  weaponTable.roll()], 25, "Large Cache");
+            console.log("cache table");
+            weaponCache.dropChanceList().forEach( entry => console.log(entry.toString()));
+
+            DEFAULT_COMMON_LOOT_TABLE.addLoot( () => WeaponGenerator.randomAk47(1), 20, "AK47");
+            DEFAULT_COMMON_LOOT_TABLE.addLoot( () => WeaponGenerator.randomM4(1), 20, "M4");
+            DEFAULT_COMMON_LOOT_TABLE.addLoot( () => WeaponGenerator.randomHuntingRifle(1), 15, "Hunting-Rifle");
+            DEFAULT_COMMON_LOOT_TABLE.addLoot( () => new Loot.Wood(100), 25, "Huge Wood");
+            DEFAULT_COMMON_LOOT_TABLE.addLoot( () => new Loot.Stone(100), 25, "Huge Stone");
+            DEFAULT_COMMON_LOOT_TABLE.addLoot( () => new Loot.Food(100), 25, "Huge Food");
+            DEFAULT_COMMON_LOOT_TABLE.addLoot( () => weaponCache.roll() , 10, "Weapon-Cache");
+
+            DEFAULT_COMMON_LOOT_TABLE.dropChanceList().forEach( entry => console.log(entry.toString()));
+        }
+        window.addEventListener('load', event => {
+            initCommonLootTable();
+            GameContext.commonLootTable(DEFAULT_COMMON_LOOT_TABLE);
+            console.log("Loaded");
+            console.log("----------Creating location----------");
+            const location = new Location("city01", "Bremerhaven");
+            location.attributes()
+            .encounterChance(0)
+            .commonItemDropChance(100)
+            .minZombieCount(3)
+            .maxZombieCount(6)
+            .startingRange(50)
+            .visibilityReduction(20);
+
+            console.log("----------Setting up Survivor----------");
+            const party = [];
+            party[0] = new Survivor("survivor01", "Developer");
+            party[0].stats().optimalRange(Range.of(10,50)).accuracy(75).speed(3).damage(Range.of(3,5));
+
+            console.log("----------Setting up Mission----------");
+            const modifier = new LocationAttributes();
+            modifier
+            .encounterChance(1.10)
+            .commonItemDropChance(1.20)
+            .minZombieCount(3)
+            .maxZombieCount(3);
+
+
+            GameContext.addMissionListener(mission => {
+                mission.addLootFoundListener( lootList => {
+                    console.log("LootFound: ");
+                    console.log(lootList);
+                });
+            });
+            GameContext.forceMission(party, location, modifier);
+        });
+    </script>
+</head>
+<body>
+
+</body>
+</html>

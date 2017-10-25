@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <script src="js/Util.js"></script>
+    <script src="js/loot.js"></script>
+    <script>
+        (function(){
+            window.addEventListener('load', event => {
+                var res = new Loot.Resource('wood', 'wood');
+                console.log(res);
+                var wood = new Loot.Wood('Woodpile', 100);
+                console.log(wood);
+            });
+        }());
+    </script>
+</head>
+<body>
+
+</body>
+</html>
