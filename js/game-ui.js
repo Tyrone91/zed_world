@@ -1,4 +1,4 @@
-(function(){
+function initUI(windowManager){
     const BuildingMenu = function(){
 
     }
@@ -261,8 +261,13 @@
             confirmButtn.on("click", event => {
                 onMissionStart(selectedSurvivor, location);
             });
+            const backBttn = $("<button>").addClass("confirm-button").text("Back");
+            backBttn.on("click", e => {
+                windowManager.pop();
+            });
             locationContainer.html(LocationAttributesOverview(attributes))
-            .append(confirmButtn);
+            .append(confirmButtn)
+            .append(backBttn);
         }
 
         const leftToRight = function(element, survivor){
@@ -293,7 +298,8 @@
         let selectedLocation = null;
         const switchToSurvivorSelection = function(){
             const content = SurvivorMissionSelection(selectedLocation, context.survivors().filter(s => s.currentState() === Survivor.State.Idle),onMissionStart );
-            domElement.html(content);
+            //domElement.html(content);
+            windowManager.push( () => content);
         };
 
         const leftPanel = $('<div>');
@@ -348,4 +354,4 @@
     window.addEventListener("load", event => {
 
     });
-}());
+}

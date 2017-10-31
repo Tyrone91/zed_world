@@ -22,6 +22,7 @@
     <script src="js/loottable.js"></script>
     <script src="js/weapongenerator.js"></script>
     <script src="js/game-ui.js"></script>
+    <script src="js/windowmanager.js"></script>
     <script>
         function initMissionMap(map){
             const smallCity = new Location("small_city", "Small City");
@@ -55,16 +56,23 @@
         window.GameContext.addSurvivor(new Survivor("survivor1", "Tyrone")).addSurvivor(new Survivor("survivor2", "Pete")).addSurvivor(new Survivor("survivor3", "Marc Steel"));
         window.GameContext.addSurvivor(new Survivor("survivor4", "The Developer"));
         initMissionMap(window.GameContext.missionMap());
+        const context = window.GameContext;
+        
         window.addEventListener('load', e =>  {
+            context.windowManager().target($('#content'));
+            initUI(context.windowManager());
             $('#bttn-character-overview').on('click', e => {
                 const survivorList = window.GameContext.survivors();
-                $('#content').empty().append(GAME_UI.SurvivorSelection(survivorList));
+                /* $('#content').empty().append(GAME_UI.SurvivorSelection(survivorList)); */
+                context.windowManager().push( () => GAME_UI.SurvivorSelection(survivorList));
+
             });
             $('#bttn-missions-overview').on('click', e => {
                 const startMission =  function(party, location){
                     window.GameContext.forceMission(party,location);
                 };
-                $('#content').empty().append(GAME_UI.MissionSelection(window.GameContext,startMission));
+                //$('#content').empty().append(GAME_UI.MissionSelection(window.GameContext,startMission));
+                context.windowManager().set( () => GAME_UI.MissionSelection(window.GameContext,startMission));
             });
         });
     </script>

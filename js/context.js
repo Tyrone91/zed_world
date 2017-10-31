@@ -10,6 +10,7 @@ function Context(options){
     this._missionListener = [];
     this._survivors = [];
     this._missionMap = options.missionMap || new MissionMap();
+    this._windowManager = options.windowManager || new WindowManager();
 }
 
 Context.prototype = {
@@ -23,6 +24,9 @@ Context.prototype = {
             new Buildings.ShootingRange().level(0),
             new Buildings.CommandCenter().level(0)
         ];
+    },
+    windowManager: function(value){
+        return Util.setOrGet(this, "_windowManager", value);
     },
     commonLootTable: function(value){
         return Util.setOrGet(this, "_commonLootTable",value);

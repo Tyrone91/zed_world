@@ -2,6 +2,11 @@
   margin: 0px;
   padding: 0px;
 }
+
+body {
+  height: 100vh;
+  width: 100vw;
+}
 /****util ****/
 .bordered {
   border: 2px solid black;
@@ -49,6 +54,7 @@ header .resource-view div {
 /**** content-section ******/
 .container {
   display: flex;
+  height: 100%;
 }
 .building-menu {
   display: flex;
