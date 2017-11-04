@@ -81,28 +81,14 @@ header .resource-view div {
   display: flex;
   height: 100%;
 }
-.building-menu {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  position: relative;
-  background-color: grey;
-  flex-shrink: 2;
-}
-.building-menu .building{
-  box-sizing: border-box;
-  height: 100px;
-  margin: 0px;
-  flex-basis: 50%;
-  padding-left: 2.5%;
-  padding-right: 2.5%;
-}
-.building-menu .building:hover{
-  background-color: whitesmoke;
-}
 main {
-  flex-basis: 100%;
+  flex-grow: 1;
+  flex-basis: 85%;
   min-height: 70vh;
+}
+
+section {
+  flex-basis: 15%;
 }
 /****** stats-overview/compare *******/
 .stats-overview{
@@ -345,5 +331,56 @@ main {
 
 .mission-report-summary tr:first-child{
   background-color: grey;
+}
+
+/***** survivor quick view list *****/
+.survivor-quick-view-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.survivor-quick-view {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid black;
+  font-size: 0.9em;
+  font-weight: bold;
+  margin: 1px;
+  background-color: lightgray;
+}
+
+.survivor-quick-view:hover{
+  box-shadow:  1px 1px 10px black;
+}
+
+.survivor-quick-view > div, img{
+  flex-grow: 1;
+  
+}
+.survivor-quick-view-name {
+  display: flex;
+  flex-basis: 75px;
+  text-shadow: 1px 1px white;
+}
+
+.survivor-quick-view-state {
+  display: flex;
+  justify-content: end;
+  margin-right: 5px;
+  text-shadow: 1px 1px black;
+}
+
+.survivor-quick-view-name, .survivor-quick-view-state {
+  align-items: center;
+}
+
+.survivor-quick-view-state-idle {
+  color: yellow;
+}
+.survivor-quick-view img {
+  max-width: 30px;
+  max-height: 30px;
+  margin: 2px;
+  border: 1px solid grey;
 }
 

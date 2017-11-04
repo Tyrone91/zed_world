@@ -112,6 +112,7 @@
             map.addLocation(Util.pointOf(0,1),debug2 );
         }
         const tyrone = new Survivor("survivor1", "Tyrone");
+        tyrone.avatar("debug_survivor_avatar.jpg");
         tyrone.stats().health(100).damage(Range.of(25,50)).optimalRange(Range.of(15,50)).speed(4).accuracy(65);
         window.GameContext = new Context();
         window.GameContext
@@ -140,6 +141,8 @@
                 //$('#content').empty().append(GAME_UI.MissionSelection(window.GameContext,startMission));
                 context.windowManager().set( () => GAME_UI.MissionSelection(window.GameContext,startMission));
             });
+
+            $("#quick-view-list").append(GAME_UI.SurvivorQuickViewList(context.survivors()));
         });
     </script>
 </head>
@@ -155,26 +158,7 @@
         <div id="header-resource-viewer" class="resource-view"></div>
     </header>
     <div class="container">
-        <div class="building-menu bordered">
-            <div class="building">
-                Schule
-            </div>
-            <div class="building">
-                Mühle
-            </div>
-            <div class="building">
-                Kaserne
-            </div>
-            <div class="building">
-                Lager
-            </div>
-            <div class="building">
-                Zentrale
-            </div>
-            <div class="building">
-                Unterkünfte
-            </div>
-        </div>
+        <section id="quick-view-list"></section>
         <main id="content" class="bordered">
             Some great stuff here
         </main>

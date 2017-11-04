@@ -3,6 +3,34 @@ function initUI(windowManager){
 
     }
 
+    const SurvivorQuickView = function(survivor, onclick){
+        onclick = onclick || ( () => {});
+        const name = survivor.name();
+        const id = survivor.id();
+        const state = survivor.currentState();
+
+        const domElement = $("<div>").addClass("survivor-quick-view");
+        const avatar = $("<img>").attr("src", "assets/images/" + survivor.avatar());
+        const nameCon = $("<div>").text(name).addClass("survivor-quick-view-name");
+        const stateCon = $("<div>")
+            .text(state)
+            .addClass("survivor-quick-view-state")
+            .addClass("survivor-quick-view-state-"+ state.toLowerCase());
+
+        return domElement
+        .append(avatar)
+        .append(nameCon)
+        .append(stateCon);
+    };
+    
+    const SurvivorQuickViewList = function(survivors){
+        const list = $("<div>").addClass("survivor-quick-view-list");
+        survivors.forEach( sur => {
+            list.append(SurvivorQuickView(sur));
+        });
+        return list;
+    };
+
     const ResourceView = function(source, domElement){
         source.resourcesAsArray().forEach(res => {
             const name = res.name();
@@ -427,7 +455,8 @@ function initUI(windowManager){
         SurvivorSelection: SurvivorSelection,
         LocationSelection: LocationSelection,
         MissionSelection: MissionSelection,
-        MissionReportView: MissionReportView
+        MissionReportView: MissionReportView,
+        SurvivorQuickViewList: SurvivorQuickViewList
     };
     window.addEventListener("load", event => {
 

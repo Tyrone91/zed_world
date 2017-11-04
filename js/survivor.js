@@ -8,6 +8,7 @@ function Survivor(id, name, stats){
     this._glovesEquipment = null;
     this._legEquipment = null;
     this._mainWeapon = null;
+    this._avatar = "generic.jpg"; //TODO you knwo what todo
 
 }
 
@@ -47,6 +48,9 @@ Survivor.prototype = {
     },
     isDead: function(){
         return this._stats.health() <= 0;
+    },
+    avatar: function(value){
+        return Util.setOrGet(this, "_avatar", value);
     }
 
 }
