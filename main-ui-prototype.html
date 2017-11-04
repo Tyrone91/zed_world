@@ -118,7 +118,10 @@
         window.GameContext
         .addSurvivor(tyrone)
         .addSurvivor(new Survivor("survivor2", "Pete"))
-        .addSurvivor(new Survivor("survivor3", "Marc Steel"));
+        .addSurvivor(new Survivor("survivor3", "Marc Steel"))
+        .addSurvivor(new Survivor("survivor4", "NEED MORE GUYS"))
+        .addSurvivor(new Survivor("survivor5", "MOREEEE"))
+        .addSurvivor(new Survivor("survivor6", "DO BABIES!!!"));
         window.GameContext.addSurvivor(new Survivor("survivor4", "The Developer"));
         initMissionMap(window.GameContext.missionMap());
         const context = window.GameContext;
@@ -134,15 +137,13 @@
 
             });
             $('#bttn-missions-overview').on('click', e => {
-                const startMission =  function(party, location){
-                    const mission = window.GameContext.forceMission(party,location);
-                    context.windowManager().set( () => GAME_UI.MissionReportView(mission));
-                };
-                //$('#content').empty().append(GAME_UI.MissionSelection(window.GameContext,startMission));
-                context.windowManager().set( () => GAME_UI.MissionSelection(window.GameContext,startMission));
+                context.windowManager().set( () => GAME_UI.MissionControlUI(window.GameContext));
             });
 
             $("#quick-view-list").append(GAME_UI.SurvivorQuickViewList(context.survivors()));
+            context.addChangeListener( () => {
+                $("#quick-view-list").html(GAME_UI.SurvivorQuickViewList(context.survivors()));
+            });
         });
     </script>
 </head>
@@ -158,7 +159,11 @@
         <div id="header-resource-viewer" class="resource-view"></div>
     </header>
     <div class="container">
-        <section id="quick-view-list"></section>
+        <div class="vertical-align bordered">
+            <section id="quick-view-list"></section>
+            <button id="bttn-end-round" class="end-round-bttn">End Round</button>
+        </div>
+        
         <main id="content" class="bordered">
             Some great stuff here
         </main>

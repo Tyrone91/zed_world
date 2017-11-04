@@ -1,7 +1,50 @@
 function initUI(windowManager){
+    const assets = "assets/";
+    const images = assets + "images/";
+    const jpg = ".jpg";
+
+    const createBackButton = function(text){
+        text = text || "Back";
+        return $("<button>").text(text).addClass("back-button");
+    };
+
+    const createConfirmButton = function(text){
+        text = text || "Confirm";
+        return $("<button>").text(text).addClass("confirm-button");
+    }
+
     const BuildingMenu = function(){
 
-    }
+    };
+
+    const SurvivorAvatarNameTag = function(survivor){
+        const name = survivor.name();
+        const avatar = images + survivor.avatar();
+        const img = $("<img>").attr("src", avatar);
+        return $("<div>").append(img).append($("<div>").text(name) ).addClass("survivor-avatar-name-tag");
+    };
+
+    const MissionQuickView = function(mission, onclick){
+        onclick = onclick || ( () => {} );
+
+        const locationName = mission.environment().name();
+        const survivorContainer = $("<div>").addClass("mission-quick-view-survivor-container");
+        const locationContainer = $("<div>").addClass("mission-quick-view-location-container");
+        locationContainer.append(locationName).append($("<img>").attr("src", images + locationName + jpg));
+        mission.getParty().forEach(surv => {
+            survivorContainer.append(SurvivorAvatarNameTag(surv) );
+        });
+        return $("<div>")
+            .append(locationContainer)
+            .append(survivorContainer)
+            .addClass("mission-quick-view");
+    };
+
+    const MissionQuickViewList = function(missions){
+        const list = $("<div>").addClass("mission-quick-view-list");
+        missions.forEach( mission => list.append(MissionQuickView(mission) ));
+        return list;
+    };
 
     const SurvivorQuickView = function(survivor, onclick){
         onclick = onclick || ( () => {});
@@ -285,11 +328,11 @@ function initUI(windowManager){
             attributes.encounterChance(silenceModi); //TODO: Just ui output not affecting anything
             attributes.apply(location.attributes());
 
-            const confirmButtn = $("<button>").addClass("confirm-button").text("Confirm");
+            const confirmButtn = createConfirmButton();
             confirmButtn.on("click", event => {
                 onMissionStart(selectedSurvivor, location);
             });
-            const backBttn = $("<button>").addClass("confirm-button").text("Back");
+            const backBttn = createBackButton();
             backBttn.on("click", e => {
                 windowManager.pop();
             });
@@ -446,7 +489,35 @@ function initUI(windowManager){
         
     
         return domElement.append(headLine).append(lootList).append(summary);
-    }
+    };
+
+    const MissionControlUI = function(context){
+        const self = this;
+        const domElement = $("<div>").addClass("mission-control");
+        const bttnBar = $("<nav>");
+        const bttnNewMission = $("<button>").text("New Mission");
+        const bttnPreparedMission = $("<button>").text("Prepared Missions");
+        const bttnMissionHistory = $("<button>").text("History");
+        bttnBar.append(bttnNewMission).append(bttnPreparedMission).append(bttnMissionHistory);
+        const newMissionSelection = function(){
+            return MissionSelection(context, (survivors, location) =>{
+                context.createMission(survivors, location);
+                windowManager.set( () => MissionControlUI(context));
+            });
+        };
+        bttnNewMission.on("click", e => windowManager.push( () => newMissionSelection() ));
+        const preparedSelected = function(){
+            const render = function(){
+                const domElement = $("<div>");
+                domElement.append(createBackButton().on("click", e => windowManager.pop() ));
+                domElement.append(MissionQuickViewList(context.getPreparedMissions() ));
+                return domElement;
+            };
+            windowManager.push( () => render() );
+        };
+        bttnPreparedMission.on("click", e => preparedSelected() );
+        return domElement.append(bttnBar);
+    };
 
     window.GAME_UI = {
         ResourceView : ResourceView,
@@ -456,7 +527,8 @@ function initUI(windowManager){
         LocationSelection: LocationSelection,
         MissionSelection: MissionSelection,
         MissionReportView: MissionReportView,
-        SurvivorQuickViewList: SurvivorQuickViewList
+        SurvivorQuickViewList: SurvivorQuickViewList,
+        MissionControlUI: MissionControlUI
     };
     window.addEventListener("load", event => {
 
