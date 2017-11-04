@@ -15,7 +15,8 @@ function Survivor(id, name, stats){
 Survivor.State = {
     Idle: 'IDLE',
     Training: 'TRAINING',
-    OnMission: 'ONMISSION'
+    OnMission: 'ONMISSION',
+    Preparing: 'PREPARING'
 }
 
 Survivor.prototype = {

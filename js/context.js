@@ -1,3 +1,8 @@
+/**
+ * Create a new holder Object for the game with all needed informations
+ * @constructor
+ * @param {object} options 
+ */
 function Context(options){
     const self = this;
     options = options || {};
@@ -11,9 +16,26 @@ function Context(options){
     this._survivors = [];
     this._missionMap = options.missionMap || new MissionMap();
     this._windowManager = options.windowManager || new WindowManager();
+    this._callOnChangeCallbacks = [];
+    this._preparedMissions = [];
 }
 
 Context.prototype = {
+    _onRoundEnd: function(){
+        const self = this;
+        this._preparedMissions().forEach(mission => {
+            mission.addLootFoundListener( (lootList) => {
+                self._camp.addToInventory(lootList); // Camps dont have an inventory anymore. context will hold it. refactoring
+            });
+            self._missionListener.forEach(listener => listener(mission));
+            mission.start()
+        });
+        this._preparedMissions = [];
+        this._notifyUpdate();
+    },
+    _notifyUpdate: function(){
+        this._callOnChangeCallbacks.forEach( callback => callback());
+    },
     _defaultBuildings: function(){
         return [
             new Buildings.Mill(1).level(1),
@@ -51,7 +73,7 @@ Context.prototype = {
     addMissionListener: function(callback){
         this._missionListener.push(callback);
     },
-    forceMission(party, location, modifier){
+    forceMission: function(party, location, modifier){
         modifier = modifier || new LocationAttributes();
         const self = this;
         const mission = new Mission({
@@ -91,23 +113,104 @@ Context.prototype = {
         mission.start();
         return mission;
     },
+
+    /**
+     * Creates a new mission that will be added to the preparedMissions
+     * and will be started on round end.
+     * 
+     * @param {[Survivor]} party The selected Survivors for the mission
+     * @param {Location} selectedLocation The location that will be used for the mission
+     * @param {LocationAttributes} gameModifier Optinal modifier. If not used defaults will be applied
+     * @returns {Mission}
+     */
+    createMission: function(party, selectedLocation, gameModifier){
+        gameModifier = gameModifier || new LocationAttributes();
+        const self = this;
+        const mission = new Mission({
+            party: party,
+            environment: selectedLocation,
+            modifier: gameModifier,
+            extraordinaryLootTable: self._extraordinaryLootTable,
+            commonLootTable: self._commonLootTable,
+            rareLootTable: self._rareLootTable
+        });
+        this.addPreparedMission(mission);
+        return mission;
+    },
     addSurvivor: function(survivor){
         this._survivors.push(survivor);
+        this._notifyUpdate();
         return this;
     },
-    remvoeSurvivor: function(survivor){
+    removeSurvivor: function(survivor){
         const index = this._survivors.indexOf(survivor);
         if(index !== -1){
             this._survivors.splice(index,1);
         }
+        this._notifyUpdate();
         return this;
     },
+
+    /**
+     * Returns all survivors bound the this context;
+     * @return {[Survivor]}
+     */
     survivors: function(){
         return this._survivors;
     },
 
+    /**
+     * Getter or setter for the used mission map
+     * @param {MissionMap} value The new mission map | Optional
+     * @return {MissionMap|Context} 
+     */
     missionMap: function(value){
         return Util.setOrGet(this, "_missionMap", value);
+    },
+    /**
+     * Adds a listener to the context that will be called for every state in the game.
+     * Useful for updating UI-Content. Caller is responsible for filtering.
+     * @param {function} callback
+     */
+    addChangeListener: function(callback){
+        this._callOnChangeCallbacks.push(callback);
+    },
+
+    /**
+     * Adds a mission that will be started if the rounds end.
+     * The mission can sill be modified/removed before round end.
+     * After the mission got fired it will be removed automatically.
+     * @param {Mission} mission 
+     * @returns {Context}
+     */
+    addPreparedMission: function(mission){
+        this._preparedMissions.push(mission);
+        mission.getParty().forEach(surv => surv.currentState(Survivor.State.Preparing) );
+        this._notifyUpdate();
+        return this;
+    },
+
+    getPreparedMissions: function(){
+        return this._preparedMissions;
+    },
+
+    removePreparedMission: function(mission){
+        const index = this._preparedMissions.findIndex(mission);
+        if(index === -1){
+            this._preparedMissions.splice(index,1).forEach(surv => surv.currentState(Survivor.State.Preparing) );
+        }
+        return this;
+    },
+
+    /**
+     * Ends the current round.
+     * Will fire all onRoundEnd callbacks
+     * 
+     * @returns {Context}
+     */
+    endRound: function(){
+        this._onRoundEnd();
+        return this;
     }
 
 }
