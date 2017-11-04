@@ -6,6 +6,9 @@
 body {
   height: 100vh;
   width: 100vw;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
 }
 /****util ****/
 .bordered {
@@ -13,18 +16,56 @@ body {
   border-collapse: collapse;
 }
 
+.vertical-align {
+  display: flex;
+  flex-direction: column;
+}
+
+.back-button,
+.menu-button,
+.confirm-button,
+nav > button
+{
+  width: 200px;
+  height: 55px;
+  font-size: 1.2em;
+  text-shadow: 1px 1px black;
+  color:  white;
+  box-shadow: 1px 1px 2px black;
+  border: 1px solid black;
+  margin: 2px;
+}
+.menu-button, nav > button {
+  background: linear-gradient(red,black);
+  color: white;
+}
+.menu-button:hover, nav > button:hover{
+   box-shadow: 1px 1px 5px black;
+   background: linear-gradient(darkorange,black);
+   border: 2px solid white;
+}
+
 .confirm-button {
-  font-size: 1.5em;
-  width: 225px;
-  height: 45px;
-  border-radius: 15px;
-  background-color: blue;
-  color: lightgrey;
+  background-color: lightgreen;
+  background: linear-gradient(lightgreen, green);
+}
+.confirm-button:hover{
+  box-shadow: 1px 1px 5px black;
+  background: linear-gradient(lightgreen, darkgreen);
+}
+
+.back-button {
+  background-color: red;
+  background: linear-gradient(orange, darkred);
+}
+.back-button:hover{
+  box-shadow: 1px 1px 5px black;
+  background: linear-gradient(red, darkred);
 }
 
 /**** header-section ******/
 header {
-  height: 10vh;
+  height: 10%;
   display: flex;
   flex-direction: column;
 }
@@ -79,16 +120,50 @@ header .resource-view div {
 /**** content-section ******/
 .container {
   display: flex;
-  height: 100%;
+  flex-grow: 1;
+  max-height: 90%;
 }
 main {
   flex-grow: 1;
   flex-basis: 85%;
-  min-height: 70vh;
+  max-height: 100%;
 }
 
 section {
   flex-basis: 15%;
+  flex-grow: 1;
+}
+
+.end-round-bttn {
+  height: 50px;
+  font-size: 1.1em;
+  box-shadow: 1px 1px 5px black;
+  text-shadow: 1px 1px 1px white;
+  color: black;
+  background-color: lightgreen;
+}
+.end-round-bttn:hover{
+  box-shadow: 1px 1px 10px green;
+  font-size: 1.15em;
+}
+#bttn-end-round {
+  margin: 5px;
+}
+
+/***** Survivor Avatar Name Tag*****/
+.survivor-avatar-name-tag {
+  display: inline-flex;
+  flex-direction: row;
+}
+.survivor-avatar-name-tag img{
+  max-width: 30px;
+  max-height: 30px;
+  margin: 5px;
+  flex-grow: 1;
+}
+.survivor-avatar-name-tag div{
+  margin: auto;
+  flex-grow: 1;
 }
 /****** stats-overview/compare *******/
 .stats-overview{
@@ -346,7 +421,8 @@ section {
   font-size: 0.9em;
   font-weight: bold;
   margin: 1px;
-  background-color: lightgray;
+  /*background-color: lightgray;*/
+  background: linear-gradient(lightgray, white);
 }
 
 .survivor-quick-view:hover{
@@ -377,10 +453,59 @@ section {
 .survivor-quick-view-state-idle {
   color: yellow;
 }
+.survivor-quick-view-state-preparing {
+  color: green;
+}
 .survivor-quick-view img {
   max-width: 30px;
   max-height: 30px;
   margin: 2px;
   border: 1px solid grey;
 }
+/******* Mission Control UI *******/
+.mission-control nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  border: 1px solid black;
+}
+.mission-control button{
+  margin: 2px;
+}
+/******* Mission Quick View *****/
+.mission-quick-view-list {
+  display: flex;
+  flex-direction: column;
+}
 
+.mission-quick-view {
+  display: flex;
+  border: 1px solid black;
+  margin: 3px;
+  max-height: 130px;
+  flex-basis: 130px;
+}
+.mission-quick-view-survivor-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.mission-quick-view-location-container{
+  font-size: 0.7em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  word-wrap: break-word;
+  max-width: 100px;
+  text-align: center;
+  margin: 3px;
+}
+
+.mission-quick-view-location-container img{
+  width: 100px;
+  height: 100px;
+  max-width: 100px;
+  max-height: 100px;
+  margin: auto;
+}
