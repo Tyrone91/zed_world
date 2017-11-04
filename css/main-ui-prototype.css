@@ -9,6 +9,7 @@ body {
   display: flex;
   flex-direction: column;
   margin: auto;
+  background: linear-gradient(-15deg, orange, orangered);
 }
 /****util ****/
 .bordered {
@@ -41,7 +42,7 @@ nav > button
 }
 .menu-button:hover, nav > button:hover{
    box-shadow: 1px 1px 5px black;
-   background: linear-gradient(darkorange,black);
+   background: linear-gradient(darkred,black);
    border: 2px solid white;
 }
 
@@ -56,11 +57,11 @@ nav > button
 
 .back-button {
   background-color: red;
-  background: linear-gradient(orange, darkred);
+  background: linear-gradient(red, darkred);
 }
 .back-button:hover{
   box-shadow: 1px 1px 5px black;
-  background: linear-gradient(red, darkred);
+  background: linear-gradient(rgb(252, 81, 81),rgb(134, 40, 40));
 }
 
 /**** header-section ******/
