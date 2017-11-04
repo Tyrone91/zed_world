@@ -8,7 +8,7 @@
  */
 function Encounter(party, enemies, environment){
     const self = this;
-    this._party = party;
+    this._party = party.slice();
     this._environment = environment;
     this._enemies = enemies;
     this._listeners = [];
@@ -249,7 +249,7 @@ Encounter.Listener.prototype = {
     onDamage: function(encounter,aggressor, target, damage){},
     onRoundEnd: function(encounter,summary){},
     onAmbush: function(encounter){},
-    onSurvivorAttack: function(encounter, survivor, target, hitChance, range, optimalRange){},
+    onSurvivorAttack: function(encounter, summary){},
     onVictory: function(encounter){},
     onDefeat: function(encounter){}
 }

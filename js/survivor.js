@@ -44,6 +44,9 @@ Survivor.prototype = {
     },
     mainWeapon: function(value){
         return Util.setOrGet(this, "_mainWeapon", value);
+    },
+    isDead: function(){
+        return this._stats.health() <= 0;
     }
 
 }

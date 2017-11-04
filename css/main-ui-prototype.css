@@ -51,6 +51,31 @@ header .resource-view div {
   margin-left: 1px;
   margin-right: 1px;
 }
+
+/***** loot-item-view*******/
+.loot-item-view {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  margin: 5px;
+  
+}
+.loot-item-icon {
+  width: 150px;
+  height: 150px;
+  background-color: blueviolet;
+  border: 1px solid black;
+  margin: 3px;
+}
+
+.loot-item-icon img{
+  max-width: 100%;
+  max-heigt: 100%;
+}
+.loot-item-name{
+  text-align: center;
+}
+
 /**** content-section ******/
 .container {
   display: flex;
@@ -266,3 +291,59 @@ main {
 #content {
   overflow-y: scroll;
 }
+
+/****** mission-report ***********/
+.mission-report-headline {
+  border: 2px solid black;
+  display: flex;
+  flex-direction: row;
+}
+
+.mission-report-group-list {
+  background-color: lightgrey;
+  display: flex;
+  flex-direction: column;
+}
+
+.mission-report-group-list > div {
+  border: 1px solid black;
+  flex-grow: 1;
+  padding: 0px 5px 0px 5px;
+}
+
+.mission-report-dead { 
+  color: grey;
+  text-decoration: underline;
+  text-decoration-color: red;
+}
+
+.mission-report-alive{
+  text-decoration: underline;
+  text-decoration-color: green;
+}
+
+.mission-report-loot-list {
+  display: flex;
+}
+
+.mission-report-summary button {
+  width: 25px;
+  height: 25px;
+}
+.mission-report-summary table{
+  
+}
+
+.mission-report-summary td, th{
+  border: 1px solid black;
+  padding: 5px;
+  text-align: center;
+}
+.mission-report-summary tr:nth-child(odd){
+  background-color: lightgrey;
+}
+
+.mission-report-summary tr:first-child{
+  background-color: grey;
+}
+

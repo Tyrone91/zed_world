@@ -22,7 +22,8 @@ LootTable.prototype = {
             count = max;
             const data = {
                 range: Range.of(min,max),
-                onDrop: entry.onDrop
+                onDrop: entry.onDrop,
+                name: entry.name
             };
             this._rangeList.push(data);
         });
@@ -36,6 +37,15 @@ LootTable.prototype = {
             const max = entry.range.upper();
             if(weightRoll >=  min && weightRoll < max){
                 loot = entry.onDrop();
+                if(loot){
+                    loot = { 
+                        drop: loot,
+                        name: function(){ // Not realy necceary but we treat name in the whole program as function so consistent
+                            return entry.name;
+                        },
+                        lootName: entry.name
+                    };
+                }
             }
         });
         if(loot){ // looks stupid but null is not undefined and I don't want set loot explicit to undefined

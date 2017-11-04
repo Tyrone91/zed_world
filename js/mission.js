@@ -1,6 +1,5 @@
 function Mission(options){
     /**
-     * [_missionModifier description]
      * @type {LocationAttributes}
      */
     this._missionModifier = options.modifier || new LocationAttributes();
@@ -17,6 +16,7 @@ function Mission(options){
     this._missionFailedListener = [];
     this._encounterHappensListener = [];
     this._lootFoundListener = [];
+    this._missionReport = new MissionReport(this);
 }
 
 Mission.prototype = {
@@ -27,6 +27,9 @@ Mission.prototype = {
             res.push(new Zombie());
         }
         return res;
+    },
+    getMissionReport: function(){
+        return this._missionReport;
     },
     environment: function(value){
         return Util.setOrGet(this, "_environment", value);
@@ -107,7 +110,79 @@ Mission.prototype = {
             onSuccessfulMission();
         }
     },
-    update: function(elapsedTime){
+    getParty: function(){
+        return this._party;
+    }
+}
 
+/**
+ * 
+ * @param {Mission} source 
+ */
+function MissionReport(source){
+    this._source = source;
+    this._lootResult = null;
+    this._enemiesKilld = 0;
+    this._survivorsKilled = 0;
+    this._details = [];
+    this._missionState = "SUCCESSFUL";
+    const self = this;
+    source.addMissionFailedListener( () => self._missionState = "FAILED");
+    source.addMissionSuccessListener( () => self._missionState = "SUCCESSFUL");
+    source.addLootFoundListener( (lootList) => self._lootResult = lootList ? lootList : null );
+    source.addEncounterListener( encounter => self._collectEncounterData(encounter));
+}
+
+MissionReport.prototype ={
+    /**
+     * @param {Encounter} encounter
+     */
+    _collectEncounterData: function(encounter){
+        const self = this;
+        const listener = new Encounter.Listener();
+        listener.onDeath =  () => ++self._survivorsKilled;
+        listener.onKill = () => ++self._enemiesKilld;
+
+        let roundSummary = {};
+        listener.onNewRound = (e , sum) => {
+            roundSummary.distance = sum.distance;
+            roundSummary.aliveSurvivors = sum.survivor;
+            roundSummary.enemies = sum.enemies;
+            roundSummary.actions = [];
+        };
+        listener.onRoundEnd = () => {
+            self._details.push(roundSummary);
+            roundSummary = {};
+        };
+        listener.onSurvivorAttack = (e, summary) => {
+            const detail = {
+                attacker: summary.survivor.name(),
+                range: summary.range,
+                target: summary.target.name(),
+                optimalRange: summary.optimalRange,
+                hitchance: summary.hitchance,
+                missed: summary.missed
+            };
+            roundSummary.actions.push(detail);
+        };
+        encounter.addListener(listener);
+    },
+    hasLoot: function(){
+        return this._lootResult != null;
+    },
+    getLoot: function(){
+        return this._lootResult ? this._lootResult : [];
+    },
+    getEnemiesKilled: function(){
+        return this._enemiesKilld
+    },
+    getSurvivorsKilled: function(){
+        return this._survivorsKilled;
+    },
+    getRoundDetails: function(){
+        return this._details ? this._details : [];
+    },
+    getMissionState: function(){
+        return this._missionState;
     }
 }

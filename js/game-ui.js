@@ -341,6 +341,83 @@ function initUI(windowManager){
         .append(leftPanel.append(LocationSelection(worldMap, applyToEntry)))
         .append(rightPanel);
         return domElement;
+    };
+
+    const LootItemView = function(loot, onselect){
+        onselect = onselect || (() => {});
+        const domElement = $("<div>").addClass("loot-item-view");
+        
+        domElement.append($("<div>").addClass("loot-item-icon").append($("<img>").attr("src", "assets/images/" + loot.name() + ".jpg") ) );
+        domElement.append($("<div>").addClass("loot-item-name").text(loot.name() ));
+        return domElement.on("click", event => onselect(loot) );
+    };
+
+    /**
+     * 
+     * @param {Mission} mission 
+     */
+    const MissionReportView = function(mission){
+        const report = mission.getMissionReport();
+        const domElement = $('<div>');
+        const headLine = $('<div>');
+        const groupList = $('<div>').addClass("mission-report-group-list");
+        mission.getParty().forEach( surv => groupList.append($('<div>').text(surv.name()).addClass(surv.isDead() ? "mission-report-dead" : "mission-report-alive") )); //maybe make a link to him??
+
+        headLine
+        .addClass("mission-report-headline")
+        .append(groupList)
+        .append($('<div>').text("Zombies killd: " + report.getEnemiesKilled() ))
+        .append($('<div>').text("Mission: " + report.getMissionState() ));
+
+        const lootList = $("<div>")
+        .addClass("mission-report-loot-list");
+        report.getLoot().forEach( loot => lootList.append(LootItemView(loot)) );
+
+        const summary = $("<div>").addClass("mission-report-summary");
+        const createDetailEntry = function(action){
+            const entry = $("<tr>").addClass("mission-report-detail-entry");
+
+           
+
+            entry.append($("<td>").text(action.attacker) );
+            entry.append($("<td>").text(action.target) );
+            entry.append($("<td>").text(action.missed) );
+            entry.append($("<td>").text(action.range) );
+            entry.append($("<td>").text(action.optimalRange) );
+            entry.append($("<td>").text(action.hitchance.toFixed(0)) );
+            return entry;
+        };
+        const createRoundSummary = function(round){
+            const roundHeadline = $("<div>").addClass("mission-report-round-headline");
+            const details = $("<table>").hide();
+            const tableHeader = $("<tr>");
+            tableHeader.append($("<th>").text("Survivor") );
+            tableHeader.append($("<th>").text("Target") );
+            tableHeader.append($("<th>").text("Missed") );
+            tableHeader.append($("<th>").text("Distance"));
+            tableHeader.append($("<th>").text("Survivor Optimal Distance") );
+            tableHeader.append($("<th>").text("Hitchance") );
+            details.append(tableHeader);
+            round.actions.forEach( action => details.append(createDetailEntry(action)) );
+            let visible = false;
+            const toggleBttn = $("<button>").text("+").on("click", e => {
+                if(visible){
+                    details.hide(0);
+                    toggleBttn.text("+");
+                }else{
+                    details.show(0);
+                    toggleBttn.text("-");
+                }
+                visible = !visible;
+            });
+            roundHeadline.append(toggleBttn).append("Distance: " + round.distance).append("Zombies: " + round.enemies.length);
+            return $("<div>").append(roundHeadline).append(details);
+        };
+        report.getRoundDetails().forEach(round => summary.append(createRoundSummary(round) ));
+        //const detailList = $('<div>').addClass("mission-report-detail-list");
+        
+    
+        return domElement.append(headLine).append(lootList).append(summary);
     }
 
     window.GAME_UI = {
@@ -349,7 +426,8 @@ function initUI(windowManager){
         StatsCompare: StatsCompare,
         SurvivorSelection: SurvivorSelection,
         LocationSelection: LocationSelection,
-        MissionSelection: MissionSelection
+        MissionSelection: MissionSelection,
+        MissionReportView: MissionReportView
     };
     window.addEventListener("load", event => {
 

@@ -32,7 +32,7 @@ Context.prototype = {
         return Util.setOrGet(this, "_commonLootTable",value);
     },
     extraordinaryLootTable: function(value){
-        return Util.setOrGet(this, ":extraordinaryLootTable",value);
+        return Util.setOrGet(this, "_extraordinaryLootTable",value);
     },
     rareLootTable: function(value){
         return Util.setOrGet(this, "_rareLootTable",value);
@@ -58,9 +58,9 @@ Context.prototype = {
             party: party,
             environment: location,
             modifier: modifier,
-            extraordinaryLootTable: this._exordinaryLootTable,
-            commonLootTable: this._commonLootTable,
-            rareLootTable: this._rareLootTable
+            extraordinaryLootTable: self.extraordinaryLootTable,
+            commonLootTable: self._commonLootTable,
+            rareLootTable: self._rareLootTable
         });
         mission.addEncounterListener(encounter => {
             encounter.addListener({
@@ -77,13 +77,19 @@ Context.prototype = {
             });
         });
         mission.addMissionSuccessListener( () => {
-
+            console.log("------------------------------------------------------------------------");
+            console.log(mission.getMissionReport());
+        });
+        mission.addMissionFailedListener( () => {
+            console.log("------------------------------------------------------------------------");
+            console.log(mission.getMissionReport());
         });
         mission.addLootFoundListener( (lootList) => {
             self._camp.addToInventory(lootList);
         });
         this._missionListener.forEach(listener => listener(mission));
         mission.start();
+        return mission;
     },
     addSurvivor: function(survivor){
         this._survivors.push(survivor);
