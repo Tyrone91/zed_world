@@ -18,18 +18,46 @@ function Context(options){
     this._windowManager = options.windowManager || new WindowManager();
     this._callOnChangeCallbacks = [];
     this._preparedMissions = [];
+    this._missionHistory = [];
 }
 
 Context.prototype = {
     _onRoundEnd: function(){
         const self = this;
-        this._preparedMissions().forEach(mission => {
+        const removeDead = function(mission){
+            mission.getParty().forEach( surv => {
+                if(surv.stats().health() <= 0 ){
+                    self.removeSurvivor(surv);
+                }
+            });
+        };
+        const makeIdle = function(mission){
+            mission.getParty().forEach( surv => {
+                if(surv.stats().health() > 0){
+                    surv.currentState(Survivor.State.Idle);
+                }
+            });
+        };
+        const receiveLoot = function(mission, lootList){
+            lootList.forEach( loot => self._camp.addToInventory(loot.drop));
+        };
+        this._preparedMissions.forEach(mission => {
+            
             mission.addLootFoundListener( (lootList) => {
                 self._camp.addToInventory(lootList); // Camps dont have an inventory anymore. context will hold it. refactoring
             });
             self._missionListener.forEach(listener => listener(mission));
+            mission.addMissionSuccessListener( () => {
+                removeDead(mission);
+                makeIdle(mission);
+            });
+            mission.addMissionFailedListener( () => {
+                removeDead(mission);
+            });
+            mission.addLootFoundListener( lootList => receiveLoot(mission, lootList) );
             mission.start()
         });
+        this._preparedMissions.forEach( mission =>  self._missionHistory.push(mission) );
         this._preparedMissions = [];
         this._notifyUpdate();
     },
@@ -209,8 +237,17 @@ Context.prototype = {
      * @returns {Context}
      */
     endRound: function(){
+        console.log("Round ended");
         this._onRoundEnd();
         return this;
+    },
+
+    getMissionHistory: function(){
+        return this._missionHistory;
+    },
+
+    clearMissionHistory: function(){
+        this._missionHistory = [];
     }
 
 }

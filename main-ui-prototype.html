@@ -111,6 +111,20 @@
             map.addLocation(Util.pointOf(0,0),debug1 );
             map.addLocation(Util.pointOf(0,1),debug2 );
         }
+
+        function initDebugUtils(context){
+            const StrongSurv = new Survivor("Stronk", "Stronk");
+            StrongSurv.stats().health(100).damage(Range.of(10,20)).speed(6).accuracy(70);
+            const weakSurv = new Survivor("Weak", "Weako");
+            context.addSurvivor(StrongSurv);
+            context.addSurvivor(weakSurv);
+
+            const happyLand = new Location("debug_happy_land", "Happy Land");
+            happyLand.attributes().encounterChance(0).commonItemDropChance(50).rareItemDropChance(50).extraordinaryItemDropChance(50);
+            context.createMission([StrongSurv, weakSurv], happyLand);
+            context.missionMap().addLocation(Util.pointOf(2,2), happyLand);
+
+        }
         const tyrone = new Survivor("survivor1", "Tyrone");
         tyrone.avatar("debug_survivor_avatar.jpg");
         tyrone.stats().health(100).damage(Range.of(25,50)).optimalRange(Range.of(15,50)).speed(4).accuracy(65);
@@ -126,14 +140,18 @@
         initMissionMap(window.GameContext.missionMap());
         const context = window.GameContext;
         initLootTable(context);
-        
+        initDebugUtils(context);
+
         window.addEventListener('load', e =>  {
             context.windowManager().target($('#content'));
             initUI(context.windowManager());
             $('#bttn-character-overview').on('click', e => {
                 const survivorList = window.GameContext.survivors();
                 /* $('#content').empty().append(GAME_UI.SurvivorSelection(survivorList)); */
-                context.windowManager().set( () => GAME_UI.SurvivorSelection(survivorList));
+                const onSurvSelection = (con, surv) => {
+                    con.on("click", e => context.windowManager().push( () => GAME_UI.SurvivorOverview(surv) ));
+                };
+                context.windowManager().set( () => GAME_UI.SurvivorSelection(survivorList, onSurvSelection));
 
             });
             $('#bttn-missions-overview').on('click', e => {
@@ -143,6 +161,10 @@
             $("#quick-view-list").append(GAME_UI.SurvivorQuickViewList(context.survivors()));
             context.addChangeListener( () => {
                 $("#quick-view-list").html(GAME_UI.SurvivorQuickViewList(context.survivors()));
+            });
+            $("#bttn-end-round").on("click", event => context.endRound() );
+            $("#bttn-inventory-overview").on("click", event => {
+                context.windowManager().set( () => GAME_UI.InventoryView(window.GameContext.camp() ));
             });
         });
     </script>
@@ -154,7 +176,7 @@
             <button>Overview</button>
             <button id="bttn-missions-overview">Missions</button>
             <button id="bttn-character-overview">Characters</button>
-            <button>Inventory</button>
+            <button id="bttn-inventory-overview">Inventory</button>
         </nav>
         <div id="header-resource-viewer" class="resource-view"></div>
     </header>

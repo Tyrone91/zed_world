@@ -86,7 +86,11 @@ Camp.prototype = {
                 }
             });
         };
-        unpack(itemBundle);
+        if(Array.isArray(itemBundle)){
+            unpack(itemBundle);
+        }else{
+            self._campInventory.push(itemBundle);
+        }
         return this;
     },
     inventory: function(){

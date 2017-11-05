@@ -9,7 +9,8 @@ body {
   display: flex;
   flex-direction: column;
   margin: auto;
-  background: linear-gradient(-15deg, orange, orangered);
+  /* background: linear-gradient(-20deg, darkgreen, black 250%); */
+  background: linear-gradient( grey, white);
 }
 /****util ****/
 .bordered {
@@ -509,4 +510,102 @@ section {
   max-width: 100px;
   max-height: 100px;
   margin: auto;
+}
+
+/****** Survivor Info Panel *******/
+.survivor-info-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.survivor-info-panel > div, .survivor-info-panel img {
+}
+
+.survivor-info-panel img {
+  max-width: 150px;
+  max-height: 150px;
+  width: 150px;
+  height: 150px;
+}
+
+.survivor-info-panel-name {
+  text-align: center;
+  font-size: 1.3em;
+  text-shadow: 1px 1px 5px white;
+  color: black;
+}
+/****** Equipment-Panel *******/
+.equipment-panel {
+  display: flex;
+  flex-direction: column;
+  max-width: 200px;
+  max-height: 200px;
+  
+  width: 150px;
+  height: 150px;
+  justify-content: center;
+  align-items: center;
+}
+.equipment-panel-slot {
+  font-size: 1.2em;
+}
+.equipment-panel-nothing, equipment-panel img {
+  height: 100%;
+  width: 100%;
+  border: 1px solid black;
+  box-shadow: 1px 1px 2px black;
+  flex-grow: 1;
+  background-color: purple;
+}
+
+.equipment-panel-nothing {
+  background: linear-gradient(to bottom, white, grey);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em;
+  color: lightyellow;
+  text-shadow: 1px 1px 1px black;
+  flex-grow: 1;
+}
+
+
+/****** Equip-Panel *******/
+.equip-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.equip-panel > div {
+  display: flex;
+  flex-direction: row;
+}
+
+.equip-panel-row > div{
+  margin: 15px;
+}
+
+/****** Survivor Overview *******/
+
+.survivor-overview .equipment-panel-icon:hover{
+  box-shadow: 2px 2px 15px lightskyblue;
+}
+.survivor-overview {
+  display: flex;
+  flex-direction: row;
+}
+.survivor-overview .survivor-info-panel{
+  margin: 10px;
+}
+.survivor-overview .equip-panel {
+  flex-grow: 1;
+}
+
+/****** inventory *****/
+.inventory-view{
+  display: flex;
+  flex-wrap: wrap;
 }

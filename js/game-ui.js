@@ -3,6 +3,49 @@ function initUI(windowManager){
     const images = assets + "images/";
     const jpg = ".jpg";
 
+
+    const EquipmentPanel = function(equipment, slot, onclick){
+        slot = slot || "Undfined";
+        onclick  = onclick || ( () => {});
+        const domElement = $("<div>").addClass("equipment-panel");
+        domElement.append($("<div>").text(slot).addClass("equipment-panel-slot") );
+        if(equipment){
+            const avatar = $("<img>").attr("src", images + equipment.id() + jpg);
+            domElement.append(avatar).addClass("equipment-panel-icon");
+        }else{
+            domElement.append($("<div>").addClass("equipment-panel-nothing").text("None").addClass("equipment-panel-icon") );
+        }
+        return domElement.on("click", e => onclick(equipment) );
+    };
+
+    const InventoryView = function(inventoryHolder){ //TODO: inly first iteration
+        const domElement = $("<div>").addClass("inventory-view");
+        inventoryHolder.inventory().forEach( item => {
+            if(item instanceof Loot.Equipment){
+                domElement.append(EquipmentPanel(item, item.type() ) );
+            }else if(item instanceof Loot.Resource){
+
+            }
+        });
+        return domElement;
+    };
+    const EquipPanel = function(target){
+        const headElement = $("<div>").append(EquipmentPanel(target.headEquipment(), "Head" ));
+        const bodyElement = $("<div>").append(EquipmentPanel(target.bodyEquipment(), "Body" ));
+        const legElement = $("<div>").append(EquipmentPanel(target.legEquipment(), "Legs" ));
+        const glovesElement = $("<div>").append(EquipmentPanel(target.glovesEquipment(), "Gloves" ));
+        const mainWeaponElement = $("<div>").append(EquipmentPanel(target.mainWeapon(), "Weapon" ));
+
+        const row = function(){
+            return $("<div>").addClass("equip-panel-row");
+        };
+        const domElement = $("<div>").addClass("equip-panel")
+        .append( row().append(headElement) )
+        .append( row().append(glovesElement).append(bodyElement).append(mainWeaponElement) )
+        .append( row().append(legElement) );
+        return domElement; 
+    };
+
     const createBackButton = function(text){
         text = text || "Back";
         return $("<button>").text(text).addClass("back-button");
@@ -37,12 +80,13 @@ function initUI(windowManager){
         return $("<div>")
             .append(locationContainer)
             .append(survivorContainer)
-            .addClass("mission-quick-view");
+            .addClass("mission-quick-view")
+            .on("click", event => onclick(mission) );
     };
 
-    const MissionQuickViewList = function(missions){
+    const MissionQuickViewList = function(missions, onclick){
         const list = $("<div>").addClass("mission-quick-view-list");
-        missions.forEach( mission => list.append(MissionQuickView(mission) ));
+        missions.forEach( mission => list.append(MissionQuickView(mission, onclick) ));
         return list;
     };
 
@@ -63,13 +107,17 @@ function initUI(windowManager){
         return domElement
         .append(avatar)
         .append(nameCon)
-        .append(stateCon);
+        .append(stateCon)
+        .on("click", e => onclick(survivor) );
     };
     
     const SurvivorQuickViewList = function(survivors){
         const list = $("<div>").addClass("survivor-quick-view-list");
+        const openInfoPanel = function(survivor){
+            windowManager.set( () => SurvivorOverview(survivor) );
+        };
         survivors.forEach( sur => {
-            list.append(SurvivorQuickView(sur));
+            list.append(SurvivorQuickView(sur, openInfoPanel));
         });
         return list;
     };
@@ -209,6 +257,30 @@ function initUI(windowManager){
             domElement.prepend(headerEntry);
         }
         return domElement;
+    };
+
+    const SurvivorInfoPanel = function(survivor){
+        const domElement = $("<div>").addClass("survivor-info-panel");
+        const avatar = $("<img>").attr("src", images + survivor.avatar() );
+        const nameCon = $("<div>").text(survivor.name()).addClass("survivor-info-panel-name");
+        const stats = StatsOverview(survivor.stats());
+        return domElement.append(avatar).append(nameCon).append(stats);
+    };
+
+    const SurvivorOverview = function(survivor){
+        const domElement = $("<div>").addClass("survivor-overview");
+        const infoPanel = SurvivorInfoPanel(survivor);
+        const equipmentPanel = EquipPanel(survivor);
+        const controlPanel = $("<nav>").addClass("vertical-align");
+
+        const bttnSendAway = $("<button>").text("Send Away");
+        const bttnRename = $("<button>").text("Rename");
+        const bttnStartTraining = $("<button>").text("Start Training");
+        const bttnStripWeapon = $("<button>").text("Unequip All");
+
+        controlPanel.append(bttnRename).append(bttnStartTraining).append(bttnStripWeapon).append(bttnSendAway);
+
+        return domElement.append(infoPanel).append(equipmentPanel).append(controlPanel);
     };
 
     const SurvivorSelection = function(survivors, applyToEntry){
@@ -516,6 +588,22 @@ function initUI(windowManager){
             windowManager.push( () => render() );
         };
         bttnPreparedMission.on("click", e => preparedSelected() );
+        const missionHistorySelect = function(){
+            const openReport = function(mission){
+                const domElement = $("<div>");
+                domElement.append(createBackButton().on("click", e => windowManager.pop() ));
+                domElement.append(MissionReportView(mission));
+                windowManager.push( () => domElement );    
+            };
+            const render = function(){
+                const domElement = $("<div>");
+                domElement.append(createBackButton().on("click", e => windowManager.pop() ));
+                domElement.append(MissionQuickViewList(context.getMissionHistory(),openReport ));
+                return domElement;
+            };
+            windowManager.push( () => render() );
+        };
+        bttnMissionHistory.on("click", e => missionHistorySelect() );
         return domElement.append(bttnBar);
     };
 
@@ -528,7 +616,9 @@ function initUI(windowManager){
         MissionSelection: MissionSelection,
         MissionReportView: MissionReportView,
         SurvivorQuickViewList: SurvivorQuickViewList,
-        MissionControlUI: MissionControlUI
+        MissionControlUI: MissionControlUI,
+        SurvivorOverview: SurvivorOverview,
+        InventoryView: InventoryView
     };
     window.addEventListener("load", event => {
 

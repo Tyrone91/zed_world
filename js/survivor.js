@@ -8,7 +8,7 @@ function Survivor(id, name, stats){
     this._glovesEquipment = null;
     this._legEquipment = null;
     this._mainWeapon = null;
-    this._avatar = "generic.jpg"; //TODO you knwo what todo
+    this._avatar = "generic.jpg"; //TODO you know what todo
 
 }
 
