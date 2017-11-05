@@ -113,7 +113,7 @@ header .resource-view div {
 
 .loot-item-icon img{
   max-width: 100%;
-  max-heigt: 100%;
+  max-height: 100%;
 }
 .loot-item-name{
   text-align: center;
@@ -285,7 +285,7 @@ section {
 }
 .location-attributes-entry {
   display: flex;
-  display-direction: row;
+  flex-direction: row;
   border: 1px solid black;
 }
 .location-attributes-entry div{
@@ -392,9 +392,6 @@ section {
 .mission-report-summary button {
   width: 25px;
   height: 25px;
-}
-.mission-report-summary table{
-  
 }
 
 .mission-report-summary td, th{
@@ -518,9 +515,6 @@ section {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-}
-
-.survivor-info-panel > div, .survivor-info-panel img {
 }
 
 .survivor-info-panel img {
