@@ -1,3 +1,7 @@
+/**
+ * @constructor
+ * @param {string} name 
+ */
 function Camp(name){
     this._name = Util.require(name);
     this._resources = {};

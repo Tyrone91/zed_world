@@ -124,6 +124,11 @@
             context.createMission([StrongSurv, weakSurv], happyLand);
             context.missionMap().addLocation(Util.pointOf(2,2), happyLand);
 
+            context.camp()
+            .addToInventory(WeaponGenerator.randomAk47() )
+            .addToInventory(WeaponGenerator.randomAk47() )
+            .addToInventory(WeaponGenerator.randomHuntingRifle() );
+
         }
         const tyrone = new Survivor("survivor1", "Tyrone");
         tyrone.avatar("debug_survivor_avatar.jpg");
@@ -141,7 +146,7 @@
         const context = window.GameContext;
         initLootTable(context);
         initDebugUtils(context);
-
+        
         window.addEventListener('load', e =>  {
             context.windowManager().target($('#content'));
             initUI(context.windowManager());

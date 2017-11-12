@@ -71,18 +71,18 @@ WeaponGenerator = {
 
         return res;
     },
-    randomM4: function(level){
+    randomM4: function(level = 1){
         const id = 0;
         return this.randomItem(id, level, WeaponTemplate.M4).makeWeapon().name("M4");
     },
-    randomAk47: function(level){
+    randomAk47: function(level = 1){
         const id = 0;
         return this.randomItem(id, level, WeaponTemplate.AK_74).makeWeapon().name("AK 47");
     },
-    randomMP7: function(level){
+    randomMP7: function(level = 1){
 
     },
-    randomHuntingRifle: function(level){
+    randomHuntingRifle: function(level = 1){
         const id = 0;
         return this.randomItem(id, level, WeaponTemplate.HUNTING_RIFLE).makeWeapon().name("Hunting Rifle");
     }

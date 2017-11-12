@@ -18,23 +18,71 @@ function initUI(windowManager){
         return domElement.on("click", e => onclick(equipment) );
     };
 
-    const InventoryView = function(inventoryHolder){ //TODO: inly first iteration
+    /**
+     * 
+     * @param {[Loot.Equipment]} source 
+     */
+    const EquipmentInventoryTable = function(source, onSelection = (()=>{}) ){
+        const table = $("<table>");
+
+        const head = $("<tr>");
+        const createHead = (...args) => args.forEach( arg => head.append($("<th>").text(arg) ) );
+        createHead("Name", "Damge", "Speed" , "Range", "Accuracy", "Silence", "Health", "Armor", "Awareness");
+
+        table.append(head);
+        /**
+         * @param {Stats} entry 
+         */
+        const createRow = function(item, name, entry){
+            const tr = $("<tr>").append($("<td>").text(name) );
+            const td = (value) => $("<td>").text(value.toString() );
+            const damage = entry.damage();
+            const speed = entry.speed();
+            const optimalRange = entry.optimalRange();
+            const accuracy = entry.accuracy();
+
+            const silence = entry.silence();
+            const health = entry.health();
+            const armor = entry.armor();
+            const awareness = entry.awareness();
+            //TODO: add item icon
+        
+            const glue = (...args) =>args.forEach(value => tr.append(td(value) ));
+            glue(damage,speed,optimalRange,accuracy,silence,health,armor,awareness);
+            return tr.on("click", event => onSelection(item) );
+        };
+        source.forEach( item => table.append(createRow(item, item.name(), item.stats()) ));
+        return table;
+    };
+
+    const InventoryView = function(inventoryHolder, onSelection = (() =>{})){ //TODO: inly first iteration
         const domElement = $("<div>").addClass("inventory-view");
+        const equipmentList = [];
         inventoryHolder.inventory().forEach( item => {
             if(item instanceof Loot.Equipment){
-                domElement.append(EquipmentPanel(item, item.type() ) );
+                equipmentList.push(item);
             }else if(item instanceof Loot.Resource){
 
             }
         });
-        return domElement;
+
+        return domElement.append(EquipmentInventoryTable(equipmentList, onSelection));
     };
-    const EquipPanel = function(target){
+
+    /** @callback EquipPanelOnSelection @param {string} slot */
+    /** @param {EquipPanelOnSelection} onSelection */
+    const EquipPanel = function(target, onSelection = ( (slot) => {}) ){
         const headElement = $("<div>").append(EquipmentPanel(target.headEquipment(), "Head" ));
         const bodyElement = $("<div>").append(EquipmentPanel(target.bodyEquipment(), "Body" ));
         const legElement = $("<div>").append(EquipmentPanel(target.legEquipment(), "Legs" ));
         const glovesElement = $("<div>").append(EquipmentPanel(target.glovesEquipment(), "Gloves" ));
         const mainWeaponElement = $("<div>").append(EquipmentPanel(target.mainWeapon(), "Weapon" ));
+
+        headElement.on("click", event => onSelection(Loot.Equipment.Type.HEAD_ARMOR) );
+        bodyElement.on("click", event => onSelection(Loot.Equipment.Type.BODY_ARMOR) );
+        legElement.on("click", event => onSelection(Loot.Equipment.Type.LEG_ARMOR) );
+        glovesElement.on("click", event => onSelection(Loot.Equipment.Type.GLOVES) );
+        mainWeaponElement.on("click", event => onSelection(Loot.Equipment.Type.WEAPON) );
 
         const row = function(){
             return $("<div>").addClass("equip-panel-row");
@@ -54,7 +102,7 @@ function initUI(windowManager){
     const createConfirmButton = function(text){
         text = text || "Confirm";
         return $("<button>").text(text).addClass("confirm-button");
-    }
+    };
 
     const BuildingMenu = function(){
 
@@ -89,6 +137,8 @@ function initUI(windowManager){
         missions.forEach( mission => list.append(MissionQuickView(mission, onclick) ));
         return list;
     };
+
+    
 
     const SurvivorQuickView = function(survivor, onclick){
         onclick = onclick || ( () => {});
@@ -270,7 +320,20 @@ function initUI(windowManager){
     const SurvivorOverview = function(survivor){
         const domElement = $("<div>").addClass("survivor-overview");
         const infoPanel = SurvivorInfoPanel(survivor);
-        const equipmentPanel = EquipPanel(survivor);
+        /**@param {String} slot */
+        const onSelection = (slot) => {
+            //TODO: For know only open weapons
+            if(slot === Loot.Equipment.Type.WEAPON){
+                windowManager.push( () => InventoryView( window.GameContext.camp(), item => {
+                    item.equipTo(survivor);
+                    const index = window.GameContext.camp().inventory().indexOf(item);
+                    window.GameContext.camp().inventory().splice(index,1);
+                    windowManager.pop();
+                    //TODO: make it better please....
+                }));
+            }
+        };
+        const equipmentPanel = EquipPanel(survivor,onSelection);
         const controlPanel = $("<nav>").addClass("vertical-align");
 
         const bttnSendAway = $("<button>").text("Send Away");

@@ -28,5 +28,8 @@ WindowManager.prototype = {
     },
     target: function(value){
         return Util.setOrGet(this, "_drawTarget", value);
+    },
+    render: function(){
+        this._render();
     }
 }

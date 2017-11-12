@@ -29,6 +29,11 @@ LootTable.prototype = {
         });
         return (weight / totalWeight) * 100;
     },
+    /**
+     * Rolls a random Item with the given weight of this table.
+     * If no Item is selected it returns undefined otherwise the an Object with an attrbiute drop as the loot.
+     * @returns {{drop: Object, lootName: string} | undefined}
+     */
     roll: function(){
         let loot = null;
         const weightRoll = Util.randomInt(0,this._totalWeight());

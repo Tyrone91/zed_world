@@ -77,17 +77,23 @@ Mission.prototype = {
         const extraordinaryLootRoll = Util.randomIntInclusive(0,100);
         const lootHappens = commonLootRoll < missionValues.commonItemDropChance() || rareLootRoll < missionValues.rareItemDropChance() || extraordinaryLootRoll < missionValues.extraordinaryItemDropChance();
 
+       
         const onSuccessfulMission = function(){
             if(lootHappens){
                 const lootList = [];
+                const collect = function(value){
+                    if(value){
+                        lootList.push(value);
+                    }
+                }
                 if(commonLootRoll < missionValues.commonItemDropChance() ){
-                    lootList.push(self._commonLootTable.roll());
+                    collect(self._commonLootTable.roll());
                 }
                 if(rareLootRoll < missionValues.rareItemDropChance() ){
-                    lootList.push(self._rareLootTable.roll());
+                    collect(self._rareLootTable.roll());
                 }
                 if(extraordinaryLootRoll < missionValues.extraordinaryItemDropChance() ){
-                    lootList.push(self._exordinaryLootTable.roll());
+                    collect(self._exordinaryLootTable.roll());
                 }
                 self._lootFoundListener.forEach(listener => listener(lootList));
             }

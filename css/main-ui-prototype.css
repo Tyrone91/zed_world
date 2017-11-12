@@ -113,7 +113,7 @@ header .resource-view div {
 
 .loot-item-icon img{
   max-width: 100%;
-  max-height: 100%;
+  max-heigt: 100%;
 }
 .loot-item-name{
   text-align: center;
@@ -285,7 +285,7 @@ section {
 }
 .location-attributes-entry {
   display: flex;
-  flex-direction: row;
+  display-direction: row;
   border: 1px solid black;
 }
 .location-attributes-entry div{
@@ -393,8 +393,11 @@ section {
   width: 25px;
   height: 25px;
 }
+.mission-report-summary table{
+  
+}
 
-.mission-report-summary td, th{
+.mission-report-summary td, .mission-report-summary th{
   border: 1px solid black;
   padding: 5px;
   text-align: center;
@@ -517,6 +520,9 @@ section {
   align-items: center;
 }
 
+.survivor-info-panel > div, .survivor-info-panel img {
+}
+
 .survivor-info-panel img {
   max-width: 150px;
   max-height: 150px;
@@ -582,6 +588,7 @@ section {
   margin: 15px;
 }
 
+
 /****** Survivor Overview *******/
 
 .survivor-overview .equipment-panel-icon:hover{
@@ -590,6 +597,7 @@ section {
 .survivor-overview {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap-reverse;
 }
 .survivor-overview .survivor-info-panel{
   margin: 10px;
@@ -597,9 +605,46 @@ section {
 .survivor-overview .equip-panel {
   flex-grow: 1;
 }
+.survivor-overview nav {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1500px) { /*** just a fun example */
+  .survivor-overview nav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
 
 /****** inventory *****/
 .inventory-view{
   display: flex;
   flex-wrap: wrap;
+}
+.inventory-view table {
+  width: 100%;
+}
+
+.inventory-view td, .inventory-view th {
+  padding: 5px;
+}
+.inventory-view tr{
+  background-color: wheat;
+}
+.inventory-view td {
+  border: 1px solid black;
+}
+.inventory-view tr:nth-child(odd){
+  background-color: white;
+}
+.inventory-view th{
+  background: linear-gradient( lightsalmon, white);
+  border: 2px outset black;
+}
+.inventory-view tr:hover{
+  box-shadow: 1px 1px 5px black;
+  background: linear-gradient(lightgreen, green);
 }

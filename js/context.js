@@ -90,6 +90,11 @@ Context.prototype = {
     buildings: function(value){
         return Util.setOrGet(this, '_buildings', value);
     },
+
+    /**
+     * @param {Camp|null} value
+     * @returns {Context|Camp}
+     */
     camp: function(value){
         return Util.setOrGet(this,'_camp', value);
     },
@@ -237,8 +242,8 @@ Context.prototype = {
      * @returns {Context}
      */
     endRound: function(){
-        console.log("Round ended");
         this._onRoundEnd();
+        this._windowManager.render();
         return this;
     },
 
