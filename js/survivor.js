@@ -9,7 +9,6 @@ function Survivor(id, name, stats){
     this._legEquipment = null;
     this._mainWeapon = null;
     this._avatar = "generic.jpg"; //TODO you know what todo
-
 }
 
 Survivor.State = {

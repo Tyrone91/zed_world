@@ -102,7 +102,7 @@ Stats.prototype = {
         const upperDmg = operator(this._damage.upper(), stats._damage.upper());
         this._damage.lower(lowerDmg).upper(upperDmg);
 
-        const lowerRange = operator(this._optimalRange.lower(), stats._optimalRange.lower());
+        const lowerRange = operator(this._optimalRange.lower(), stats._optimalRange.lower()); //TODO: Lower-Range we have to treat it different than accuary of something.
         const upperRange = operator(this._optimalRange.upper(), stats._optimalRange.upper());
         this._optimalRange.lower(lowerRange).upper(upperRange);
     }

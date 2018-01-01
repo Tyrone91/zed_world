@@ -66,7 +66,7 @@ var Util = {
             throw "Failed to set or get field of '"+target+"' The object doesn't hava a field: " + name;
         }
         let self = this;
-        if(self.exists(value)){
+        if(typeof value !== 'undefined'){
             target[name] = value;
             return target;
         }else{

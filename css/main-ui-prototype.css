@@ -10,7 +10,9 @@ body {
   flex-direction: column;
   margin: auto;
   /* background: linear-gradient(-20deg, darkgreen, black 250%); */
-  background: linear-gradient( grey, white);
+  /**background: linear-gradient( grey, white);**/
+  background: radial-gradient(circle, white, grey 60%, black);
+  overflow: hidden;
 }
 /****util ****/
 .bordered {
@@ -41,6 +43,7 @@ nav > button
   background: linear-gradient(red,black);
   color: white;
 }
+
 .menu-button:hover, nav > button:hover{
    box-shadow: 1px 1px 5px black;
    background: linear-gradient(darkred,black);
@@ -51,6 +54,7 @@ nav > button
   background-color: lightgreen;
   background: linear-gradient(lightgreen, green);
 }
+
 .confirm-button:hover{
   box-shadow: 1px 1px 5px black;
   background: linear-gradient(lightgreen, darkgreen);
@@ -64,6 +68,56 @@ nav > button
   box-shadow: 1px 1px 5px black;
   background: linear-gradient(rgb(252, 81, 81),rgb(134, 40, 40));
 }
+.clickable,
+.survivor-quick-view,
+.header-additional-infos button,
+.back-button,
+.confirm-button,
+.menu-button,
+nav > button{
+  cursor: pointer;
+}
+
+.message-box::after {
+  content: "\f003";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  padding: 3px;
+}
+.updatable-notify{
+  
+  padding: 3px;
+}
+.no-update{
+  border: 1px solid grey;
+  background-color: lightgray;
+  box-shadow: inset 1px 1px 1px black;
+}
+
+.notify-update{
+  border: 1px solid darkgreen;
+  background: radial-gradient(green,darkgreen);
+  
+  position: relative;
+  animation-name: notify-information-animation;
+  animation-duration: 1500ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-out;
+}
+
+.notify-update::before{
+  position: absolute;
+  content: "NEW";
+  color: white;
+  text-shadow: 1px 1px 1px blue;
+  font-size: 0.6em;
+  bottom: -15%;
+  right: -10%;
+  
+  animation: blinking-text-small-to-big 800ms ease-in-out infinite;
+}
+
 
 /**** header-section ******/
 header {
@@ -95,6 +149,15 @@ header .resource-view div {
   margin-right: 1px;
 }
 
+header .header-additional-infos{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+
 /***** loot-item-view*******/
 .loot-item-view {
   display: flex;
@@ -113,7 +176,7 @@ header .resource-view div {
 
 .loot-item-icon img{
   max-width: 100%;
-  max-heigt: 100%;
+  max-height: 100%;
 }
 .loot-item-name{
   text-align: center;
@@ -123,7 +186,8 @@ header .resource-view div {
 .container {
   display: flex;
   flex-grow: 1;
-  max-height: 90%;
+  /*! max-height: 90%; */
+  height: 90%;
 }
 main {
   flex-grow: 1;
@@ -285,7 +349,7 @@ section {
 }
 .location-attributes-entry {
   display: flex;
-  display-direction: row;
+  flex-direction: row;
   border: 1px solid black;
 }
 .location-attributes-entry div{
@@ -352,7 +416,7 @@ section {
   border: 1px solid black;
 }
 #content {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 /****** mission-report ***********/
@@ -647,4 +711,101 @@ section {
 .inventory-view tr:hover{
   box-shadow: 1px 1px 5px black;
   background: linear-gradient(lightgreen, green);
+}
+
+/**** message center ****/
+.message-center {
+  background-color: yellow;
+  height: 100%;
+}
+
+.message-center-entry {
+  background: linear-gradient(lightgrey, whitesmoke);
+  margin: 5px;
+  box-sizing: content-box;
+  border: 1px solid black;
+  box-shadow: 1px 1px 5px black;
+  padding: 5px 5px 0px 5px;
+}
+.message-center-entry-headline {
+  font-size: 1.2em;
+  text-decoration: underline;
+  margin-bottom: 5px;
+}
+.message-center-entry-body {
+  
+}
+.message-center-entry-link {
+  padding: 5px 0px 5px 0px;
+  font-size: 0.7em;
+  border-top: 2px solid black;
+}
+
+.message-center-list {
+  height: 100%;
+  overflow-y: scroll;
+}
+
+/**** crafting ****/
+.crafting-view {
+  
+}
+
+.crafting-view-entry-list {
+  box-shadow: 1px 1px black;
+  background: radial-gradient(white,rgba(255,255,255,0.5));
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.crafting-view-recipe-entry{
+  box-sizing: border-box;
+  box-shadow: 2px 2px 5px black;
+  margin: 3px;
+  width: 32%;
+  min-width: 175px;
+  height: 125px;
+  display: flex;
+  flex-direction: column;
+}
+.crafting-view-recipe-entry:hover{
+  /*border: 2px solid #FF0000FF;*/
+  box-shadow: 2px 2px 10px #6185d1;
+}
+
+.crafting-view-recipe-entry.crafting-view-recipe-available{
+  background-color: green;
+}
+.crafting-view-recipe-entry:not(.crafting-view-recipe-available){
+  /*background-color: red;*/
+  box-shadow: inset 1000px 1000px #777777BB, 2px 2px 5px black;
+}
+.crafting-view-recipe-entry-headline{
+  padding: 2px;
+  margin: 2px;
+  background: linear-gradient(rgba(140,140,140), #FFFFFFAA);
+  box-shadow: 1px 1px 3px black;
+  text-align: center;
+  height: 15%;
+}
+.crafting-view-recipe-entry-description{
+  margin: 5px;
+  background-color: #77777777;
+  height: 70%;
+}
+.crafting-view-recipe-entry-cost{
+  color: red;
+  background-color: #000000AA;
+  flex-grow: 1;
+  text-align: right;
+  height: 15%;
+  margin: 0px 5px 5px 5px;
+  padding-right: 5px;
+}
+
+.crafting-view-recipe-entry.crafting-view-recipe-available .crafting-view-recipe-entry-cost{
+  color: green;
+  text-shadow: 1px 1px 1px black;
+  font-size: 1.1em;
 }

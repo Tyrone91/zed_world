@@ -1,6 +1,7 @@
 function WindowManager(container){
     this._callStack = [];
     this._drawTarget = container;
+    this._onRenderCallbacks = [];
 }
 WindowManager.prototype = {
     /**
@@ -12,6 +13,7 @@ WindowManager.prototype = {
         }
         const callback = this._callStack[this._callStack.length-1];
         $(this._drawTarget).html(callback());
+        this._onRenderCallbacks.forEach(callback => callback() );
     },
     push: function(callback){
         this._callStack.push(callback);
@@ -29,7 +31,13 @@ WindowManager.prototype = {
     target: function(value){
         return Util.setOrGet(this, "_drawTarget", value);
     },
+
     render: function(){
         this._render();
+    },
+
+    addRenderCallback: function(callback){
+        this._onRenderCallbacks.push(callback);
+        return this;
     }
 }

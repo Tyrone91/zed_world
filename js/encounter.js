@@ -1,4 +1,4 @@
-
+//TODO: finish reinforcement chance
 /**
  * Handler for encounters between surivors and enemies.
  * @param       {array} party       The surivor party. If everyone dies the encounter is over

@@ -1,0 +1,21 @@
+@keyframes notify-information-animation {
+    0% {
+        
+    }
+    50% {
+        box-shadow: 0px 0px 15px 2px rgb(0, 174, 243);
+        /*border: 2px solid skyblue;*/
+    }
+    100%{
+
+    }
+}
+
+@keyframes blinking-text-small-to-big{
+    from {
+        font-size: 0.5em;
+    }
+    to {
+        font-size: 0.6em;
+    }
+}

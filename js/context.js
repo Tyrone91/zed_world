@@ -1,7 +1,17 @@
 /**
  * Create a new holder Object for the game with all needed informations
  * @constructor
- * @param {object} options 
+ * @typedef Options
+ * @property {string} campName
+ * @property {LootTable} commonLootTable
+ * @property {LootTable} extraordinaryLootTable
+ * @property {LootTable} rareLootTable
+ * @property {MissionMap} missionMap
+ * @property {WindowManager} windowManager
+ * @property {number} initialCraftingParts
+ * @property {number} deconstructFactor
+ * 
+ * @param {Options} options
  */
 function Context(options){
     const self = this;
@@ -19,6 +29,12 @@ function Context(options){
     this._callOnChangeCallbacks = [];
     this._preparedMissions = [];
     this._missionHistory = [];
+    this._eventDispatcher = new EventDispatcher();
+    this._messageCenter = new MessageCenter(this._eventDispatcher);
+    this._craftingHandler = new CraftingHandler(options.initialCraftingParts || 0, options.deconstructFactor || 0);
+
+    Context.EventDispatcher = this._eventDispatcher; //TODO: look for something better. I knwo this is bad but passing the context toe every function that could possibly use the dispatcher
+    // is not really better. The Context is right now effectively a Singleton. If I ever would create a second instance the dispatcher would be overwitten.
 }
 
 Context.prototype = {
@@ -28,6 +44,7 @@ Context.prototype = {
             mission.getParty().forEach( surv => {
                 if(surv.stats().health() <= 0 ){
                     self.removeSurvivor(surv);
+                    self.eventDispatcher().dispatchEvent(GameEvents.SURVIVOR_DIED, new SurvivorDeathEvent(surv) );
                 }
             });
         };
@@ -39,20 +56,25 @@ Context.prototype = {
             });
         };
         const receiveLoot = function(mission, lootList){
+            self.eventDispatcher().dispatchEvent(GameEvents.LOOT_FOUND, new LootEvent(lootList.map( loot => loot.drop)) );
             lootList.forEach( loot => self._camp.addToInventory(loot.drop));
         };
         this._preparedMissions.forEach(mission => {
             
-            mission.addLootFoundListener( (lootList) => {
+            mission.addLootFoundListener( (lootList) => { //duplicated listene @see last line -1
                 self._camp.addToInventory(lootList); // Camps dont have an inventory anymore. context will hold it. refactoring
             });
             self._missionListener.forEach(listener => listener(mission));
             mission.addMissionSuccessListener( () => {
                 removeDead(mission);
                 makeIdle(mission);
+                const event =  new MissionEvent(mission, mission.getParty() );
+                this.eventDispatcher().dispatchEvent(GameEvents.MISSION_SUCCESSFUL, event);
             });
             mission.addMissionFailedListener( () => {
                 removeDead(mission);
+                const event =  new MissionEvent(mission, mission.getParty() );
+                this.eventDispatcher().dispatchEvent(GameEvents.MISSION_FAILED, event);
             });
             mission.addLootFoundListener( lootList => receiveLoot(mission, lootList) );
             mission.start()
@@ -106,7 +128,7 @@ Context.prototype = {
     addMissionListener: function(callback){
         this._missionListener.push(callback);
     },
-    forceMission: function(party, location, modifier){
+    forceMission: function(party, location, modifier){ //TODO remove if safe
         modifier = modifier || new LocationAttributes();
         const self = this;
         const mission = new Mission({
@@ -253,6 +275,28 @@ Context.prototype = {
 
     clearMissionHistory: function(){
         this._missionHistory = [];
+    },
+
+    /**
+     * Access to the global event dispatcher of the game
+     * @returns {EventDispatcher} The global event dispatcher.
+     */
+    eventDispatcher: function(){
+        return this._eventDispatcher;
+    },
+
+    /**
+     * @returns {MessageCenter}
+     */
+    messageCenter: function(){
+        return this._messageCenter;
+    },
+
+    /**
+     * @returns {CraftingHandler}
+     */
+    craftingHandler: function(){
+        return this._craftingHandler;
     }
 
 }

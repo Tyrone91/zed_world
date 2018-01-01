@@ -1,7 +1,127 @@
+/**
+ * 
+ * @param {windowManager} windowManager 
+ */
 function initUI(windowManager){
     const assets = "assets/";
     const images = assets + "images/";
     const jpg = ".jpg";
+
+    const createBackButton = function(text){
+        text = text || "Back";
+        return $("<button>").text(text).addClass("back-button");
+    };
+
+    const createConfirmButton = function(text){
+        text = text || "Confirm";
+        return $("<button>").text(text).addClass("confirm-button");
+    };
+
+    /**
+     * @param {CraftingHandler} craftingHandler
+     * @param {CraftingRecipe} recipe 
+     */
+    const CraftingRecipeEntry = function(craftingHandler, recipe, onSelection = (recipe) => {} ){
+        const domElement = $("<div>").addClass("crafting-view-recipe-entry").addClass("clickable");
+        const url = images + recipe.icon + jpg;
+        domElement.css("background-image", "url("+ url+ ")");
+        domElement.css("background-size", "cover");
+        domElement.on("click", event => onSelection(recipe) );
+
+        const headLine = $("<div>").addClass("crafting-view-recipe-entry-headline").text(recipe.name);
+        const description = $("<div>").addClass("crafting-view-recipe-entry-description").text(recipe.description);
+        const cost = $("<div>").addClass("crafting-view-recipe-entry-cost").text(recipe.cost);
+
+        if(craftingHandler.canCreate(recipe)){
+            domElement.addClass("crafting-view-recipe-available");
+        }
+        return domElement.append(headLine, description, cost);
+    };
+    /**
+     * 
+     * @param {CraftingHandler} craftingHandler 
+     */
+    const CraftingView = function(craftingHandler, onSuccessfulCrafting){
+        const domElement = $("<div>").addClass("crafting-view");
+        const recipeList = $("<div>").addClass("crafting-view-entry-list");
+        craftingHandler.getAllRecipes().forEach( recipe => {
+            /**@param {CraftingRecipe} recipe*/
+            const onSelection = recipe => {
+                if(craftingHandler.canCreate(recipe) ){
+                    onSuccessfulCrafting(craftingHandler.create(recipe));
+                    windowManager.render(); // rerender to update availability
+                }
+            };
+            recipeList.append(CraftingRecipeEntry(craftingHandler ,recipe, onSelection ));
+        });
+        return domElement.append(recipeList);
+    };
+
+    const UserMessageEventConverter = function(source){
+        let name = "PLACEHOLDER";
+        let description = "SAMPLE_TEXT";
+        if(source.name === GameEvents.MISSION_SUCCESSFUL){
+            name = "Mission Report: Successful";
+            description = "Your survivors did a wonderful job and (most of them) returned.";
+        }else if(source.name === GameEvents.MISSION_FAILED){
+            name = "Mission Report: Failed";
+            description = "After we didn't hear anything from our team, we send a recon party. They returned but only with bad news. Our first team now walks under the dead.";
+        }else if(source.name === GameEvents.SURVIVOR_DIED){
+            const survivorName = source.event.survivor.name();
+            name = "Rest in Peace " + survivorName;
+            description = "Even if we all know how short a life can be these days, it is still sad to lose a friend."
+            + survivorName + " will not be forgotten. Death by: " + source.event.cirumstances;
+        }else if(source.name === GameEvents.LOOT_FOUND){
+            name = "We found something";
+            description = "Finally we found something useful. Our inventory has the following been added: " + source.event.loot.map(loot => loot.name()).join(", ");
+        }
+        return { //TODO add somehing like color for different events
+            name: name,
+            description: description,
+            hotlink: "TODO. Link as example to the inventory if the user got a new Item"
+        }
+    }
+
+    const UserEventMessageCenterEntry = function(source, onRemove = () => {} ){
+        const domElement = $("<div>").addClass("message-center-entry");
+        const data = UserMessageEventConverter(source);
+        const headLine = data.name;
+        //TODO add icon to delete message etc.
+        const headlineElement = $("<div>");
+        headlineElement.append($("<div>").addClass("message-center-entry-headline").text(headLine));
+        headlineElement.append($("<button>").text("X").on("click", event => onRemove(source) ));
+        domElement.append(headlineElement); 
+        domElement.append($("<div>").addClass("message-center-entry-body").text(data.description) );
+        domElement.append($("<div>").addClass("message-center-entry-link").text(data.hotlink) );
+        return domElement;
+    };
+
+    const UserMessageCenterEventList = function(list, onEntryRemove){
+        const domElement = $("<div>").addClass("message-center-list");
+        list.forEach(event => {
+            domElement.append(UserEventMessageCenterEntry(event,onEntryRemove));
+        });
+        return domElement;
+    };
+
+    /**
+     * @param {Context} context 
+     */
+    const UserMessageCenterView = function(context){
+        /**
+         * @type {MessageCenter} messageCenter
+         */
+        const messageCenter = context.messageCenter();
+        const events = messageCenter.getAllEvents();
+
+        const domElement = $("<div>").addClass("message-center");
+        const buttonCommands = $("<div>");
+        const bttnClearAll = $("<button>").text("Clear All").on("click", event => {messageCenter.deleteAllEvents(); windowManager.render() } );
+        buttonCommands.append(bttnClearAll);
+        domElement.append(buttonCommands);
+        domElement.append(UserMessageCenterEventList(events, data => {messageCenter.deleteEvent(data);  windowManager.render()} ));
+        return domElement;
+    };
 
 
     const EquipmentPanel = function(equipment, slot, onclick){
@@ -26,7 +146,7 @@ function initUI(windowManager){
         const table = $("<table>");
 
         const head = $("<tr>");
-        const createHead = (...args) => args.forEach( arg => head.append($("<th>").text(arg) ) );
+        const createHead = (...args) => args.forEach( arg => { head.append($("<th>").text(arg) ) });
         createHead("Name", "Damge", "Speed" , "Range", "Accuracy", "Silence", "Health", "Armor", "Awareness");
 
         table.append(head);
@@ -92,16 +212,6 @@ function initUI(windowManager){
         .append( row().append(glovesElement).append(bodyElement).append(mainWeaponElement) )
         .append( row().append(legElement) );
         return domElement; 
-    };
-
-    const createBackButton = function(text){
-        text = text || "Back";
-        return $("<button>").text(text).addClass("back-button");
-    };
-
-    const createConfirmButton = function(text){
-        text = text || "Confirm";
-        return $("<button>").text(text).addClass("confirm-button");
     };
 
     const BuildingMenu = function(){
@@ -325,6 +435,11 @@ function initUI(windowManager){
             //TODO: For know only open weapons
             if(slot === Loot.Equipment.Type.WEAPON){
                 windowManager.push( () => InventoryView( window.GameContext.camp(), item => {
+                    const old = survivor.mainWeapon();
+                    if(old){ 
+                        old.unequipFrom(survivor);
+                        window.GameContext.camp().addToInventory(old);
+                    }
                     item.equipTo(survivor);
                     const index = window.GameContext.camp().inventory().indexOf(item);
                     window.GameContext.camp().inventory().splice(index,1);
@@ -340,6 +455,20 @@ function initUI(windowManager){
         const bttnRename = $("<button>").text("Rename");
         const bttnStartTraining = $("<button>").text("Start Training");
         const bttnStripWeapon = $("<button>").text("Unequip All");
+        bttnStripWeapon.on("click", event => {
+            const helper = function(item){
+                if(item){
+                    item.unequipFrom(survivor);
+                    window.GameContext.camp().addToInventory(item); //TODO: The unequip function has a bug. If you pass null to the survivor equiptment function it will just treat it as getter. Need seperate function.
+                }
+            };
+            helper(survivor.mainWeapon());
+            helper(survivor.headEquipment());
+            helper(survivor.legEquipment());
+            helper(survivor.glovesEquipment());
+            helper(survivor.bodyEquipment());
+            windowManager.render();
+        });
 
         controlPanel.append(bttnRename).append(bttnStartTraining).append(bttnStripWeapon).append(bttnSendAway);
 
@@ -681,7 +810,9 @@ function initUI(windowManager){
         SurvivorQuickViewList: SurvivorQuickViewList,
         MissionControlUI: MissionControlUI,
         SurvivorOverview: SurvivorOverview,
-        InventoryView: InventoryView
+        InventoryView: InventoryView,
+        UserMessageCenterView: UserMessageCenterView,
+        CraftingView: CraftingView
     };
     window.addEventListener("load", event => {
 
