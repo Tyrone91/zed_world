@@ -2,14 +2,23 @@ class CraftingRecipe{
 
     /**
      * 
-     * @param {number} cost 
+     * @typedef Options
+     * @property {number} cost
+     * @property {number} craftingTime
+     * @property {string} name 
+     * @property {string} description
+     * @property {string} iconName
+     * 
+     * @param {function} creationCallback Should return the crafted object
+     * @param {Options} options
      */
-    constructor(constructorCallback, name = "PLACEHOLDER CRAFTING-RECIPE", cost = 0 , description = "", icon = "DEFAULT_CRAFTING_ICON"){
-        this._craftingCost = cost;
-        this._constructorCallback = constructorCallback;
-        this._name = name;
-        this._description = description;
-        this._icon = icon;
+    constructor(creationCallback, options = {} ){
+        this._creationCallback = creationCallback;
+        this._craftingCost      = options.cost || 0;
+        this._name              = options.name || "PLACEHOLDER CRAFTING-RECIPE";
+        this._description       = options.description || "";
+        this._icon              = options.iconName || "DEFAULT_CRAFTING_ICON";
+        this._craftingTime      = options.craftingTime || 0;
     }
 
     /**
@@ -31,11 +40,47 @@ class CraftingRecipe{
         return this._icon;
     }
 
+    get craftingTime(){
+        return this._craftingTime;
+    }
+
     /**
      * @returns {any}
      */
     craft(){
-        return this._constructorCallback();
+        return this._creationCallback();
+    }
+}
+
+class CraftingQueueElement{
+    /**
+     * @param {CraftingRecipe} recipe 
+     */
+    constructor(recipe, onCrafted){
+        this._time = 0;
+        this._recipe = recipe;
+        this._callback = onCrafted;
+    }
+
+    get finished(){
+        return this._time >= this._recipe.craftingTime;
+    }
+
+    get time(){
+        return this._time;
+    }
+
+    get recipe(){
+        return this._recipe;
+    }
+
+    get onCrafted(){
+        return this._callback;
+    }
+
+    update(){
+        ++this._time;
+        return this;
     }
 }
 
@@ -46,10 +91,40 @@ class CraftingHandler { //TODO: maybe make mor materials, till then only one res
      * @param {number} initial 
      * @param {number} desconstructReturnFactor
      */
-    constructor(initial = 0, desconstructReturnFactor = 0.5){
+    constructor(craftingQueueLength = 1, initial = 0, desconstructReturnFactor = 0.5){
         this._materials = initial;
         this._knownRecipes = [];
         this._deconstructFactor = desconstructReturnFactor;
+        this._craftingQueueLength = craftingQueueLength;
+
+        /**@type {CraftingQueueElement} */
+        this._craftingQueue = [];
+        /**@type {EventDispatcher}*/
+        const dispatcher = Context.EventDispatcher;
+        dispatcher.subscribe(GameEvents.ROUND_END, () => this._update() );
+    }
+
+    /**
+     * 
+     * @param {CraftingQueueElement} queueElement 
+     */
+    _craftItem(queueElement){
+        const res = queueElement.recipe.craft();
+        queueElement.onCrafted(res);
+        Context.EventDispatcher.dispatchEvent(GameEvents.WEAPON_CRAFTED, new WeaponCraftEvent(res) );
+    }
+
+    _update(){
+        for(let i = this._craftingQueue.length - 1; i >= 0; --i){ // By going backwards over the array I can remove items without skipping any.
+            const element = this._craftingQueue[i];
+            console.log("recipe in queue: " + element.recipe.name + " time: " + element.time + " finished: " + element.finished);
+            console.log(element);
+            element.update();
+            if(element.finished){
+                this._craftingQueue.splice(i,1);
+                this._craftItem(element);
+            }
+        }
     }
 
     materialCount(){
@@ -68,11 +143,15 @@ class CraftingHandler { //TODO: maybe make mor materials, till then only one res
      * 
      * @param {CraftingRecipe} craftingRecipe 
      */
-    create(craftingRecipe){
+    create(craftingRecipe, onCreationCallback = (craftedObject) => {} ){
         this._materials -= craftingRecipe.cost;
-        const result = craftingRecipe.craft();
-        Context.EventDispatcher.dispatchEvent(GameEvents.WEAPON_CRAFTED, new WeaponCraftEvent(result) );
-        return result;     
+        const queueElement = new CraftingQueueElement(craftingRecipe, onCreationCallback);
+        if(queueElement.finished){
+            this._craftItem(queueElement);
+            return;
+        }
+        this._craftingQueue.push(queueElement);
+        return this;     
     }
 
     /**
@@ -80,7 +159,7 @@ class CraftingHandler { //TODO: maybe make mor materials, till then only one res
      * @param {CraftingRecipe} craftingRecipe 
      */
     canCreate(craftingRecipe){
-        return (this._materials - craftingRecipe.cost) >= 0;
+        return (this._materials - craftingRecipe.cost) >= 0 && this.getMaxCraftingCount() > this.getItemInCreationCount();
     }
 
     /**
@@ -101,5 +180,20 @@ class CraftingHandler { //TODO: maybe make mor materials, till then only one res
     
     changeMaterialCountBy(value){
         this._materials += value;
+    }
+
+    /**
+     * @returns {[CraftingQueueElement]}
+     */
+    getCraftigQueue(){
+        return this._craftingQueue;
+    }
+
+    getMaxCraftingCount(){
+        return this._craftingQueueLength;
+    }
+
+    getItemInCreationCount(){
+        return this._craftingQueue.length;
     }
 }

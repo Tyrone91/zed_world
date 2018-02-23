@@ -18,6 +18,25 @@ function initUI(windowManager){
     };
 
     /**
+     * 
+     * @param {CraftingHandler} craftingHandler 
+     */
+    const CraftingQueueList = function(craftingHandler){
+        const domElement = $("<div>").addClass("crafting-queue-list");
+        for(let i = 0; i < craftingHandler.getMaxCraftingCount(); ++i){
+            const craftingSlot = $("<div>").addClass("crafting-queue-slot");
+            domElement.append(craftingSlot);
+            if( i < craftingHandler.getItemInCreationCount() ){
+                const element = craftingHandler.getCraftigQueue()[i];
+                craftingSlot.addClass("crafting-queue-used-slot");
+                craftingSlot.text(element.time + "/" + element.recipe.craftingTime);
+            }
+        }
+
+        return domElement;
+    }
+
+    /**
      * @param {CraftingHandler} craftingHandler
      * @param {CraftingRecipe} recipe 
      */
@@ -43,12 +62,13 @@ function initUI(windowManager){
      */
     const CraftingView = function(craftingHandler, onSuccessfulCrafting){
         const domElement = $("<div>").addClass("crafting-view");
+        domElement.append(CraftingQueueList(craftingHandler));
         const recipeList = $("<div>").addClass("crafting-view-entry-list");
         craftingHandler.getAllRecipes().forEach( recipe => {
             /**@param {CraftingRecipe} recipe*/
             const onSelection = recipe => {
                 if(craftingHandler.canCreate(recipe) ){
-                    onSuccessfulCrafting(craftingHandler.create(recipe));
+                    craftingHandler.create(recipe,onSuccessfulCrafting);
                     windowManager.render(); // rerender to update availability
                 }
             };
@@ -175,7 +195,7 @@ function initUI(windowManager){
         return table;
     };
 
-    const InventoryView = function(inventoryHolder, onSelection = (() =>{})){ //TODO: inly first iteration
+    const InventoryView = function(inventoryHolder, onSelection = (() =>{})){ //TODO: only first iteration of the inventory view
         const domElement = $("<div>").addClass("inventory-view");
         const equipmentList = [];
         inventoryHolder.inventory().forEach( item => {
@@ -561,7 +581,7 @@ function initUI(windowManager){
         for(let y = 0; y <= height; ++y){
             const row = $('<div>').addClass("location-selection-row");
             for(let x = 0; x <= width; ++x){
-                const pair = pairs.find(pair => findLocationAt(Util.pointOf(x,y), pair.first ) ); //FIXME: I know, I knwo it is really hard to get worse performance than that, but for know with max 9 Location or so I don't care right now
+                const pair = pairs.find(pair => findLocationAt(Util.pointOf(x,y), pair.first ) ); //FIXME: I know, I know it is really hard to get worse performance than that, but for know with max 9 Location or so I don't care right now
                 if(pair){
                     const element = $('<div>').text(pair.second.name()).addClass("location-entry");
                     applyToEntry(pair.second, element);

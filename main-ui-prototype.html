@@ -29,7 +29,8 @@
     <script src="js/event.js"></script>
     <script src="js/message-center.js"></script>
     <script src="js/crafting.js"></script>
-    <script src="js/game-init-debug.js"></script>
+    <script src="js/game-init-prototype.js"></script>
+    <script src="js/event-handling-init.js"></script>
     <script>
         initDebugWorld();
     </script>
@@ -44,11 +45,13 @@
             <button id="bttn-inventory-overview">Inventory</button>
             <button id="bttn-crafting-overview">Crafting</button>
         </nav>
-        <div id="header-resource-viewer" class="resource-view">
-            <div id="header-crafting-materials">0</div>
-        </div>
-        <div class="header-additional-infos">
-            <button id="message-box-info" class="message-box updatable-notify"></button>
+        <div class="information-bar">
+            <div id="header-resource-viewer" class="resource-view">
+                <div id="header-crafting-materials">0</div>
+            </div>
+            <div class="header-additional-infos">
+                <button id="message-box-info" class="message-box updatable-notify"></button>
+            </div>
         </div>
     </header>
     <div class="container">

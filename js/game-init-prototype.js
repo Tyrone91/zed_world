@@ -49,9 +49,6 @@ function initLootTable(context){
     debugTable.addLoot( () => new Loot.Food(100), 25, "Huge Food");
     debugTable.addLoot( () => weaponCache.roll() , 10, "Weapon-Cache");
 
-    console.log("debug table");
-    debugTable.dropChanceList().forEach( entry => console.log(entry.toString()));
-
     context.commonLootTable(debugTable);
     context.extraordinaryLootTable(debugTable);
     context.rareLootTable(debugTable);
@@ -82,60 +79,49 @@ function initMissionMap(map){
     .reinforcementChance(5)
     .encounterChance(33);
 
-    const debug1 = new Location("debug_friendly", "DEBUG NO ENCOUNTER 100% LOOT");
-    debug1.attributes()
+    const plains = new Location("plain", "Plains");
+    plains.attributes()
     .visibilityReduction(0)
     .minZombieCount(5)
     .maxZombieCount(15)
-    .commonItemDropChance(100)
-    .rareItemDropChance(5)
+    .commonItemDropChance(10)
+    .rareItemDropChance(1)
     .extraordinaryItemDropChance(1)
-    .startingRange(100)
+    .startingRange(150)
     .reinforcementChance(5)
-    .encounterChance(0);
+    .encounterChance(10);
 
-    const debug2 = new Location("debug_hostile", "DEBUG 100% ENCOUNTER");
-    debug2.attributes()
-    .visibilityReduction(0)
-    .minZombieCount(5)
-    .maxZombieCount(15)
+    const overrunEvac = new Location("overrun_evec", "Abonded Evac-Point");
+    overrunEvac.attributes()
+    .visibilityReduction(30)
+    .minZombieCount(25)
+    .maxZombieCount(150)
     .commonItemDropChance(100)
-    .rareItemDropChance(5)
-    .extraordinaryItemDropChance(1)
-    .startingRange(100)
-    .reinforcementChance(5)
-    .encounterChance(100);
+    .rareItemDropChance(60)
+    .extraordinaryItemDropChance(20)
+    .startingRange(80)
+    .reinforcementChance(45)
+    .encounterChance(75);
 
 
-    map.addLocation(Util.pointOf(1,0),smallCity );
-    map.addLocation(Util.pointOf(4,3),farms );
-    map.addLocation(Util.pointOf(0,0),debug1 );
-    map.addLocation(Util.pointOf(0,1),debug2 );
+    map.addLocation(Util.pointOf(0,0),plains );
+    map.addLocation(Util.pointOf(1,0),plains );
+    map.addLocation(Util.pointOf(2,0),plains );
+
+    map.addLocation(Util.pointOf(0,1),plains );
+    map.addLocation(Util.pointOf(1,1),smallCity );
+    map.addLocation(Util.pointOf(2,1),plains );
+
+    map.addLocation(Util.pointOf(0,2),overrunEvac );
+    map.addLocation(Util.pointOf(1,2),farms );
+    map.addLocation(Util.pointOf(2,2),farms );
 }
 /**
  * 
  * @param {Context} context 
  */
 function initDebugUtils(context){
-    context.craftingHandler().changeMaterialCountBy(1000);
-    const StrongSurv = new Survivor("Stronk", "Stronk");
-    StrongSurv.stats().health(100).damage(Range.of(10,20)).speed(6).accuracy(70);
-    const weakSurv = new Survivor("Weak", "Weako");
-    context.addSurvivor(StrongSurv);
-    context.addSurvivor(weakSurv);
-
-    const happyLand = new Location("debug_happy_land", "Happy Land");
-    happyLand.attributes().encounterChance(0).commonItemDropChance(50).rareItemDropChance(50).extraordinaryItemDropChance(50);
-    context.createMission([StrongSurv, weakSurv], happyLand);
-    context.missionMap().addLocation(Util.pointOf(2,2), happyLand);
-
-    context.camp()
-    .addToInventory(WeaponGenerator.randomAk47() )
-    .addToInventory(WeaponGenerator.randomAk47() )
-    .addToInventory(WeaponGenerator.randomHuntingRifle() );
-
     GLOBAL_EVENT_LOGGER = new EventLogger(context.eventDispatcher());
-
 }
 
 function getContextOptions(){
@@ -150,22 +136,14 @@ function initDebugWorld(){
     tyrone.stats().health(100).damage(Range.of(25,50)).optimalRange(Range.of(15,50)).speed(4).accuracy(65);
     window.GameContext = new Context(getContextOptions() );
     window.GameContext
-    .addSurvivor(tyrone)
-    .addSurvivor(new Survivor("survivor2", "Pete"))
-    .addSurvivor(new Survivor("survivor3", "Marc Steel"))
-    .addSurvivor(new Survivor("survivor4", "NEED MORE GUYS"))
-    .addSurvivor(new Survivor("survivor5", "MOREEEE"))
-    .addSurvivor(new Survivor("survivor6", "DO BABIES!!!"));
-    window.GameContext.addSurvivor(new Survivor("survivor4", "The Developer"));
+    .addSurvivor(tyrone);
     initMissionMap(window.GameContext.missionMap());
     /**@type {Context} */
     const context = window.GameContext;
     initLootTable(context);
-    initDebugUtils(context);
-    
-    window.addEventListener('load', e =>  {
-        
-        initCraftingRecipes(context.craftingHandler());
+    initDebugUtils(context)
+    initCraftingRecipes(context.craftingHandler());
+    window.addEventListener("load", event => {
         initEventHandlingAndUI(context);
     });
 }

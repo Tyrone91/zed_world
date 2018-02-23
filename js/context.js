@@ -10,11 +10,16 @@
  * @property {WindowManager} windowManager
  * @property {number} initialCraftingParts
  * @property {number} deconstructFactor
+ * @property {number} initialCraftingQueueLength
  * 
  * @param {Options} options
  */
 function Context(options){
     const self = this;
+    this._eventDispatcher = new EventDispatcher();
+    Context.EventDispatcher = this._eventDispatcher; //TODO: look for something better. I knwo this is bad but passing the context toe every function that could possibly use the dispatcher
+    // is not really better. The Context is right now effectively a Singleton. If I ever would create a second instance the dispatcher would be overwitten.
+
     options = options || {};
     this._camp = new Camp(Util.valueOr(options.campName,"Default Camp Name"));
     this._buildings = options.buildings || this._defaultBuildings();
@@ -29,12 +34,11 @@ function Context(options){
     this._callOnChangeCallbacks = [];
     this._preparedMissions = [];
     this._missionHistory = [];
-    this._eventDispatcher = new EventDispatcher();
+    
     this._messageCenter = new MessageCenter(this._eventDispatcher);
-    this._craftingHandler = new CraftingHandler(options.initialCraftingParts || 0, options.deconstructFactor || 0);
+    this._craftingHandler = new CraftingHandler(options.initialCraftingQueueLength, options.initialCraftingParts || 0, options.deconstructFactor || 0);
 
-    Context.EventDispatcher = this._eventDispatcher; //TODO: look for something better. I knwo this is bad but passing the context toe every function that could possibly use the dispatcher
-    // is not really better. The Context is right now effectively a Singleton. If I ever would create a second instance the dispatcher would be overwitten.
+    
 }
 
 Context.prototype = {
@@ -82,6 +86,7 @@ Context.prototype = {
         this._preparedMissions.forEach( mission =>  self._missionHistory.push(mission) );
         this._preparedMissions = [];
         this._notifyUpdate();
+        this.eventDispatcher().dispatchEvent(GameEvents.ROUND_END);
     },
     _notifyUpdate: function(){
         this._callOnChangeCallbacks.forEach( callback => callback());
