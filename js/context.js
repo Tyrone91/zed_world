@@ -21,9 +21,8 @@ function Context(options){
     // is not really better. The Context is right now effectively a Singleton. If I ever would create a second instance the dispatcher would be overwitten.
 
     options = options || {};
-    this._camp = new Camp(Util.valueOr(options.campName,"Default Camp Name"));
+    this._camp = {}; //TODO: camp removal
     this._buildings = options.buildings || this._defaultBuildings();
-    this._buildings.forEach( building => self._camp.bindBuilding(building) );
     this._commonLootTable = options.commonLootTable || new LootTable();
     this._extraordinaryLootTable = options.extraordinaryLootTable || new LootTable();
     this._rareLootTable = options.rareLootTable || new LootTable();

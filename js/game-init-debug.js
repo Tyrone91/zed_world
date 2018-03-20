@@ -129,11 +129,12 @@ function initDebugUtils(context){
     context.createMission([StrongSurv, weakSurv], happyLand);
     context.missionMap().addLocation(Util.pointOf(2,2), happyLand);
 
+    /* TODO: no more camp in future
     context.camp()
     .addToInventory(WeaponGenerator.randomAk47() )
     .addToInventory(WeaponGenerator.randomAk47() )
     .addToInventory(WeaponGenerator.randomHuntingRifle() );
-
+    */
     GLOBAL_EVENT_LOGGER = new EventLogger(context.eventDispatcher());
 
 }

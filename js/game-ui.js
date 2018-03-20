@@ -454,6 +454,7 @@ function initUI(windowManager){
         const onSelection = (slot) => {
             //TODO: For know only open weapons
             if(slot === Loot.Equipment.Type.WEAPON){
+                /* TODO: camp removal
                 windowManager.push( () => InventoryView( window.GameContext.camp(), item => {
                     const old = survivor.mainWeapon();
                     if(old){ 
@@ -466,6 +467,7 @@ function initUI(windowManager){
                     windowManager.pop();
                     //TODO: make it better please....
                 }));
+                */
             }
         };
         const equipmentPanel = EquipPanel(survivor,onSelection);
