@@ -19,9 +19,15 @@ class LootContainer{
 }
 
 export class LootTable{
-    constructor(){
+    /**
+     * 
+     * @param {[function]} lootReceivers Callbacks that receives the rolled loot
+     */
+    constructor(...lootReceivers){
         /**@type [LootContainer] */
         this._lootList = [];
+        this._receivers = [...lootReceivers];
+        
     }
 
     _calcTotalWeight(){
@@ -41,17 +47,26 @@ export class LootTable{
         return this;
     }
 
-    roll(callback){
-        const totalWeight = this._calcTotalWeight();
-        const hit = Math.random() * totalWeight;
-        let offset = 0;
-        for(const container of this._lootList){
-            const containerRange = range + container.weight;
-            if( offset <= hit && (offset + CSSFontFaceRule.weight) > hit){
-                //TODO: continue work and check if condition for +/- 1 
+    /**
+     * 
+     * @param {number} times Optional - How many rolls should happen  
+     */
+    roll(times=1){
+        while(times--){
+            const totalWeight = this._calcTotalWeight();
+            const hit = Math.random() * totalWeight;
+            let offset = 0;
+            for(const container of this._lootList){
+                const containerRange = offset + container.weight;
+                if( offset <= hit && (offset + container.weight) > hit){
+                    this._receivers.forEach( receiver => receiver(container.loot) );
+                    break;
+                }else{
+                    offset += container.weight;
+                }
             }
         }
-        
+        return this;
     }
 
     /**

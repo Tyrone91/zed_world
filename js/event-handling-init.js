@@ -2,7 +2,6 @@
 function initEventHandlingAndUI(context){
     context.windowManager().target($('#content'));
     initUI(context.windowManager(), context);
-
     $('#bttn-character-overview').on('click', e => {
         const survivorList = window.GameContext.survivors();
         /* $('#content').empty().append(GAME_UI.SurvivorSelection(survivorList)); */
