@@ -6,9 +6,9 @@ function Mission(options){
     this._environment = options.environment || null;
     this._party = options.party || null;
     this._missionLength = options.length;
-    this._commonLootTable = options.commonLootTable || new LootTable();
-    this._rareLootTable = options.rareLootTable || new LootTable();
-    this._exordinaryLootTable = options.exordinaryLootTable || new LootTable();
+    this._commonLootTable = options.commonLootTable || ( () => {});
+    this._rareLootTable = options.rareLootTable || ( () => {});
+    this._exordinaryLootTable = options.exordinaryLootTable || ( () => {});
     this._encounterFactory = options.encounterFactory || function(party, enemies, environment){
         return new Encounter(party, enemies, environment);
     };
@@ -87,13 +87,13 @@ Mission.prototype = {
                     }
                 }
                 if(commonLootRoll < missionValues.commonItemDropChance() ){
-                    collect(self._commonLootTable.roll());
+                    collect(self._commonLootTable());
                 }
                 if(rareLootRoll < missionValues.rareItemDropChance() ){
-                    collect(self._rareLootTable.roll());
+                    collect(self._rareLootTable());
                 }
                 if(extraordinaryLootRoll < missionValues.extraordinaryItemDropChance() ){
-                    collect(self._exordinaryLootTable.roll());
+                    collect(self._exordinaryLootTable());
                 }
                 self._lootFoundListener.forEach(listener => listener(lootList));
             }
