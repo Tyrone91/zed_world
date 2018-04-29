@@ -134,7 +134,6 @@ function initDebugWorld(){
     const tyrone = new Survivor("survivor1", "Tyrone");
     tyrone.avatar("debug_survivor_avatar.jpg");
     tyrone.stats().health(100).damage(Range.of(25,50)).optimalRange(Range.of(15,50)).speed(4).accuracy(65);
-    window.GameContext = new Context(getContextOptions() );
     window.GameContext
     .addSurvivor(tyrone);
     initMissionMap(window.GameContext.missionMap());

@@ -1,4 +1,4 @@
-const GameEvents = Object.freeze({
+export const GameEvents = Object.freeze({
     MISSION_SUCCESSFUL: "MISSION_SUCCESSFUL",
     MISSION_FAILED: "MISSION_FAILED",
     SURVIVOR_DIED: "SURVIVOR_DIED",
@@ -7,7 +7,7 @@ const GameEvents = Object.freeze({
     WEAPON_CRAFTED: "WEAPON_CRAFTED"
 });
 
-class WeaponCraftEvent {
+export class WeaponCraftEvent {
 
     /**
      * @param {Loot.Equipment} result 
@@ -21,7 +21,7 @@ class WeaponCraftEvent {
     }
 }
 
-class SurvivorDeathEvent {
+export class SurvivorDeathEvent {
     constructor(deadSurvivor, circumstances = "Unknown"){
         this._survivor = deadSurvivor;
         this._cirumstances = circumstances;
@@ -39,7 +39,7 @@ class SurvivorDeathEvent {
     }
 }
 
-class LootEvent {
+export class LootEvent {
     /**
      * 
      * @param {[Loot]} loot 
@@ -56,7 +56,7 @@ class LootEvent {
     }
 }
 
-class RoundEndEvent {
+export class RoundEndEvent {
     constructor(roundNr){
         this._roundNr = roundNr;
     }
@@ -69,7 +69,7 @@ class RoundEndEvent {
     }
 }
 
-class MissionEvent {
+export class MissionEvent {
     constructor(mission, survivors){
         this._mission = mission;
         this._survivors = survivors;
@@ -94,7 +94,7 @@ class MissionEvent {
 /**
  * Utillity class for dispatching events to subscribed events.
  */
-class EventDispatcher {
+export class EventDispatcher {
     constructor(){
         this._eventmap = new Map();
     }

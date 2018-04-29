@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Zed Survival</title>
+        <link href="css/start.css" type="text/css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+        <audio id="click-sound">
+            <source src="assets/sound/Click2-Sebastian-759472264.wav"></source>
+            
+        </audio>
+        <audio id="bg-music">
+            <source src="assets/sound/Supernatural - Oh Death - Jen Titus (Lyrics).mp3"></source>
+        </audio>
+
+        <script>
+            window.addEventListener("load", event => {
+                const audio = document.getElementById("click-sound");
+                const list = document.getElementsByTagName("button");
+                for(let i = 0; i < list.length; ++i){
+                    list.item(i).addEventListener("mouseenter", event =>{
+                        audio.play(); 
+                    });
+                }
+                document.getElementById("bg-music").play();
+            });
+        </script>
+    </head>
+    <body>
+        <div class="title">ZED WORLD</div>
+        <div class="fill-background bg-zed-image centered-content">
+            <button>New Game</button>
+            <button>Load</button>
+            <button>Options</button>
+        </div>
+    </body>
+</html>

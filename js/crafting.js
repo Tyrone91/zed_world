@@ -100,7 +100,7 @@ class CraftingHandler { //TODO: maybe make mor materials, till then only one res
         /**@type {CraftingQueueElement} */
         this._craftingQueue = [];
         /**@type {EventDispatcher}*/
-        const dispatcher = Context.EventDispatcher;
+        const dispatcher = window.GameContext.EventDispatcher;
         dispatcher.subscribe(GameEvents.ROUND_END, () => this._update() );
     }
 

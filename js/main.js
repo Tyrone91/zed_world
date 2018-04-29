@@ -1,6 +1,17 @@
 import { LootTable, LootObject, LootHander } from "./loot-system/loot-system.js";
+import {Context as GameContext} from "./context.js";
+import { Table } from "./math/table.js";
+import { MissionParameters } from "./mission/mission-parameters.js";
+import { GameConstants } from "./core/game-constants.js";
+import { Team } from "./mission/team.js";
+import { Survivor } from "./core/Survivor.js";
+import { SurvivorMission } from "./mission/survivor-mission.js";
 
-initDebugWorld();
+
+
+//Please delete this mess
+//window.GameContext = new GameContext();
+//initDebugWorld();
 window.addEventListener("load", main);
 
 /**
@@ -12,6 +23,7 @@ function receiveLoot(lootObject){
 }
 
 function main(){
+    /*
     const handler = new LootHander();
     const lootTable = new LootTable( (handler.reveiceLoot.bind(handler)) );
 
@@ -28,4 +40,29 @@ function main(){
     .roll()
     .roll()
     .roll();
+    */
+   
+    const t1 = new Table(4,10);
+    const t2 = new Table(4,10);
+
+    window.Table = Table;
+    window.t1 = t1;
+    window.t2 = t2;
+    window.Parameters = MissionParameters;
+    window.Constants = GameConstants;
+
+    const team1 = new Team();
+    const surv1 = new Survivor();
+    const surv2 = new Survivor();
+
+    team1.addTeamMember(surv1, surv2);
+
+    const mission = new SurvivorMission();
+    mission.addTeam(team1);
+
+    window.mission = mission;
+    window.team = team1;
+    window.surv1 = surv1;
+    window.surv2 = surv2;
 }
+

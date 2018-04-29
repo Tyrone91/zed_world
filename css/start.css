@@ -1,0 +1,140 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+.fill-background {
+    width: 100vw;
+    height: 100vh;
+}
+
+.bg-zed-image {
+    background:
+        radial-gradient(#ffffff00 50%,#000000cc),
+        url("../assets/images/hd-abstract-wallpaper-colorful-images-widescreen-pictures-hd-screen-size-free-art-amazing-abstract-images-free-1920x1080.jpg");
+    background-size: cover;
+}
+
+.centered-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.focus-effect {
+    background: radial-gradient(black)
+}
+
+
+
+button:hover{
+    box-shadow: 1px 1px 10px white;
+    font-size: 2.2em;
+    
+}
+
+
+
+button:active {
+    background: #ffffff6c;
+}
+
+@keyframes title-effect{
+    0%{
+        left: 0px;
+        top: 0px;
+    }
+    30% {
+        text-shadow: 1px 1px 20px #b08f34e6, 1px 1px 5px red, 1px 1px 20px white;
+        left: 2px;
+        top: 7px;
+    }
+    50% {
+        text-shadow: 1px 1px 20px #b08f34e6, 1px 1px 5px red, 1px 1px 30px white;
+        left: 0px;
+        top: 0px;
+    }
+    80%{
+        text-shadow: 1px 1px 20px #b08f34e6, 1px 1px 5px red, 1px 1px 20px white;
+        left: -5px;
+        top: -4px;
+    }
+    100%{
+        text-shadow: 1px 1px 20px #b08f34e6, 1px 1px 5px red, 1px 1px 20px white;
+        left: 0px;
+        top: 0px;
+    }
+}
+@keyframes fade-in {
+    from {
+        color: #00000000;
+    }
+    to{
+        color: #000000;
+    }
+}
+
+.title{
+    position: absolute;
+    font-size: 3em;
+    text-align: center;
+    max-width: 100vw;
+    max-height: 100vh;
+    margin: auto;
+    left: 0px;
+    right: 0px;
+    animation-name: fade-in, title-effect;
+    animation-duration: 0s, 5s;
+    animation-delay: 0ms, 0s;
+    animation-iteration-count: 1, infinite;
+    animation-timing-function: ease, ease;
+    -moz-user-select: none;
+    user-select: none;
+    overflow: hidden;
+    box-sizing: border-box;
+    pointer-events: none;
+    text-shadow: 1px 1px 20px #b08f34e6, 1px 1px 5px red, 1px 1px 20px white;
+}
+
+button {
+    width: 75%;
+    height: 15%;
+    margin: 5px;
+    background-color: #b08f34e6;
+    border: 2px solid black;
+    font-size: 2em;
+    font-family: 'Open Sans';
+    text-shadow: 0px 0px 5px white;
+    box-shadow: 1px 1px 5px #fd751bbd;
+    user-select: none;
+    border-radius: 3px;
+}
+
+button:hover{
+    width: 85%;
+    height: 16%;
+    transition-duration: 300ms
+}
+
+@media (min-width: 600px) and (min-height: 400px){
+    .title{
+        font-size: 5em;
+    }
+
+    button {
+        width: 250px;
+        height: 50px;
+        margin: 10px;
+        font-size: 2em;
+        font-family: 'Open Sans'; 
+        border-radius: 3px;
+    }
+
+    button:hover{
+        width: 270px;
+        height: 55px;
+        transition-duration: 300ms
+    }
+}
+

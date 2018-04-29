@@ -1,3 +1,5 @@
+import {LootTable} from "./loot-system/loot-table.js"
+
 /**
  * Create a new holder Object for the game with all needed informations
  * @constructor
@@ -14,7 +16,7 @@
  * 
  * @param {Options} options
  */
-function Context(options){
+export function Context(options){
     const self = this;
     this._eventDispatcher = new EventDispatcher();
     Context.EventDispatcher = this._eventDispatcher; //TODO: look for something better. I knwo this is bad but passing the context toe every function that could possibly use the dispatcher
