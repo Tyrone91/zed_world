@@ -1,4 +1,32 @@
 export class GameConstants {};
+function objectAsArray(object){
+    return Object.keys(object).map(key=>object[key]);
+}
+
+GameConstants.CHARACTER_STATS = {
+    HEALTH : "HEALTH",
+    HUNGER : "HUNGER"
+}
+GameConstants.CHARACTER_STATS_COLUMN_KEYS = {
+    CURRENT : "CURRENT",
+    MAX : "MAX"
+};
+
+GameConstants.CHARACTER_STATS_ROWS = objectAsArray(GameConstants.CHARACTER_STATS);
+GameConstants.CHARACTER_STATS_COLUMNS = objectAsArray(GameConstants.CHARACTER_STATS_COLUMN_KEYS);
+
+GameConstants.AMMO_TYPES = {
+    SMALL : "SMALL",
+    MEDIUM : "MEDIUM",
+    HEAVY : "HEAVY",
+    SPECIAL : "SPECIAL"
+};
+GameConstants.AMMO_TYPES_COLUMN_KEYS = {
+    AMOUNT : "AMOUNT"
+}
+GameConstants.AMMO_TYPES_COLUMN = Object.keys(GameConstants.AMMO_TYPES_COLUMN_KEYS).map( key => GameConstants.AMMO_TYPES_COLUMN_KEYS[key]);
+GameConstants.AMMO_TYPES_ROW = Object.keys(GameConstants.AMMO_TYPES).map( key => GameConstants.AMMO_TYPES[key]);
+
 GameConstants.MISSION_PARAMETERS_COLUMN_KEYS = {
     BASE: "BASE",
     MIN: "MIN",
@@ -13,7 +41,8 @@ GameConstants.MISSION_PARAMETERS_ROW_KEYS = {
     LOOT_EXTRAORDINARY: "LOOT_EXTRAORDINARY",
     REINFORCEMENT: "REINFORCEMENT",
     AMBUSH_CHANCE: "AMBUSH_CHANCE",
-    COVER_FREQUENCY: "COVER_FREQUENCY" 
+    COVER_FREQUENCY: "COVER_FREQUENCY",
+    MISSION_LENGTH: "MISSION_LENGTH"
 };
 GameConstants.MISSION_PARAMETERS_COLUMNS = Object.keys(GameConstants.MISSION_PARAMETERS_COLUMN_KEYS).map( key => GameConstants.MISSION_PARAMETERS_COLUMN_KEYS[key] );
 GameConstants.MISSION_PARAMETERS_ROWS = Object.keys(GameConstants.MISSION_PARAMETERS_ROW_KEYS).map( key => GameConstants.MISSION_PARAMETERS_ROW_KEYS[key] );
@@ -27,3 +56,9 @@ GameConstants.MISSION_PARAMETERS_VISIBLE_PARAMETERS = [
     GameConstants.MISSION_PARAMETERS_ROW_KEYS.REINFORCEMENT,
     GameConstants.MISSION_PARAMETERS_ROW_KEYS.COVER_FREQUENCY
 ];
+
+GameConstants.MISSION = {
+    AMBUSH_CAN_HAPPEN : true,
+    SURVIVOR_CONSUME_FOOD: true,
+    SURVIVOR_CONSUME_AMMO: true
+}

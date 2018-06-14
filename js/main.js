@@ -1,11 +1,13 @@
 import { LootTable, LootObject, LootHander } from "./loot-system/loot-system.js";
-import {Context as GameContext} from "./context.js";
 import { Table } from "./math/table.js";
 import { MissionParameters } from "./mission/mission-parameters.js";
 import { GameConstants } from "./core/game-constants.js";
 import { Team } from "./mission/team.js";
 import { Survivor } from "./core/Survivor.js";
 import { SurvivorMission } from "./mission/survivor-mission.js";
+import { TemplateLoader } from "./loader/template-loader.js";
+import { LootTableLoader } from "./loader/loot-table-loader.js";
+import { ItemResolver } from "./loader/item-resolver.js";
 
 
 
@@ -64,5 +66,19 @@ function main(){
     window.team = team1;
     window.surv1 = surv1;
     window.surv2 = surv2;
+
+    /*
+    const loader = new TemplateLoader("data/items/", "_templates.json");
+    console.log("loader");
+    //loader.load().then( (list) => console.log(list) );
+    
+    const tableLoader = new LootTableLoader("data/items/", "_loot-tables.json");
+    tableLoader.load().then( () => {
+        console.log("TableCreation");
+        const t = tableLoader.createTable("generic-table");
+        console.log(t);
+        t._printChances();
+    });
+    */
 }
 

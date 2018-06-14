@@ -1,0 +1,20 @@
+{
+    "referenceId" : "rifle1",
+    "name" : "Standart Gewehr",
+    "stats" : {
+        "damage" : {
+            "lower" : 10,
+            "upper" : 12
+        },
+
+        "hitchance" : {
+            "lower" : 5,
+            "upper" : 15
+        },
+
+        "optimalrange" : {
+            "lower" : 5,
+            "upper" : 25
+        }
+    }
+}

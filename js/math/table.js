@@ -1,5 +1,12 @@
+/**
+ * TODO: It would be better to make multiply and co static and then give them table a,b and the target table c. It would eliminate the new instance mess.
+ */
 export class Table {
     constructor(width, height){
+        this._init(width, height);
+    }
+
+    _init(width = 0, height = 0){
         this._source = new Array(width * height);
         this._source.fill(0);
         this._width = width;
@@ -9,7 +16,7 @@ export class Table {
     /**
      * checks if the given values are valid inside this table
      * @param {number} x 
-     * @param {numebr} y
+     * @param {number} y
      * @returns {boolean} 
      */
     _isLegalAccess(x,y){
@@ -20,7 +27,7 @@ export class Table {
 
     /**
      * Returns default error message if the x and y are invalid
-     * @param {numeber} x 
+     * @param {number} x 
      * @param {number} y 
      * @returns {string}
      */
@@ -29,15 +36,19 @@ export class Table {
     }
 
     /**
-     * 
+     * @template T
      * @param {Table} table 
-     * @param {function(number,number) => number} operation 
+     * @param {function(number,number): number} operation 
+     * @returns {Table}
      */
     operation(table, operation){
         if(table._width != this._width || table._height != this._height){
             throw new Error(`Error: the given table has to be same size. width: ${this._width} vs ${table._width} height: ${this._height} vs ${table._height}`);
         }
-        const result = new Table(this._width, this._height);
+        //const result = new Table(this._width, this._height); //TODO: fixme replace with injection. No new Table because inheirated objects will no have their propertys
+        /**@type {T extends Table} */
+        const result = this.createIntance(this);
+        result._source = this._source.slice(0);
         for(let y = 0; y < this._height; ++y){
             for(let x = 0; x < this._width; ++x) {
                 const index = (this._width * y) + x;
@@ -47,20 +58,37 @@ export class Table {
         return result;
     }
     
+    /**
+     * 
+     * @param {Table} table 
+     */
     multipy(table){
         return this.operation(table, (v1,v2) => v1 * v2);
     }
 
+    /**
+     * 
+     * @param {Table} table 
+     */
     add(table){
         return this.operation(table, (v1,v2) => v1 + v2);
     }
 
+    /**
+     * 
+     * @param {number} value 
+     */
     fill(value){
         this._source.fill(value);
         return this;
     }
 
-    fillColumn(value, column){
+    /**
+     * 
+     * @param {number} column 
+     * @param {number} value 
+     */
+    fillColumn(column, value ){
         this.forEach( (x, y , currentValue , index) => {
             if(x === column){
                 this._source[index] = value
@@ -69,7 +97,12 @@ export class Table {
         return this;
     }
 
-    fillRow(value, row){
+    /**
+     * 
+     * @param {number} row 
+     * @param {number} value 
+     */
+    fillRow(row, value ){
         this.forEach( (x, y , currentValue , index) => {
             if(y === row){
                 this._source[index] = value
@@ -108,7 +141,7 @@ export class Table {
     /**
      * 
      * @param {number} x 
-     * @param {numebr} y 
+     * @param {number} y 
      * @returns {number} The value at the given position.
      */
     getCell(x,y){
@@ -137,5 +170,25 @@ export class Table {
 
     out(){
         console.log(this.toString());
+    }
+
+    /**
+     * You must override this method if you are extending this class.
+     * It will be used to create a new object in some method
+     * @param {Table} parent 
+     */
+    createIntance(parent){
+        if(Object.getPrototypeOf(parent) !== Table.prototype){
+
+            console.warn(`
+                Table: You have extended the Table class by an other class and didn't override the 'createInstance'-method.
+                This could lead to problems if you add properties to ypur class and you are expecting them to be set right.
+                The 'operation'-method will create a new instance of your class but cannot set the right properties for you e.g. constructor args.
+                If you need such things or you are tired of the warning, override the 'createInstance'-method return your object`);
+        }
+        /**@type {Table} */
+        const instance = Object.create(Object.getPrototypeOf(parent));
+        instance._init(parent._width, parent._height);
+        return instance;
     }
 }

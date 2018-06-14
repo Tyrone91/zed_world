@@ -1,0 +1,17 @@
+{
+    "referenceId" : "generic-table",
+    "drops" : [
+        {
+            "weight" : 10,
+            "itemRef" : "rifle1"
+        },
+        {
+            "itemRef" : "NO_DROP",
+            "weight" : 90
+        },
+        {
+            "weight" 50,
+            "tableRef": "small-weapon-chache"
+        }
+    ]
+}

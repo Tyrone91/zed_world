@@ -1,0 +1,20 @@
+{
+    "referenceId" : "pistole1",
+    "name" : "Kleine Pistole",
+    "stats" : {
+        "damage" : {
+            "lower" : 4,
+            "upper" : 6
+        },
+
+        "hitchance" : {
+            "lower" : 10,
+            "upper" : 15
+        },
+
+        "optimalrange" : {
+            "lower" : 5,
+            "upper" : 15
+        }
+    }
+}

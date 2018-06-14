@@ -4,18 +4,30 @@ import { AugmentedTableColumnAccessHelper, AugmentedTable } from "../math/augmen
 
 class AccessHelper extends AugmentedTableColumnAccessHelper{
 
+    /**
+     * @param {number=} [optionalValue]
+     */
     min(optionalValue){
         return this.accessColumn(GameConstants.MISSION_PARAMETERS_COLUMN_KEYS.MIN, optionalValue);
     }
 
+    /**
+     * @param {number=} [optionalValue]
+     */
     active(optionalValue){
         return this.accessColumn(GameConstants.MISSION_PARAMETERS_COLUMN_KEYS.ACTIVE, optionalValue);
     }
 
+    /**
+     * @param {number=} [optionalValue]
+     */
     max(optionalValue){
         return this.accessColumn(GameConstants.MISSION_PARAMETERS_COLUMN_KEYS.MAX, optionalValue);
     }
 
+    /**
+     * @param {number=} [optionalValue]
+     */
     base(optionalValue){
         return this.accessColumn(GameConstants.MISSION_PARAMETERS_COLUMN_KEYS.BASE, optionalValue);
     }
@@ -84,6 +96,13 @@ export class MissionParameters extends AugmentedTable{
      */
     get coverFrequency(){
         return new AccessHelper(this, GameConstants.MISSION_PARAMETERS_ROW_KEYS.COVER_FREQUENCY);
+    }
+
+    /**
+     * @returns {AccessHelper}
+     */
+    get missionLength(){
+        return new AccessHelper(this, GameConstants.MISSION_PARAMETERS_ROW_KEYS.MISSION_LENGTH);
     }
     
     getParameter(parameterName){

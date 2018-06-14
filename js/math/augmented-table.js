@@ -1,31 +1,34 @@
 import { Table } from "./table.js";
 
 export class AugmentedTable extends Table {
-
     /**
      * 
-     * @param {[string]} rows - A list of strings representing the name of each row 
-     * @param {[string]} columns - A list of strings representing the name of each column
-     * @param {(function(string) => AugmentedTableColumnAccessHelper)=} accessFactory - Change the default factory to use a customer AccessHelper. Note: For consistency it is recommended to return an extension of the default AugmentedTableColumnAccessHelper.
+     * @param {string[]} rows - A list of strings representing the name of each row 
+     * @param {string[]} columns - A list of strings representing the name of each column
      */
-    constructor(columns, rows, accessFactory = ((rowName) => new AugmentedTableColumnAccessHelper(this, rowName)) ){
+    constructor(columns, rows){
+    
         super(columns.length, rows.length);
         this._rows = rows;
         this._columns = columns;  
-        this._accessFactory = accessFactory;
+
     }
 
+    /**
+     * 
+     * @param {AugmentedTableColumnAccessHelper} rowName 
+     */
     getRow(rowName){
         const accessCheck = this._rows.indexOf(rowName);
         if(accessCheck === -1){
             throw `AugmentedTable: Illegal row access with: ${rowName}.\
             Allowed are: ${this._rows.join(", ")}`;
         }
-        return this._accessFactory(rowName);
+        return this.createColumnAccessor(rowName);
     }
 
     /**
-     * @returns {[AugmentedTableColumnAccessHelper]}
+     * @returns {AugmentedTableColumnAccessHelper[]}
      */
     getAllRows(){
         return this._rows.map( row => this.getRow(row) );
@@ -38,6 +41,30 @@ export class AugmentedTable extends Table {
     getColumnNames(){
         return this._columns;
     }
+
+    /**
+     * 
+     * @param {AugmentedTable} parent 
+     */
+    createIntance(parent){
+        const res = new AugmentedTable(parent._columns, parent._rows);
+        //res._accessFactory = Function.bind(this._accessFactory, res);
+        return res; //the accessFactory is shared. we use apply because of that
+    }
+
+    /**
+     * @template T
+     * 
+     * @param {string} rowName
+     * @returns {AugmentedTableColumnAccessHelper<T>} 
+     */
+    createColumnAccessor(rowName){
+        if(AugmentedTable.prototype !== Object.getPrototypeOf(this)){
+            throw "AugmentedTable: You are using an inherited class. Please override createColumnAccessor";
+        }
+        return new AugmentedTableColumnAccessHelper(this, rowName);
+    }
+    
 }
 
 export class AugmentedTableColumnAccessHelper{
@@ -69,7 +96,7 @@ export class AugmentedTableColumnAccessHelper{
      * If optionalValue is undefined this function will act like a getter, otherwise as a setter. 
      * @param {string} columnName 
      * @param {number=} optionalValue
-     * @returns {this|number} 
+     * @returns {(number|this)}
      */
     accessColumn(columnName, optionalValue){
         const accessCheck = this._parent._columns.indexOf(columnName);
@@ -86,10 +113,10 @@ export class AugmentedTableColumnAccessHelper{
     }
 
     /**
-     * @returns [number]
+     * @returns number[]
      */
     getAllColumns(){
-        return this._parent._columns.map( column => this.getColumn(column) );
+        return this._parent._columns.map( column => this.accessColumn(column) );
     }
 
     get name(){

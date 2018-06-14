@@ -3,5 +3,4 @@ assets/
 font-awesome-4.7.0/
 .vscode/
 notes
-test/jasmine-standalone-3.1.0.zip
-test/
+/node_modules
