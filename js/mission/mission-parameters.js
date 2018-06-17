@@ -56,6 +56,10 @@ export class MissionParameters extends AugmentedTable{
         return new AccessHelper(this, GameConstants.MISSION_PARAMETERS_ROW_KEYS.ZOMBIES);
     }
 
+    get encounterChance(){
+        return new AccessHelper(this,GameConstants.MISSION_PARAMETERS_ROW_KEYS.ENCOUNTER_CHANCE);
+    }
+
      /**
      * @returns {AccessHelper}
      */

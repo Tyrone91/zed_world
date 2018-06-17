@@ -2,6 +2,13 @@ import { Team } from "./team.js";
 import { MissionParameters } from "./mission-parameters.js";
 import { Location } from "./location.js";
 import { GameConstants } from "../core/game-constants.js";
+import {LootDispatcher} from "./loot-dispatcher.js";
+import { LootReceiver } from "../loot-system/loot-receiver.js";
+import {Random} from "../math/random.js"
+import { ENVIRONMENT } from "../core/game-environment.js";
+import { Survivor } from "../core/survivor.js";
+import { AmmoTable } from "../loot-system/ammo-table.js";
+
 
 /**
  * 
@@ -36,44 +43,122 @@ function passingTimeIn(mission){
  * 
  * consume/refill phase
  */
-class MissionScheduler{
+class MissionScheduler extends LootReceiver{
 
     /**
      * @param {SurvivorMission} mission 
-     * @param {MissionParameters} values
      */
     constructor(mission, values){
         this._mission = mission;
-        this._values = values;
         this._shedule = [
             () => this.ambush(),
             () => this.scouting(),
             () => this.restocking()
         ];
+        this._retread = false;
+
     }
 
     _validating(){
-        return this._mission.getSurivivors().length > 0;
+        return this._mission.getSurivivors().length > 0 || this._retread;
     }
 
+    get rng(){
+        return this._mission._rng;
+    }
+
+    _checkScoutingBattle(){
+        const encChance = ENVIRONMENT.calculator().encounterChance(this._mission.modifier, this.rng);
+        const comparision = this.rng.inBetween(0,100);
+        if(comparision > chance){
+            //TODO: doBattle
+            return true;
+        }
+        return false
+    }
 
     scouting(){
-        return false;
+        const fought = this._checkScoutingBattle();
+
+        this._mission._lootDispatchers.forEach(d => {
+            const dropped = d.checkForDrops(this, this._mission.modifier, this.rng);
+        });
+        return fought;
     }
 
     ambush(){
         if(!GameConstants.MISSION.AMBUSH_CAN_HAPPEN){
             return false;
         }
+        const calc = ENVIRONMENT.calculator();
+        const modifier = this._mission.modifier;
+        const cmp = this.rng.inBetween(0,100);
+        if(cmp > calc.ambushChance(modifier, this.rng) ){
+            //TODO: doBattle
+            return true;
+        }
+        return false;
     }
 
     restocking(){
         if(GameConstants.MISSION.SURVIVOR_CONSUME_FOOD){
+            /**
+             * 
+             * @param {Survivor} surv 
+             * @param {number} amount 
+             */
+            const consumeFood = (surv, amount) => {
+                const foodWant = amount;
+                const teams = this._mission.getTeams();
+                for(const team of teams){
+                    if(team.getFoodStock() > 0 ){
+                        const diff = team.getFoodStock() - amount;
+                        if(diff >= 0){
+                            amount = 0;
+                            team.setFoodStock(diff);
+                            break;
+                        }else{
+                            amount -= team.getFoodStock();
+                            team.setFoodStock(0);
+                        }
+                    }
+                }
+                if(amount > 0){
+                    const diff = this._mission._foundFood - amount;
+                    if(diff >= 0){
+                        amount = 0;
+                        this._mission._foundFood -= amount;
+                    }else{
+                        amount -= this._mission._foundFood;
+                        this._mission._foundFood = 0;
+                    }
+                }
+                surv.stats.hunger.current(foodWant-amount);
+            };
+            this._mission.getSurivivors()
+            .sort( surv1, surv2 => {
+                const h1 = surv1.stats.hunger.current();
+                const h2 = surv2.stats.hunger.current();
 
+                if(h1 < h2){
+                    return -1;
+                }
+
+                if(h1 > h2){
+                    return 1;
+                }
+
+                return 0;
+            })
+            .forEach(surv => {
+                const current = surv.stats.hunger.current();
+                const max = surv.stats.hunger.max();
+                consumeFood(surv, max - current); //TODO: give team an average consume if not enough
+            });
         }
 
         if(GameConstants.MISSION.SURVIVOR_CONSUME_AMMO){
-
+            console.log("AMMO RFILL NOT YET IMPLEMENTED"); //TODO: finish
         }
     }
 
@@ -82,13 +167,13 @@ class MissionScheduler{
     }
 
     _retreadFromMission(){
-        
+        this._retread = true;
     }
 
     shedule(){
         for( const task of this._shedule){
             if(this._validating()){
-
+                return;
             }
 
             const combat = task();
@@ -100,8 +185,22 @@ class MissionScheduler{
         }
     }
 
+    /**
+     * 
+     * @param {AmmoTable} ammoTable 
+     */
+    addAmmo(ammoTable){
+        const newTable = this._mission._foundAmmo.add(ammoTable);
+        this._mission._foundAmmo = newTable;
+    }
 
+    addFood(amount){
+        this._mission._foundEquipment += amount;
+    }
 
+    addEquipment(equipment){
+        this._mission._foundEquipment.push(equipment);
+    }
 }
 
 
@@ -110,9 +209,6 @@ export class SurvivorMission {
 
         /**@type {Team[]} */
         this._team = [];
-
-        /**@type {Object[]} */ //TODO: finish rewards
-        this._rewards = [];
 
         this._baseMissionValues = new MissionParameters();
 
@@ -126,6 +222,17 @@ export class SurvivorMission {
         this._missionLength = 1;
 
         this._targetLocation = null;
+
+        /**@type {LootDispatcher[]} */
+        this._lootDispatchers = [];
+
+        /**@type {Random} */
+        this._rng = null;
+
+        this._foundAmmo = new AmmoTable();;
+        this._foundFood = 0;
+        this._foundEquipment  = [];
+        this._earlyReturn = false;
     }   
 
     /**
@@ -140,16 +247,16 @@ export class SurvivorMission {
         return this._missionLength - this._passedTime;
     }
 
+    isFinished(){
+        return this.timeLeft() <= 0 || this._earlyReturn || this.getSurivivors().length === 0;
+    }
+
     /**
      * 
      * @param {Team} team 
      */
     addTeam(team){
         this._team.push(team);
-    }
-
-    addReward(){
-        //TODO: add reward
     }
 
     /**
@@ -201,8 +308,23 @@ export class SurvivorMission {
         return this._team;
     }
 
-    _onTimePass(){
+    addLootDispatcher(...dispatchers){
+        this._lootDispatchers.push(...dispatchers);
+    }
 
+    _onTimePass(){
+        const shedule = new MissionScheduler(this);
+        shedule.shedule();
+        if(shedule._retread){
+            this._earlyReturn = true;
+        }
+    }
+
+    /**
+     * @returns {MissionParameters}
+     */
+    get modifier(){
+        return ; //TODO: finish work
     }
 
 

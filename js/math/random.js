@@ -23,14 +23,23 @@ export class Random{
         };
     }
 
+    /**
+     * @returns {number}
+     */
     nextInt(){
         return this._nextRand();
     }
 
+    /**
+     * @returns {number}
+     */
     next(){
         return this._nextRand() / MAX_VALUE;
     }
 
+    /**
+     * @returns {number}
+     */
     inBetween(low, upper = MAX_VALUE){
         const f = this.nextInt() / MAX_VALUE;
         return Math.floor(low + ( (upper-low) * f ));

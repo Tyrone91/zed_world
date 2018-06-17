@@ -1,14 +1,28 @@
-import {SurvivorMission} from "../../js/mission/survivor-mission"
+import {SurvivorMission} from "../../js/mission/survivor-mission.js"
+import {MissionBuilder} from "../../js/mission/mission-builder.js"
 
+describe("Mission System Trst", function(){
+    describe("mission builder test", () => {
 
-describe("Mission function test", () => {
+            it("mission is not ready if not all parameters are set", function(){
+                const builder = new MissionBuilder();
 
-    it("Initialization test", () => {
-        const mission = new SurvivorMission();
-    });
+                expect(builder.isReady()).toBeFalsy();
 
-    it("Calculation test", () => {
-        const mission = new SurvivorMission();
-        mission.calcMissionValues();
-    });
+                builder.setLootDispatcher({});
+                expect(builder.isReady()).toBeFalsy();
+
+                builder.setMissionLength(3);
+                expect(builder.isReady()).toBeFalsy();
+
+                builder.setTarget({});
+                expect(builder.isReady()).toBeFalsy();
+
+                builder.setTeams([{}]);
+                expect(builder.isReady()).toBeTruthy();
+            });
+            
+        });
 });
+
+

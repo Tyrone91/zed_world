@@ -1,4 +1,8 @@
 import { Table } from "../math/table.js";
+import { MissionParameters } from "../mission/mission-parameters.js";
+import { Random } from "../math/random.js";
+import { Survivor } from "./survivor.js";
+import { Team } from "../mission/team.js";
 
 
 export class GameCalculator {
@@ -24,6 +28,98 @@ export class GameCalculator {
             return tables.reduce( (prev,current) => prev.multipy(current) );
         }
     }
+
+    /**
+     * 
+     * @param {MissionParameters} modifier 
+     * @param {Random=} rng 
+     */
+    ambushChance(modifier, rng){
+        //TODO: add reduction of ambush chance if you have a higt awareness and so on
+        return this._chanceBetween(
+            modifier.ambushChance.min,
+            modifier.ambushChance.max,
+            rng
+        );
+    }
+
+    /**
+     * 
+     * @param {MissionParameters} modifiers 
+     * @param {Random=} rng - Optional. If not given the average is used.
+     */
+    encounterChance(modifiers, rng){
+        return this._chanceBetween(
+            modifiers.encounterChance.min,
+            modifiers.encounterChance.max,
+            rng
+        );
+    }
+
+    /**
+     * 
+     * @param {number} min 
+     * @param {number} max 
+     * @param {Random=} rng 
+     */
+    _chanceBetween(min, max, rng){
+        if(!rng){
+            return (max + min) / 2; 
+        }
+        return rng.inBetween(min,max);
+    }
+
+    /**
+     * 
+     * @param {MissionParameters} modifiers 
+     * @param {Random=} rng 
+     */
+    extraordinaryLootChance(modifiers, rng){
+        this._chanceBetween(
+            modifiers.lootExtraOrdinary.min,
+            odifiers.lootExtraOrdinary.max,
+            rng);
+    }
+
+    /**
+     * 
+     * @param {MissionParameters} modifiers 
+     * @param {Random=} rng 
+     */
+    commonLootChance(modifiers, rng){
+        this._chanceBetween(
+            modifiers.lootCommon.min,
+            modifiers.lootCommon.max,
+            rng
+        );
+    }
+
+    /**
+     * 
+     * @param {MissionParameters} modifiers 
+     * @param {Random=} rng 
+     */
+    rareLootChance(modifiers, rng){
+        this._chanceBetween(
+            modifiers.lootRare.min,
+            modifiers.lootRare.max,
+            rng
+        );
+    }
+
+    /**
+     * 
+     * @param {Survivor} survivor 
+     * @param {MissionParameters} modifier 
+     * @param {Team} team 
+     */
+    foodConsumptionForSurvivor(survivor, modifier, team){
+        const diff = survivor.stats.hunger.max - survivor.stats.hunger.current;
+        //TODO: add advance stuff later
+        return diff;
+    }
+
+
 }
 
 /**

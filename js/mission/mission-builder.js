@@ -1,13 +1,14 @@
 import { Team } from "./team.js";
 import { SurvivorMission } from "./survivor-mission.js";
 
-class MissionBuilder{
+export class MissionBuilder{
 
     constructor(){
         this._teamTeam = null;
         this._teams = [];
         this._length = 1;
         this._target = null;
+        this._lootDispatchers = [];
     }
 
     /**
@@ -44,6 +45,9 @@ class MissionBuilder{
         if(!this._target){
             return false;
         }
+        if(this._lootDispatchers.length === 0){
+            return false;
+        }
         return true;
     }
 
@@ -55,6 +59,10 @@ class MissionBuilder{
         return this._length;
     }
 
+    setLootDispatcher(dispatcher){
+        this._lootDispatchers = dispatcher;
+    }
+
     build(){
         if(!this.isReady()){
             throw "MissionBuilder is not yes ready to create a new Mission";
@@ -63,6 +71,7 @@ class MissionBuilder{
         this._teams.forEach(team => m.addTeam(team));
         m.setTargetLocation(this._target);
         m.setMissionTime(this._length);
+        m.addLootDispatcher(...this._lootDispatchers);
         
         return m;
     }

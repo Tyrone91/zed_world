@@ -81,6 +81,10 @@ export class Team {
         return this._foodStock;
     }
 
+    setFoodStock(amount){
+        this._foodStock = amount;
+    }
+
     setContinueAfterCombat(value){
         this._continueAfterCombat = value;
     }

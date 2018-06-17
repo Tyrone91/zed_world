@@ -18,6 +18,9 @@ class LootContainer{
     }
 }
 
+/**
+ * @template T
+ */
 export class LootTable{
     /**
      * 
@@ -36,7 +39,7 @@ export class LootTable{
 
     /**
      * 
-     * @param {any} loot 
+     * @param {T} loot 
      * @param {number} weight 
      */
     add(loot,weight){
@@ -49,24 +52,26 @@ export class LootTable{
 
     /**
      * 
-     * @param {number} times Optional - How many rolls should happen  
+     * @param {number} times Optional - How many rolls should happen 
+     * @param {function():number} rng - Optinal random number generator. Default Math.random() 
      */
-    roll(times=1){
+    roll(times=1, rng = () => {Math.random()} ){
         while(times--){
             const totalWeight = this._calcTotalWeight();
-            const hit = Math.random() * totalWeight;
+            const hit = rng() * totalWeight;
             let offset = 0;
             for(const container of this._lootList){
                 const containerRange = offset + container.weight;
                 if( offset <= hit && (offset + container.weight) > hit){
                     this._receivers.forEach( receiver => receiver(container.loot) );
-                    break;
+                    return container.loot;
                 }else{
                     offset += container.weight;
                 }
             }
         }
-        return this;
+
+        return null;
     }
 
     /**
