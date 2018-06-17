@@ -1,6 +1,6 @@
 import {Random} from "../math/random.js";
 import {LootTable} from "../loot-system/loot-table.js";
-import { LootReceiver } from "../loot-system/loot-receiver";
+import { LootReceiver } from "../loot-system/loot-receiver.js";
 import {LootContainer} from "../loot-system/loot-container.js";
 import { GameConstants } from "../core/game-constants.js";
 
@@ -14,8 +14,7 @@ export class LootDispatcher {
      * @param {LootTable} rare 
      * @param {LootTable} common 
      */
-    constructor(rng, extraordinary, rare, common){
-        this._rng = rng;
+    constructor(extraordinary, rare, common){
         this._tables = {
             common: common,
             rare: rare ,
@@ -25,26 +24,28 @@ export class LootDispatcher {
 
     /**
      * 
-     * @param {LootReceiver} receiver 
+     * @param {LootReceiver} receiver
+     * @param {Random} rng
+     * @param {LootTable} table
      */
-    _dispatchLoot(table, receiver){
+    _dispatchLoot(table, receiver, rng){
 
         /**
          * @type {LootContainer}
          */
-        const res = table.roll(1, this._rng);
+        const res = table.roll(1, () => rng.next() );
 
-        if(res.type === LootContainer.Type.AMMO){
+        if(res.type === GameConstants.Loot.Type.AMMO){
             receiver.addAmmo(res.loot);
             return;
         }
 
-        if(res.type === LootContainer.Type.FOOD){
+        if(res.type === GameConstants.Loot.Type.FOOD){
             receiver.addFood(res.loot);
             return;
         }
 
-        if(res.type === LootContainer.Type.EQUIPMENT){
+        if(res.type === GameConstants.Loot.Type.EQUIPMENT){
             receiver.addEquipment(res.loot);
             return;
         }
@@ -55,9 +56,9 @@ export class LootDispatcher {
     checkForDrops(receiver, modifiers, rng){
 
         if(GameConstants.MISSION.ALWAYS_ROLL_FOR_LOOT){
-            this._dispatchLoot(this._tables.common, receiver);
-            this._dispatchLoot(this._tables.rare, receiver);
-            this._dispatchLoot(this._tables.extraordinary, receiver);
+            this._dispatchLoot(this._tables.common, receiver, rng);
+            this._dispatchLoot(this._tables.rare, receiver, rng);
+            this._dispatchLoot(this._tables.extraordinary, receiver, rng);
             return;
         }
         let dropped = false;
@@ -66,17 +67,17 @@ export class LootDispatcher {
         let cmp = () => rng.inBetween(0,100);
 
         if(cmp() > calc.commonLootChance(modifiers,rng)){
-            this._dispatchLoot(this._tables.common, receiver);
+            this._dispatchLoot(this._tables.common, receiver, rng);
             dropped = true;
         }
 
         if(cmp() > calc.rareLootChance(modifiers,rng)){
-            this._dispatchLoot(this._tables.rare, receiver);
+            this._dispatchLoot(this._tables.rare, receiver, rng);
             dropped = true;
         }
 
         if(cmp() > calc.extraordinaryLootChance(modifiers,rng)){
-            this._dispatchLoot(this._tables.extraordinary, receiver);
+            this._dispatchLoot(this._tables.extraordinary, receiver, rng);
             dropped = true;
         }
 

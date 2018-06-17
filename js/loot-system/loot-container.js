@@ -12,10 +12,5 @@ export class LootContainer {
     get loot(){
         return this._lootBuilder();
     }
-
-    static Type = {
-        FOOD : "FODD",
-        AMMO : "AMMO",
-        EQUIPMENT: "EQUIPMENT"
-    }
+    
 }

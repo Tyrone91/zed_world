@@ -23,7 +23,7 @@ export class CharacterStats extends AugmentedTable{
     }
 
     createColumnAccessor(rowName){
-        return new StatsAccessor(rowName);
+        return new StatsAccessor(this, rowName);
     }
 
     createIntance(parent){

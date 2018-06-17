@@ -24,7 +24,7 @@ class LootContainer{
 export class LootTable{
     /**
      * 
-     * @param {[function]} lootReceivers Callbacks that receives the rolled loot
+     * @param {[function]=} lootReceivers Callbacks that receives the rolled loot
      */
     constructor(...lootReceivers){
         /**@type [LootContainer] */
@@ -55,7 +55,7 @@ export class LootTable{
      * @param {number} times Optional - How many rolls should happen 
      * @param {function():number} rng - Optinal random number generator. Default Math.random() 
      */
-    roll(times=1, rng = () => {Math.random()} ){
+    roll(times=1, rng = (() => {Math.random()}) ){
         while(times--){
             const totalWeight = this._calcTotalWeight();
             const hit = rng() * totalWeight;

@@ -9,6 +9,7 @@ export class MissionBuilder{
         this._length = 1;
         this._target = null;
         this._lootDispatchers = [];
+        this._rng = null;
     }
 
     /**
@@ -38,6 +39,10 @@ export class MissionBuilder{
         return this._teamTeam;
     }
 
+    setRNG(rng){
+        this._rng = rng;
+    }
+
     isReady(){
         if(this._teams.length <= 0){
             return false;
@@ -46,6 +51,9 @@ export class MissionBuilder{
             return false;
         }
         if(this._lootDispatchers.length === 0){
+            return false;
+        }
+        if(!this._rng){
             return false;
         }
         return true;
@@ -59,8 +67,8 @@ export class MissionBuilder{
         return this._length;
     }
 
-    setLootDispatcher(dispatcher){
-        this._lootDispatchers = dispatcher;
+    setLootDispatchers(dispatchers){
+        this._lootDispatchers = dispatchers;
     }
 
     build(){
@@ -72,6 +80,7 @@ export class MissionBuilder{
         m.setTargetLocation(this._target);
         m.setMissionTime(this._length);
         m.addLootDispatcher(...this._lootDispatchers);
+        m.setRandomNumberGenerator(this._rng);
         
         return m;
     }

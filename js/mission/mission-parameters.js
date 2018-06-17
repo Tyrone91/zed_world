@@ -37,9 +37,16 @@ export class MissionParameters extends AugmentedTable{
     constructor(){
         super(
             GameConstants.MISSION_PARAMETERS_COLUMNS,
-            GameConstants.MISSION_PARAMETERS_ROWS,
-            rowName => new AccessHelper(this,rowName)
+            GameConstants.MISSION_PARAMETERS_ROWS
         );
+    }
+
+    createIntance(){
+        return new MissionParameters();
+    }
+
+    createColumnAccessor(row){
+        return new AccessHelper(this,row);
     }
 
     /**

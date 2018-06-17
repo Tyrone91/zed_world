@@ -3,6 +3,7 @@ import { MissionParameters } from "../mission/mission-parameters.js";
 import { Random } from "../math/random.js";
 import { Survivor } from "./survivor.js";
 import { Team } from "../mission/team.js";
+import { SurvivorMission } from "../mission/survivor-mission.js";
 
 
 export class GameCalculator {
@@ -31,14 +32,41 @@ export class GameCalculator {
 
     /**
      * 
+     * @param {...Table} tables 
+     */
+    _multiplyTablesToOne(...tables){
+        return tables.reduce( (prev,current) => prev.multipy(current) );
+    }
+
+    /**
+     * 
+     * @param {SurvivorMission} mission 
+     */
+    calculateFinalMissionValues(mission){
+        //TODO: add option for addaptive and muliplitiv
+        const base = mission.getBaseValues();
+        let res = base;
+
+        if(mission.getAdditionalModifiers().length > 0){
+            res = this._multiplyTablesToOne(res, ...mission.getAdditionalModifiers());
+        }
+
+        res = this._multiplyTablesToOne(res, ...mission.getTeams().map(team => team.getMissionModifiers()));
+        res = this._multiplyTablesToOne(res, mission.getTargetLocation().modifiers);
+
+        return res;
+    }
+
+    /**
+     * 
      * @param {MissionParameters} modifier 
      * @param {Random=} rng 
      */
     ambushChance(modifier, rng){
         //TODO: add reduction of ambush chance if you have a higt awareness and so on
         return this._chanceBetween(
-            modifier.ambushChance.min,
-            modifier.ambushChance.max,
+            modifier.ambushChance.min(),
+            modifier.ambushChance.max(),
             rng
         );
     }
@@ -50,8 +78,8 @@ export class GameCalculator {
      */
     encounterChance(modifiers, rng){
         return this._chanceBetween(
-            modifiers.encounterChance.min,
-            modifiers.encounterChance.max,
+            modifiers.encounterChance.min(),
+            modifiers.encounterChance.max(),
             rng
         );
     }
@@ -76,8 +104,8 @@ export class GameCalculator {
      */
     extraordinaryLootChance(modifiers, rng){
         this._chanceBetween(
-            modifiers.lootExtraOrdinary.min,
-            odifiers.lootExtraOrdinary.max,
+            modifiers.lootExtraOrdinary.min(),
+            odifiers.lootExtraOrdinary.max(),
             rng);
     }
 
@@ -88,8 +116,8 @@ export class GameCalculator {
      */
     commonLootChance(modifiers, rng){
         this._chanceBetween(
-            modifiers.lootCommon.min,
-            modifiers.lootCommon.max,
+            modifiers.lootCommon.min(),
+            modifiers.lootCommon.max(),
             rng
         );
     }
@@ -101,8 +129,8 @@ export class GameCalculator {
      */
     rareLootChance(modifiers, rng){
         this._chanceBetween(
-            modifiers.lootRare.min,
-            modifiers.lootRare.max,
+            modifiers.lootRare.min(),
+            modifiers.lootRare.max(),
             rng
         );
     }

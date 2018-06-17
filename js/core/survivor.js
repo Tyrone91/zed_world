@@ -17,7 +17,7 @@ export class Survivor extends Character{
     }
 
     isAlive(){
-        this.stats.health.current() > 0;
+        return this.stats.health.current() > 0;
     }
 
     get stats(){

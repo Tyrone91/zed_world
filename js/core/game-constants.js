@@ -64,3 +64,11 @@ GameConstants.MISSION = {
     SURVIVOR_CONSUME_AMMO: true,
     ALWAYS_ROLL_FOR_LOOT: true
 }
+
+GameConstants.Loot = {
+    Type : {
+        FOOD : "FODD",
+        AMMO : "AMMO",
+        EQUIPMENT: "EQUIPMENT"
+    }
+};

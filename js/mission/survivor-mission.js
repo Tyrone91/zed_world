@@ -49,6 +49,7 @@ class MissionScheduler extends LootReceiver{
      * @param {SurvivorMission} mission 
      */
     constructor(mission, values){
+        super();
         this._mission = mission;
         this._shedule = [
             () => this.ambush(),
@@ -70,7 +71,7 @@ class MissionScheduler extends LootReceiver{
     _checkScoutingBattle(){
         const encChance = ENVIRONMENT.calculator().encounterChance(this._mission.modifier, this.rng);
         const comparision = this.rng.inBetween(0,100);
-        if(comparision > chance){
+        if(comparision > encChance){
             //TODO: doBattle
             return true;
         }
@@ -136,7 +137,7 @@ class MissionScheduler extends LootReceiver{
                 surv.stats.hunger.current(foodWant-amount);
             };
             this._mission.getSurivivors()
-            .sort( surv1, surv2 => {
+            .sort( (surv1, surv2) => {
                 const h1 = surv1.stats.hunger.current();
                 const h2 = surv2.stats.hunger.current();
 
@@ -243,6 +244,10 @@ export class SurvivorMission {
         this._missionLength = time;
     }
 
+    setRandomNumberGenerator(rng){
+        this._rng = rng;
+    }
+
     timeLeft(){
         return this._missionLength - this._passedTime;
     }
@@ -268,20 +273,33 @@ export class SurvivorMission {
         return this;
     }
 
+    /**
+     * @returns {Location}
+     */
     getTargetLocation(){
         return this._targetLocation;
     }
-
-    isReady(){
-        return this._targetLocation && this._team.length !== 0;
-    }
-
+    
     /**
      * 
      * @param {...MissionParameters} modifiers 
      */
     addAdditionalModifiers(...modifiers){
         this._additionalModifiers.push(...modifiers);
+    }
+
+    /**
+     * @returns {MissionParameters[]}
+     */
+    getAdditionalModifiers(){
+        return this._additionalModifiers;
+    }
+
+    /**
+     * @returns {MissionParameters}
+     */
+    getBaseValues(){
+        return this._baseMissionValues;
     }
 
     start(){
@@ -324,7 +342,7 @@ export class SurvivorMission {
      * @returns {MissionParameters}
      */
     get modifier(){
-        return ; //TODO: finish work
+        return ENVIRONMENT.calculator().calculateFinalMissionValues(this);
     }
 
 
