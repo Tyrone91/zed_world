@@ -60,8 +60,8 @@ class MissionScheduler extends LootReceiver{
 
     }
 
-    _validating(){
-        return this._mission.getSurivivors().length > 0 || this._retread;
+    _continueTask(){
+        return this._mission.getSurivivors().length > 0 || !this._retread;
     }
 
     get rng(){
@@ -71,7 +71,7 @@ class MissionScheduler extends LootReceiver{
     _checkScoutingBattle(){
         const encChance = ENVIRONMENT.calculator().encounterChance(this._mission.modifier, this.rng);
         const comparision = this.rng.inBetween(0,100);
-        if(comparision > encChance){
+        if(comparision < encChance){
             //TODO: doBattle
             return true;
         }
@@ -173,12 +173,12 @@ class MissionScheduler extends LootReceiver{
 
     shedule(){
         for( const task of this._shedule){
-            if(this._validating()){
+           
+            if(!this._continueTask()){
                 return;
             }
 
             const combat = task();
-
             if(combat && this._isRetreating() ){
                 this._retreadFromMission();
                 return;
@@ -279,7 +279,7 @@ export class SurvivorMission {
     getTargetLocation(){
         return this._targetLocation;
     }
-    
+
     /**
      * 
      * @param {...MissionParameters} modifiers 

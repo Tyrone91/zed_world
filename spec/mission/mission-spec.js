@@ -121,9 +121,14 @@ describe("Mission System Test", function(){
                 s3.stats.health.current(0);
                 s4.stats.health.current(0);
 
-                builder.setTeams(teams);
+                team1.addTeamMember(s1,s2);
+                team2.addTeamMember(s3,s4);
+
+                builder.setTeams([team1, team2]);
 
                 const mission = builder.build();
+
+                expect(mission.getSurivivors()).toEqual([]);
         });
     });
 
@@ -269,6 +274,24 @@ describe("Mission System Test", function(){
                     const deadTeam = new Team();
                     deadTeam.addTeamMember(survivor1);
                     survivor1.stats.health.current(0);
+                    mission._team = [deadTeam];
+                    expect(mission.timeLeft()).toBeGreaterThan(0);
+                    expect(mission.isFinished()).toBeTruthy();
+                });
+                
+                it("over by retreat", function(){
+                    const mission = quickBuild();
+                    const retreatTeam = getTeam();
+                    retreatTeam._continueAfterCombat = false;
+                    mission._team = [retreatTeam];
+                    mission.getBaseValues().encounterChance.min(100).max(100);
+
+                    expect(mission.timeLeft()).toBeGreaterThan(0);
+                    expect(mission.isFinished()).toBeFalsy();
+
+                    mission.passTime();
+
+                    expect(mission.getSurivivors()).toEqual([survivor1, survivor2, survivor3]);
                     expect(mission.timeLeft()).toBeGreaterThan(0);
                     expect(mission.isFinished()).toBeTruthy();
                 });

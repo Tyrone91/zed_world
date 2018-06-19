@@ -3,7 +3,7 @@ import { GameCalculator } from "./game-calculator.js";
 export class GameEnvironment {
     constructor(){
         this._calculator = new GameCalculator({
-            addativeModifiersOn: true
+            addativeModifiersOn: false
         });
     }
 

@@ -53,7 +53,6 @@ export class GameCalculator {
 
         res = this._multiplyTablesToOne(res, ...mission.getTeams().map(team => team.getMissionModifiers()));
         res = this._multiplyTablesToOne(res, mission.getTargetLocation().modifiers);
-
         return res;
     }
 
