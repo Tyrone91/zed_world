@@ -29,19 +29,38 @@ export class AmmoTable extends AugmentedTable{
         return new AmmoAccessor(this, rowName);
     }
 
+    /**
+     * @returns {AmmoAccessor}
+     */
     get small(){
         return this.getRow(GameConstants.AMMO_TYPES.SMALL);
     }
 
+    /**
+     * @returns {AmmoAccessor}
+     */
     get medium(){
         return this.getRow(GameConstants.AMMO_TYPES.MEDIUM);
     }
 
+    /**
+     * @returns {AmmoAccessor}
+     */
     get heavy(){
         return this.getRow(GameConstants.AMMO_TYPES.HEAVY);
     }
 
+    /**
+     * @returns {AmmoAccessor}
+     */
     get special(){
         return this.getRow(GameConstants.AMMO_TYPES.SPECIAL);
+    }
+
+    /**
+     * @returns {AmmoAccessor[]}
+     */
+    getAllRows(){
+        return super.getAllRows();
     }
 }

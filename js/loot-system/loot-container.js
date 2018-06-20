@@ -1,4 +1,10 @@
 export class LootContainer {
+    
+    /**
+     * 
+     * @param {string} type 
+     * @param {function():any} lootBuilder 
+     */
     constructor(type, lootBuilder){
         this._type = type;
         this._lootBuilder = lootBuilder;

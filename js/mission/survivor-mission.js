@@ -103,6 +103,7 @@ class MissionScheduler extends LootReceiver{
 
     restocking(){
         if(GameConstants.MISSION.SURVIVOR_CONSUME_FOOD){
+            //we dont tell the survivor here to eat, all survivors will be updated at round end
             /**
              * 
              * @param {Survivor} surv 
@@ -134,7 +135,8 @@ class MissionScheduler extends LootReceiver{
                         this._mission._foundFood = 0;
                     }
                 }
-                surv.stats.hunger.current(foodWant-amount);
+                const tmp = surv.stats.hunger.current();
+                surv.stats.hunger.current(tmp + (foodWant-amount));
             };
             this._mission.getSurivivors()
             .sort( (surv1, surv2) => {
