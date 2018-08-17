@@ -47,7 +47,7 @@ export class Table {
         }
         //const result = new Table(this._width, this._height); //TODO: fixme replace with injection. No new Table because inheirated objects will no have their propertys
         /**@type {T extends Table} */
-        const result = this.createIntance(this);
+        const result = this.createInstance(this);
         result._source = this._source.slice(0);
         for(let y = 0; y < this._height; ++y){
             for(let x = 0; x < this._width; ++x) {
@@ -177,7 +177,7 @@ export class Table {
      * It will be used to create a new object in some method
      * @param {Table} parent 
      */
-    createIntance(parent){
+    createInstance(parent){
         if(Object.getPrototypeOf(parent) !== Table.prototype){
 
             console.warn(`

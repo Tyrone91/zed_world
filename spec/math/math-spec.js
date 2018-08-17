@@ -106,7 +106,7 @@ describe("Tests the functionallity of the math module", function(){
                 });
             }
 
-            createIntance(parent){
+            createInstance(parent){
                 return new A();
             }
         }

@@ -1,5 +1,6 @@
 import { Team } from "./team.js";
 import { SurvivorMission } from "./survivor-mission.js";
+import { ENVIRONMENT } from "../core/game-environment.js";
 
 export class MissionBuilder{
 
@@ -10,6 +11,7 @@ export class MissionBuilder{
         this._target = null;
         this._lootDispatchers = [];
         this._rng = null;
+        this._combatStarter = null;
     }
 
     /**
@@ -71,6 +73,10 @@ export class MissionBuilder{
         this._lootDispatchers = dispatchers;
     }
 
+    setCombatStarter(starter){
+        this._combatStarter = starter;
+    }
+
     build(){
         if(!this.isReady()){
             throw "MissionBuilder is not yes ready to create a new Mission";
@@ -81,7 +87,14 @@ export class MissionBuilder{
         m.setMissionTime(this._length);
         m.addLootDispatcher(...this._lootDispatchers);
         m.setRandomNumberGenerator(this._rng);
-        
+        if(this._combatStarter){
+            m.setCombatStarter(this._combatStarter);
+        }else{
+            m.setCombatStarter( (mission, ambush) => {
+                ENVIRONMENT.startBattle(mission.getTeams(), this._target, mission.modifier, ambush, mission);
+            });
+        }
+       
         return m;
     }
 }

@@ -57,6 +57,8 @@ export function getJSON(url){
 }
 
 /**
+ * Returns a list with the results of the given urls.
+ * 
  * @template T
  * @param {string[]} urls 
  * @param {string=} basePath

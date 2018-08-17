@@ -26,7 +26,7 @@ export class CharacterStats extends AugmentedTable{
         return new StatsAccessor(this, rowName);
     }
 
-    createIntance(parent){
+    createInstance(parent){
         return new CharacterStats();
     }
 

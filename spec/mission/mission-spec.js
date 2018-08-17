@@ -183,7 +183,7 @@ describe("Mission System Test", function () {
 
     });
 
-    ; describe("mission execution test", function () {
+    describe("mission execution test", function () {
 
         function createLootTable(){
             const res = new LootTable();
@@ -201,6 +201,7 @@ describe("Mission System Test", function () {
         let survivor1 = new Survivor();
         let survivor2 = new Survivor();
         let survivor3 = new Survivor();
+        let survivors = [survivor1, survivor2, survivor3];
         let defaultLocation = new Location();
         let missionBuilder = new MissionBuilder();
         let defaultLootDispatcher = new LootDispatcher();
@@ -214,6 +215,7 @@ describe("Mission System Test", function () {
             survivor1 = giveHp(new Survivor());
             survivor2 = giveHp(new Survivor());
             survivor3 = giveHp(new Survivor());
+            survivors = [survivor1, survivor2, survivor3];
             defaultLocation = new Location("DEFAULT", "FOR_TESTING");
             missionBuilder = new MissionBuilder();
             commonTable = createLootTable();

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Weapon Designer</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/weapondesigner.css" />
+    <style>
+            @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+            </style> 
+    <script src="js/jquery.js"></script>
+    <script src="js/weapondesigner.js" type="module"></script>
+    <script>
+        function main(){
+            const canvas = $("<canvas>");
+            canvas[0].width = window.innerWidth;
+            canvas[0].height = window.innerHeight;
+            
+            $(document.body).append(canvas);
+            testDraw(canvas[0]);
+
+            window.addEventListener("resize", event => {
+                // canvas[0].width = window.innerWidth;
+                // canvas[0].height = window.innerHeight;
+            });
+        }
+        window.addEventListener("load", main);
+    </script>
+</head>
+<body>
+    <div class="menu">
+        <div class="controls">
+            <span>Show average</span>
+            <input id="checkbox-show-avg" type="checkbox" checked="true">
+        </div>
+        <div class="controls">
+            <span>Padding start</span>
+            <input type="range" value="60" id="slider-padding-start" max="200" min="10" step="11">
+        </div>
+        <div class="controls">
+            <span>Padding end</span>
+            <input type="range" value="20" id="slider-padding-end" max="200" min="10" step="1">
+        </div>
+        <div class="controls">
+            <span>Marker Steps</span>
+            <input type="range" value="5" id="slider-marker-steps" max="20" min="1" step="1">
+        </div>
+        <div class="controls">
+            <span>Font Size</span>
+            <input type="range" value="20" id="slider-font-size" max="60" min="5" step="1">
+        </div>
+        <div class="controls">
+            <span>Max. Distance</span>
+            <input type="range" value="100" id="slider-distance" max="200" min="10" step="10">
+        </div>
+        
+    </div>
+</body>
+</html>

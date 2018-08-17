@@ -4,6 +4,13 @@ import { Random } from "../math/random.js";
 import { Survivor } from "./survivor.js";
 import { Team } from "../mission/team.js";
 import { SurvivorMission } from "../mission/survivor-mission.js";
+import { CombatStats } from "../combat/combat-stats.js";
+import { GameConstants } from "./game-constants.js";
+
+
+function valueInBetween(value, min, max){
+    return value >= min && value <= max;
+}
 
 
 export class GameCalculator {
@@ -68,6 +75,30 @@ export class GameCalculator {
             modifier.ambushChance.max(),
             rng
         );
+    }
+
+    /**
+     * 
+     * @param {CombatStats} modifier 
+     * @param {Random} rng 
+     */
+    hitchance(distance, modifier, rng ){
+        const hitchance = this._chanceBetween(
+            modifier.hitchance.min(),
+            modifier.hitchance.max(),
+            rng
+        );
+        if(valueInBetween(distance, modifier.optimalRange.min(), modifier.optimalRange.max() )){
+            return hitchance;
+        }
+        const range = modifier.optimalRange;
+        let diff = 0;
+        if(range.max() < distance){
+            diff = distance - range.max();
+        }else{
+            diff  = range.min() - distance;
+        }
+        return Math.abs(hitchance - Math.pow(diff,GameConstants.COMBAT.OPTIMAL_RANGE_VS_DISTANCE_DIFFERENCE_EXPONENT));
     }
 
     /**

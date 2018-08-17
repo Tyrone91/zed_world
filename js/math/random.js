@@ -12,8 +12,8 @@ export class Random{
         const G = PARAMETER;
 
         this._nextRand = function(){
-            const div = seed / (N / G);
-            const rem = seed % (N / G);
+            const div = seed / (N / G); //(44488.07041494893)
+            const rem = seed % (N / G); //(44488.07041494893)
 
             const a = rem * G;
             const b = div * (N % G);
@@ -38,6 +38,8 @@ export class Random{
     }
 
     /**
+     * lower inclusive
+     * upper exclusive
      * @returns {number}
      */
     inBetween(low, upper = MAX_VALUE){

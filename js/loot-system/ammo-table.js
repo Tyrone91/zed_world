@@ -21,7 +21,7 @@ export class AmmoTable extends AugmentedTable{
         );
     }
 
-    createIntance(parent){
+    createInstance(parent){
         return new AmmoTable();
     }
 

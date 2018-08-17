@@ -3,11 +3,10 @@ export class Character {
         this._name = "";
     }
 
-    get name(){
-        return this._name;
-    }
-
     name(newName){
+        if(!newName){
+            return this._name;
+        }
         this._name = newName;
         return this;
     }

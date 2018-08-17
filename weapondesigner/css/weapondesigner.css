@@ -1,0 +1,24 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+.menu {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    padding: 10px;
+    background: #8080806c;
+    border: 1px solid black;
+}
+
+.controls {
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end
+}
+
+.controls span {
+    margin-right: 5px;
+}

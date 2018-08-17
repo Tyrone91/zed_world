@@ -15,8 +15,8 @@ export class AugmentedTable extends Table {
     }
 
     /**
-     * 
-     * @param {AugmentedTableColumnAccessHelper} rowName 
+     * @param {string} rowName;
+     * @returns {AugmentedTableColumnAccessHelper}
      */
     getRow(rowName){
         const accessCheck = this._rows.indexOf(rowName);
@@ -46,7 +46,7 @@ export class AugmentedTable extends Table {
      * 
      * @param {AugmentedTable} parent 
      */
-    createIntance(parent){
+    createInstance(parent){
         const res = new AugmentedTable(parent._columns, parent._rows);
         //res._accessFactory = Function.bind(this._accessFactory, res);
         return res; //the accessFactory is shared. we use apply because of that

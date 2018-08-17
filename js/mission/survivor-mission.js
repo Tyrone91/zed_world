@@ -72,7 +72,7 @@ class MissionScheduler extends LootReceiver{
         const encChance = ENVIRONMENT.calculator().encounterChance(this._mission.modifier, this.rng);
         const comparision = this.rng.inBetween(0,100);
         if(comparision < encChance){
-            //TODO: doBattle
+            this._mission._combatStarter(this._mission, false);
             return true;
         }
         return false
@@ -95,7 +95,7 @@ class MissionScheduler extends LootReceiver{
         const modifier = this._mission.modifier;
         const cmp = this.rng.inBetween(0,100);
         if(cmp > calc.ambushChance(modifier, this.rng) ){
-            //TODO: doBattle
+            this._mission._combatStarter(this._mission, true);
             return true;
         }
         return false;
@@ -232,6 +232,8 @@ export class SurvivorMission {
         /**@type {Random} */
         this._rng = null;
 
+        this._combatStarter = null;
+
         this._foundAmmo = new AmmoTable();;
         this._foundFood = 0;
         this._foundEquipment  = [];
@@ -248,6 +250,14 @@ export class SurvivorMission {
 
     setRandomNumberGenerator(rng){
         this._rng = rng;
+    }
+
+    /**
+     * 
+     * @param {function(SurvivorMission, boolean):void} combatStarter 
+     */
+    setCombatStarter(combatStarter){
+        this._combatStarter = combatStarter;
     }
 
     timeLeft(){
@@ -296,6 +306,8 @@ export class SurvivorMission {
     getAdditionalModifiers(){
         return this._additionalModifiers;
     }
+
+    
 
     /**
      * @returns {MissionParameters}

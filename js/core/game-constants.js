@@ -3,10 +3,36 @@ function objectAsArray(object){
     return Object.keys(object).map(key=>object[key]);
 }
 
+GameConstants.COMBAT = {
+    OPTIMAL_RANGE_VS_DISTANCE_DIFFERENCE_EXPONENT: 1.2,
+    ZOMBIE_DISTANCE_PER_ROUND : 7.5,
+    MINIMUM_ACCURACY : 5,
+    MAXIMUN_ACCURACY_PENALTY_EXPONENT : 2
+};
+
+GameConstants.COMBAT_STATS = {
+    HIT_CHANCE : "HIT_CHANCE",
+    DAMAGE : "DAMAGE",
+    OPTIMIAL_RANGE : "OPTIMIAL_RANGE",
+    ACTION_PER_ROUND : "ACTION_PER_ROUND",
+    STABILITY : "STABILITY",
+    ACCURACY : "ACCURACY"
+};
+
+GameConstants.COMBAT_STATS_COLUMN_KEYS = {
+    MIN : "MIN",
+    MAX : "MAX",
+    BASE: "BASE"
+};
+
+GameConstants.COMBAT_STATS_ROWS = objectAsArray(GameConstants.COMBAT_STATS);
+GameConstants.COMBAT_STATS_COLUMNS = objectAsArray(GameConstants.COMBAT_STATS_COLUMN_KEYS);
+
 GameConstants.CHARACTER_STATS = {
     HEALTH : "HEALTH",
     HUNGER : "HUNGER"
-}
+};
+
 GameConstants.CHARACTER_STATS_COLUMN_KEYS = {
     CURRENT : "CURRENT",
     MAX : "MAX"

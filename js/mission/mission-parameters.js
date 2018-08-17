@@ -41,7 +41,7 @@ export class MissionParameters extends AugmentedTable{
         );
     }
 
-    createIntance(){
+    createInstance(){
         return new MissionParameters();
     }
 
