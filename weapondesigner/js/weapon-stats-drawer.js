@@ -223,4 +223,8 @@ export class WeaponStatsDrawer{
         ctx.strokeStyle = "black";
         ctx.fillText(equipment.name, p.x +markerLength + 5, p.y + this._fontSize/4);
     }
+
+    get domElement(){
+        return this._canvas;
+    }
 }
