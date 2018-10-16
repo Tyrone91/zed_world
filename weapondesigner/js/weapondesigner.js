@@ -1,5 +1,5 @@
 import { Equipment } from "../../js/equipment/equipment.js";
-import { WeaponStatsDrawer } from "./weapon-stats-drawser.js";
+import { WeaponStatsDrawer } from "./weapon-stats-drawer.js";
 import { CombatStats } from "../../js/combat/combat-stats.js";
 import { AugmentedTableColumnAccessHelper } from "../../js/math/augmented-table.js"
 
