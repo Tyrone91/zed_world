@@ -9,6 +9,7 @@ export class Survivor extends Character{
         this._missionModifiers = new MissionParameters().fill(1);
         this._stats = new CharacterStats();
         this._combatstats = new CombatStats();
+        this._currentState = Survivor.States.IDLE;
     }
 
     /**
@@ -37,4 +38,26 @@ export class Survivor extends Character{
     set health(newhealth){
         this._stats.health.current(newhealth);
     }
+
+    get state(){
+        return this._currentState;
+    }
+
+    set state(newState){
+        this._currentState = newState;
+    }
+
+    isAvailable(){
+        if(this._currentState === Survivor.States.IDLE){
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+Survivor.States = {
+    IDLE: "IDLE",
+    ON_MISSION: "ON_MISSION",
+    TRAINING: "TRAINING"
 }

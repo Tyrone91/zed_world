@@ -112,7 +112,7 @@ export class Table {
     }
     
     /**
-     * @param {function(number, number, number, number)} callback 
+     * @param {(x:number, y:number, data:number, index:number)=>void} callback 
      */
     forEach(callback){
         for(let y = 0; y < this._height; ++y){
@@ -190,5 +190,38 @@ export class Table {
         const instance = Object.create(Object.getPrototypeOf(parent));
         instance._init(parent._width, parent._height);
         return instance;
+    }
+
+    /**
+     * All tables must be of the same type.
+     * @param {Table} table1 
+     * @param {Table} table2 
+     * @param  {...Table} rest 
+     */
+    static avg(table1, ...rest){
+        const tables = [table1, ...rest];
+        const target = table1.createInstance(table1);
+
+        /**
+         * @param {number[]} numbers 
+         */
+        function sum(numbers) {
+            return numbers.reduce( (prev, current) => prev + current, 0 );
+        }
+
+        /**
+         * @param {number} x 
+         * @param {number} y 
+         */
+        function sumOf(x,y){
+            return sum(tables.map( table => table.getCell(x,y) ));
+        }
+
+        const avgOf = (x,y) => sumOf(x,y) / tables.length;
+        
+        target.forEach( (x,y,data,index) => {
+            target.setCell(x,y, avgOf(x,y) );
+        });
+        return target;
     }
 }

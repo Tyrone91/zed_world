@@ -12,7 +12,7 @@ export class LootObjectNotFoundError extends Error{
 
 export class LootHander{
     constructor(){
-        /**@type [LootObject] */
+        /**@type LootObject[] */
         this._unopened = [];
         this._newUnopenedListeners = [];
     }

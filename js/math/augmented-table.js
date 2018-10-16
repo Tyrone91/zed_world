@@ -119,6 +119,9 @@ export class AugmentedTableColumnAccessHelper{
         return this._parent._columns.map( column => this.accessColumn(column) );
     }
 
+    /**
+     * Name of the row to that this columns belongs.
+     */
     get name(){
         return this._rowName;
     }

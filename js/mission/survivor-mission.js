@@ -48,7 +48,7 @@ class MissionScheduler extends LootReceiver{
     /**
      * @param {SurvivorMission} mission 
      */
-    constructor(mission, values){
+    constructor(mission){
         super();
         this._mission = mission;
         this._shedule = [
@@ -317,7 +317,7 @@ export class SurvivorMission {
     }
 
     start(){
-
+        this.getSurivivors().forEach( s => s.state = Survivor.States.ON_MISSION);
     }
 
     passTime(){
@@ -357,6 +357,18 @@ export class SurvivorMission {
      */
     get modifier(){
         return ENVIRONMENT.calculator().calculateFinalMissionValues(this);
+    }
+
+    getFoundEquipment(){
+        return this._foundEquipment;
+    }
+
+    getFoundAmmo(){
+        return this._foundAmmo;
+    }
+
+    getFoundFood(){
+        return this._foundFood;
     }
 
 

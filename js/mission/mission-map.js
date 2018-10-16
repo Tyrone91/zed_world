@@ -76,7 +76,8 @@ export class MissionMap {
 
     /**
      * @param {number} x 
-     * @param {number} y 
+     * @param {number} y
+     * @returns {Location}
      */
     getPosition(x,y){
         return this._map[this._pointToIndex(x,y)];
@@ -87,12 +88,18 @@ export class MissionMap {
      * @param {number} x 
      * @param {number} y 
      * @param {Location} location 
+     * @returns  {this}
      */
     setPosition(x,y, location){
         this._map[this._pointToIndex(x,y)] = location;
         return this;
     }
 
+
+    /**
+     * 
+     * @param { (location:Location, x: number, y: number)=>void } callback 
+     */
     forEach(callback){
         for(let y = 0; y < this._height; ++y){
             for(let x = 0; x < this._width; ++x){
@@ -110,10 +117,16 @@ export class MissionMap {
         return this;
     }
 
+    /**
+     * @returns {number}
+     */
     get width(){
         return this._width;
     }
 
+    /**
+     * @returns {number}
+     */
     get height(){
         return this._height;
     }

@@ -1,62 +1,231 @@
-body {
-    background-color: red;
-}
-.content-wrapper {
-    display: flex;
-    flex-direction: row;
-    height: 100vh;
-    background-color: white;
+/* util */
+
+* {
+    padding: 0px;
+    margin: 0px;
 }
 
-.building-viewer-container {
-    width: auto;
-    height: 100vh;
-    display: none;
+.flex-row {
+    display: flex;
+    flex-direction: row;
 }
-.left-menu {
-    background-color: lightblue;
-    height: 100vh;
-    width: 5%;
-    min-width: 50px;
+
+.flex-colum {
+    display: flex;
+    flex-direction: column;
 }
-.left-menu.active-menu{
-    display: none;
+
+.confirm-bttn,
+.cancel-bttn {
+    padding: 0.5;
+    width: 175px;
+    height: 35px;
+    font-size: 1.25em;
 }
-.building-panel{
-    background: white;
-    max-height: 150px;
-    margin: 0;
-    height: 200px;
-    width: 200px;
-    border: 1px solid black;
-    border-radius: 25px;
-    text-align: center;
-    box-sizing: border-box;
-}
-.building-viewer{
-    max-width: 600px;
+
+.confirm-bttn {
     background-color: green;
-    display: flex;
-    align-content: flex-start;
-    justify-content: flex-start;
-    flex-direction: row;
-    flex-wrap: wrap;
+}
+
+.cancel-bttn {
+    background-color: darkred;
+}
+
+body {
+    background-color: #2c2b2b;
+}
+
+/* content wrapper */
+
+#game-main-view{
+    width: 100vw;
     height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-.resource-panel {
-    background-color: yellow;
-    width: 200px;
-    height: 50px;
-}
-.resource-panel p {
-    display: inline-block;
-    padding: 5px;
-
-}
-
-.resource-viewer {
+#game-menu {
+    /* background-color: red; */
+    height: 75%;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 1em;
+    border-bottom: 1px solid white;
+    box-shadow:  0px 2px 30px 5px darkred;
+    border-bottom: 3px solid darkred;
 }
+
+#resource-view {
+    /* background-color: blue; */
+    flex-grow: 1;
+}
+
+#side-panel {
+    background-color: #2c2b2b;
+    flex-grow: 1;
+}
+
+#content-header{
+    background-color: #2c2b2b;
+    flex-grow: 1;
+}
+
+#content {
+    background-color: #3f3f3f;
+    flex-basis: 95%;
+}
+
+#game-main-view header {
+    height: 10vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #2c2b2b;
+    margin-bottom: 4px;
+    z-index: 10;
+    
+}
+
+#game-main-view .content-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+#game-main-view .main-view {
+    width: 85%;
+    display: flex;
+    flex-direction: column
+}
+
+#game-menu button {
+    font-size: 1.15em;
+    background-color: #2c2b2b;
+    color: #b1b0b0;
+    padding: 0.5em;
+    height: 100%;
+    width: 10em;
+    border: none;
+    text-decoration: underline;
+    
+}
+
+#game-menu button:hover {
+    border-bottom: darkred solid 1px;
+    background-color: #3f3f3f;
+    box-shadow: 1px 1px 5px black;
+}
+/** mission-map **/
+
+.mission-map {
+    display: flex;
+    flex-direction: column;
+}
+
+.mission-map > div{
+    display: flex;
+    flex-direction: row;
+}
+
+.mission-map .mission-map-entry {
+    width: 100px;
+    height: 100px;
+    border: 1px solid black;
+}
+
+/** stat-viewer **/
+.stat-viewer {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.stat-viewer > div {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.stat-viewer > div > div:first-child{
+    width: 10em;
+}
+
+.stat-viewer > div > div{
+    width: 5em;
+}
+
+/** location-selector **/
+.location-selector {
+    display: flex;
+    flex-direction: row;
+}
+
+.location-selector > div {
+    padding: 0.5em;
+}
+
+.location-selector .location-title {
+    border-bottom: 2px solid black;
+}
+
+/** team-creator **/
+.team-creator {
+    display: flex;
+    flex-direction: row;
+    color: #b1b0b0;
+}
+
+.team-creator .available-survivors{
+
+}
+
+.team-creator .available-survivors .list-title {
+    
+}
+
+.team-creator .list-title,
+.team-creator .team-name {
+    padding: 0.5em;
+    background-color: #3f3f3f;
+    border-bottom: 2px solid white;
+}
+
+.team-creator .list-title,
+.team-creator .team-name input {
+    
+}
+
+/** team-viewer **/
+.team-viewer {
+
+}
+
+.team-viewer .team-name input {
+    border: none;
+    background-color: #00000000;
+    margin-left: 0.5em;
+    color: white;
+}
+
+.team-viewer .team-name input:hover,
+.team-viewer .team-name input:focus {
+    box-shadow: white 0px 1px 1px -1px; 
+}
+
+/** survivor-list-compact **/
+.survivor-list-compact {
+    padding: 0.5;
+    min-width: 12em;
+    background-color: #2c2b2b;
+    box-shadow: 1px 1px 5px black;
+}
+
+.survivor-list-compact .survivor-entry {
+    padding: 0.5em;
+    margin-bottom: 0.2em;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
+    background-color: #3f3f3f;
+}
+

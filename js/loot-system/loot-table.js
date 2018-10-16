@@ -24,10 +24,10 @@ class LootContainer{
 export class LootTable{
     /**
      * 
-     * @param {[function]=} lootReceivers Callbacks that receives the rolled loot
+     * @param {function[]]=} lootReceivers Callbacks that receives the rolled loot
      */
     constructor(...lootReceivers){
-        /**@type [LootContainer] */
+        /**@type LootContainer[] */
         this._lootList = [];
         this._receivers = [...lootReceivers];
         

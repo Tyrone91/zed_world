@@ -2,6 +2,8 @@ import {Survivor} from "../core/survivor.js"
 import { ENVIRONMENT } from "../core/game-environment.js";
 import { MissionParameters } from "./mission-parameters.js";
 import { AmmoTable } from "../loot-system/ammo-table.js";
+import { Table } from "../math/table.js";
+import { CombatStats } from "../combat/combat-stats.js";
 
 export class Team {
     constructor(name  = "NO_NAME_TEAM"){
@@ -64,11 +66,29 @@ export class Team {
     }
 
     /**
+     * @param {...Survivor} potentialMembers
      * @returns {MissionParameters}
      */
-    getMissionModifiers(){
-        return ENVIRONMENT.calculator().calculateModifiers( ...this._teamList.map(surv => surv.getMissionModifiers() ) );
+    getMissionModifiers(...potentialMembers){
+        const list = [...this._teamList, ...potentialMembers];
+        if(list.length === 0){
+            return new MissionParameters().fill(0);
+        }
+        return ENVIRONMENT.calculator().calculateModifiers( ...list.map(surv => surv.getMissionModifiers() ) );
     }
+
+    /**
+     * @param {...Survivor} potentialMembers
+     * @returns {CombatStats}
+     */
+    getAverageCombatStats(...potentialMembers) {
+        const list = [...this._teamList, ...potentialMembers];
+        if(list.length === 0){
+            return new CombatStats().fill(0);
+        }
+        return Table.avg(...list.map(s => s.combatstats));
+    }
+
 
     /**
      * @returns {AmmoTable}
@@ -83,6 +103,18 @@ export class Team {
 
     setFoodStock(amount){
         this._foodStock = amount;
+    }
+
+    getFoundEquipment(){
+        return this._foundEquipment;
+    }
+
+    addFoundEquipment(equipment){
+        this._foundEquipment.push(equipment);
+    }
+
+    clearFoundEquipment(){
+        this._foundEquipment = [];
     }
 
     setContinueAfterCombat(value){

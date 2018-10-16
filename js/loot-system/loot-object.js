@@ -9,7 +9,7 @@ export class LootObject{
      * @param {boolean} autoOpen 
      * @param {string} name 
      * @param {string} description
-     * @param {[any]} content
+     * @param {any[]} content
      */
     constructor(onOpen, content = [], autoOpen = false, name = "NO_NAME", description = "NO_DESCRIPTION"){
         this._onOpen = onOpen || (() => {});
