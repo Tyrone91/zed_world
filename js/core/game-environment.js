@@ -12,6 +12,7 @@ import { MissionBuilder } from "../mission/mission-builder.js";
 import { LootDispatcher } from "../mission/loot-dispatcher.js";
 import { LootTable } from "../loot-system/loot-table.js";
 import { SurvivorMission } from "../mission/survivor-mission.js";
+import { SurvivorCamp } from "./survivor-camp.js";
 
 export class GameEnvironment {
     constructor(){
@@ -20,35 +21,19 @@ export class GameEnvironment {
         });
 
         this._randomNumberGenerator = new Random(Date.now() % Number.MAX_SAFE_INTEGER );
-        this._missionMap = new MissionMap(5,5, [
-            {
-                location: new Location("City", "A former glorous City, turned into an undead buffet."),
-                x: 0,
-                y: 0
-
-            }
-        ]);
+        this._missionMap = new MissionMap(5,5);
         
         /**@type {Team[]} */
         this._teams = [];
 
         /**@type {Survivor[]} */
         this._survivors = [];
-
-        this._survivors.push(
-            new Survivor().name("Bob"),
-            new Survivor().name("Francis"),
-            new Survivor().name("Alex"),
-            this.createRandomSurvivor("R1"),
-            this.createRandomSurvivor("R2"),
-            this.createRandomSurvivor("R3")
-        );
-
-        this._survivors[0].getMissionModifiers().range.max(5).base(1).min(3);
-        this._survivors[1].getMissionModifiers().range.max(10).base(1).min(5);
         
         /**@type {SurvivorMission[]} */
         this._activeMissions = [];
+
+
+        this._camp = new SurvivorCamp();
     }
 
     _updateMissions(){
@@ -57,7 +42,7 @@ export class GameEnvironment {
             const index = this._activeMissions.indexOf(m);
             this._activeMissions.splice(index,1);
 
-            if(m.getSurivivors().length > 0){
+            if(m.getMissionState() === SurvivorMission.State.FINISHED){
                 console.log("succesful mission");
 
             } else {
@@ -154,13 +139,25 @@ export class GameEnvironment {
         return dispatcher;
     }
 
+    /**
+     * 
+     * @param {SurvivorMission} mission 
+     */
     addNewMission(mission){
         this._activeMissions.push(mission);
         mission.start();
     }
 
+    getActiveMissions(){
+        return this._activeMissions;
+    }
+
     endRound(){
         this._updateMissions();
+    }
+
+    getCamp(){
+        return this._camp;
     }
 }
 

@@ -52,7 +52,7 @@ export class TeamCreator extends ViewComponent {
         root
             .append(
                 $("<div>").addClass("available-survivors").append(
-                    $("<div>").addClass("list-title").text("Available"),
+                    $("<div>").addClass("list-title").text( this.resolve("Available")),
                     this._availableSurvivorList.domElement()
                 ),
                 this._teamViewer.domElement(),

@@ -8,6 +8,7 @@ export class Survivor extends Character{
         super();
         this._missionModifiers = new MissionParameters().fill(1);
         this._stats = new CharacterStats();
+        this._stats.health.current(1);
         this._combatstats = new CombatStats();
         this._currentState = Survivor.States.IDLE;
     }

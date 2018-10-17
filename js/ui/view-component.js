@@ -1,7 +1,10 @@
 import { ENVIRONMENT } from "../core/game-environment.js";
 import { ContentManager } from "./content-manager.js";
+import { TextResolver } from "../util/text-resolver.js";
 
-export const CONTENT_MANAGER = new ContentManager("#content", "#game-menu");  
+export const CONTENT_MANAGER = new ContentManager("#content", "#game-menu");
+export const DEFAULT_TEXT_RESOLVER = new TextResolver();
+
 
 export class ViewComponent {
 
@@ -35,5 +38,9 @@ export class ViewComponent {
     domElement(){
         this.update();
         return this.rootElement();
+    }
+
+    resolve(key){
+        return DEFAULT_TEXT_RESOLVER.resolve(key);
     }
 }

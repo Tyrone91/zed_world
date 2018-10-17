@@ -4,7 +4,7 @@ export class CancelButton extends ViewComponent {
 
     constructor(){
         super();
-        this._rootElement = $("<button>").text("CANCEL").addClass("cancel-bttn");
+        this._rootElement = $("<button>").text( this.resolve("CANCEL") ).addClass("cancel-bttn");
     }
 
     onclick(callback){

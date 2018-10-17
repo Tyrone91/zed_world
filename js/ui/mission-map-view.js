@@ -41,7 +41,7 @@ export class MissionMapView extends ViewComponent {
                     .addClass("mission-map-entry")
                     .data("x",x)
                     .data("y",y)
-                    .text(entry.name)
+                    .text( this.resolve(entry.name) )
                     .click( () => this._locationCallback(entry, x, y) )
             )
         });

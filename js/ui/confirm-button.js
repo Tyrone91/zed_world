@@ -4,7 +4,7 @@ export class ConfirmButton extends ViewComponent{
 
     constructor(){
         super();
-        this._rootElement = $("<button>").text("OK").addClass("confirm-bttn");
+        this._rootElement = $("<button>").text( this.resolve("OK")).addClass("confirm-bttn");
     }
 
     onclick(callback){

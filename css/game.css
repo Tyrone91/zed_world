@@ -31,6 +31,22 @@
     background-color: darkred;
 }
 
+.action-button {
+    padding: 0.5em;
+    border: 1px solid black;
+    background-color: #2c2b2b;
+    background: linear-gradient(#00000077, #2c2b2b 30%);
+    color: #b1b0b0;
+    font-size: 1.10em;
+    width: 8em;
+    box-shadow: 1px 1px 4px -2px black;
+}
+
+.action-button:hover {
+    border-bottom: 1px darkred solid;
+    color: white;
+}
+
 body {
     background-color: #2c2b2b;
 }
@@ -60,6 +76,9 @@ body {
 #resource-view {
     /* background-color: blue; */
     flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
 }
 
 #side-panel {
@@ -229,3 +248,61 @@ body {
     background-color: #3f3f3f;
 }
 
+/** mission-overview **/
+.mission-overview .list-container {
+    margin: 10px;
+    box-shadow: 1px 1px 5px black;
+    padding: 0.5em;
+    display: inline-block;
+}
+
+.mission-overview .list-container .list-title {
+    margin-bottom: 10px;
+}
+
+.mission-overview .list-container .list-title span {
+    border-bottom: 1px solid white;
+    padding: 0.2em;
+}
+/** mission-list **/
+.mission-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.mission-list .mission-entry {
+    padding: 0.5em;
+    background: linear-gradient(#00000077, #3f3f3f 20%);
+    width: 8em;
+    border: 1px solid black;
+    box-shadow: 1px 1px 5px black;
+    color: #b1b0b0;
+    margin-right: 5px;
+}
+
+.mission-list .mission-entry:hover {
+    border: 1px solid #3f3f3f;
+    border-bottom: 1px solid darkred;
+}
+
+.mission-list .mission-entry > div {
+    background-color: #2c2b2b;
+    margin-bottom: 0.2em;
+    padding: 0.3em;
+    border: 1px solid black;
+}
+
+/** resource-panel **/
+.resource-panel span {
+    margin-right: 5px;
+}
+
+/** ammo-panel **/
+.ammo-panel > span{
+    margin-left: 5px;
+}
+
+.ammo-panel > span > span{
+    margin-left: 5px;
+}

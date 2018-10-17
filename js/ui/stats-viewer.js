@@ -25,7 +25,7 @@ export class StatsViewer extends ViewComponent {
         const table = this._souce;
         root.append(
             table.getColumnNames()
-            .map( name => $("<div>").text(name) )
+            .map( name => $("<div>").text( this.resolve(name)) )
             .reduce( (prev, current) => prev.append(current), $("<div>").append($("<div>").text("names") ) )
         );
 
@@ -33,7 +33,7 @@ export class StatsViewer extends ViewComponent {
         .forEach(rowName => {
             const row = $("<div>");
             row.append(
-                $("<div>").text(rowName)
+                $("<div>").text( this.resolve(rowName))
             );
             const colums = table.getRow(rowName);
             table.getColumnNames().forEach( name => {

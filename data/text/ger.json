@@ -1,0 +1,34 @@
+{
+    "SMALL" : "Kl.",
+    "MEDIUM" : "Mittel",
+    "HEAVY" : "Schw.",
+    "SPECIAL": "Spezial",
+    "RESOURCE_TYPE_FOOD" : "Nahrung",
+    "RESOURCE_TYPE_WOOD" : "Holz",
+    "RESOURCE_TYPE_METAL" : "Metal",
+
+    "ZOMBIES" : "Zombies",
+    "RANGE" : "Reichweite",
+    "LOOT_COMMON" : "Gewöhnliches Loot",
+    "LOOT_RARE" : "Seltenes Loot",
+    "LOOT_EXTRAORDINARY" : "Außergewöhnliches Loot",
+    "REINFORCEMENT" : "Verstärkung %",
+    "AMBUSH_CHANCE" : "Überfall %",
+    "COVER_FREQUENCY" : "Deckung %",
+    "MISSION_LENGTH" : "Länge",
+    "ENCOUNTER_CHACNE" : "Kampf %",
+
+    "BASE" : "Basis",
+    "MIN" : "min.",
+    "MAX" : "max.",
+    "ACTIVE" : "aktiv",
+
+    "HIT_CHANCE" : "Treffer %",
+    "DAMAGE" : "Schaden",
+    "OPTIMIAL_RANGE" : "Opt. Reichweite",
+    "ACTION_PER_ROUND" : "APR",
+    "STABILITY" : "Stabilität",
+    "ACCURACY" : "Genauigkeit",
+
+    "AMMO": "Munition"
+}

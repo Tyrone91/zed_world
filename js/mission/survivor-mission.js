@@ -238,6 +238,7 @@ export class SurvivorMission {
         this._foundFood = 0;
         this._foundEquipment  = [];
         this._earlyReturn = false;
+        this._missionState = SurvivorMission.State.NOT_STARTED;
     }   
 
     /**
@@ -246,6 +247,10 @@ export class SurvivorMission {
      */
     setMissionTime(time){
         this._missionLength = time;
+    }
+
+    getMissionLength(){
+        return this._missionLength;
     }
 
     setRandomNumberGenerator(rng){
@@ -317,12 +322,20 @@ export class SurvivorMission {
     }
 
     start(){
+        this._missionState = SurvivorMission.State.RUNNING;
         this.getSurivivors().forEach( s => s.state = Survivor.States.ON_MISSION);
     }
 
     passTime(){
         this._onTimePass();
         this._passedTime++;
+        if(this.isFinished()){
+            if(this.getSurivivors().length > 0){
+                this._missionState = SurvivorMission.State.FINISHED;
+            } else {
+                this._missionState = SurvivorMission.State.FAILED;
+            }
+        }
         return this;
     }
 
@@ -336,6 +349,9 @@ export class SurvivorMission {
             .reduce( (prev, current) => prev.concat(current), [] );
     }
 
+    /**
+     * @returns {Team[]}
+     */
     getTeams(){
         return this._team;
     }
@@ -371,5 +387,15 @@ export class SurvivorMission {
         return this._foundFood;
     }
 
+    getMissionState(){
+        return this._missionState;
+    }
 
+}
+
+SurvivorMission.State = {
+    NOT_STARTED: "NOT_STARTED",
+    FAILED: "FAILED",
+    RUNNING: "RUNNING",
+    FINISHED: "FINISHED" 
 }

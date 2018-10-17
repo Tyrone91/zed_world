@@ -6,10 +6,15 @@ import { Location } from "../mission/location.js";
 import { Team } from "../mission/team.js";
 import { Survivor } from "../core/survivor.js";
 import { MissionPlaner } from "./mission-planer.js";
-import { CONTENT_MANAGER } from "./view-component.js";
+import { CONTENT_MANAGER, DEFAULT_TEXT_RESOLVER } from "./view-component.js";
 import { MissionSummary } from "./mission-summary.js";
 import { LocationSelector } from "./location-selector.js";
 import { TeamSelector } from "./team-selector.js";
+import { MissionOverview } from "./mission-overview.js";
+import { ActionButton } from "./action-button.js";
+import { SurvivorListDetail } from "./survivor-list-detail.js";
+import { ResourcePanel } from "./resource-panel.js";
+import { AmmoPanel } from "./ammo-panel.js";
 
 const game = ENVIRONMENT;
 const manager = CONTENT_MANAGER;
@@ -18,7 +23,7 @@ function createMission(){
     const missionBuilder = game.createDefaultMissionBuilder();
     const locationSelector = new LocationSelector();
     const teamSelector = new TeamSelector();
-    const missionSummary = new MissionSummary();
+    
     
 
     locationSelector.onLocationSelection( loc => {
@@ -28,30 +33,66 @@ function createMission(){
 
     teamSelector.onTeamSelected( team => {
         missionBuilder.setTeams([team]);
-        manager.pushContent( () => missionSummary.domElement() );
-    });
 
-    missionSummary.onconfirmation( () => {
-        const m = missionBuilder.build();
-        game.addNewMission(m);
+        const mission = missionBuilder.build();
+        const missionSummary = new MissionSummary(mission);
+        missionSummary.onconfirmation( () => {
+            game.addNewMission(mission);
+            openMissionOverview();
+        });
+        manager.pushContent( () => missionSummary.domElement() );
     });
 
     manager.setContent( () => locationSelector.domElement());
 }
 
-window.addEventListener("load", init);
-function init(){
-    CONTENT_MANAGER
-        .addMenuEntry("Mission", () => createMission() );
+function openSurvivorOverview(){
+    const list = new SurvivorListDetail(game.getAvailableSurvivors());
+
+    manager.setContent( () => list.domElement());
 }
 
+function openMissionOverview(){
+    const missionOverview = new MissionOverview();
 
+    missionOverview.onNewMission( () => createMission());
 
+    missionOverview.onMissionSelection( m => {
+        const summary = new MissionSummary(m);
+        summary.onconfirmation( () => manager.popContent() );
+        manager.pushContent( () => summary.domElement());
+    });
 
+    manager.setContent( () => missionOverview.domElement());
+    
+}
 
+function initResourceBar(){
+    const camp = game.getCamp();
+    const woodView = new ResourcePanel(camp.getWoodStock());
+    const metalView = new ResourcePanel(camp.getMetalStock());
+    const foodView = new ResourcePanel(camp.getFoodStock());
 
+    const ammoView = new AmmoPanel(camp.getAmmoStock());
 
+    $("#resource-view").append(
+        ammoView.domElement(),
+        foodView.domElement(),
+        woodView.domElement(),
+        metalView.domElement());
+}
 
+DEFAULT_TEXT_RESOLVER.load("en.json")
+.then( () => {
+    $(document).ready(init);
+});
+function init(){
+    initResourceBar();
+    manager.addMenuEntry("Survivors", () => openSurvivorOverview() );
+    manager.addMenuEntry("Mission", () => openMissionOverview() );
+
+    $("#side-panel").append( new ActionButton("End Round").onclick( () => game.endRound()).domElement() );
+}
 
 
 

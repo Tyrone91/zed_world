@@ -16,20 +16,19 @@ export class TeamViewer extends ViewComponent {
         this._teamMemberList = new SurvivorListCompact(this._team.getTeam());
         this._teamStats = new StatsViewer(team.getAverageCombatStats());
         this._potentialMember = [];
+        this._nameInput = $("<input>");
         this.init();
     }
 
     init(){
         const root = this.rootElement();
         const team = this._team;
-        const nameInput = $("<input>")
-            .on("change", () => team.setName($(this).val() ))
-            .val(team.getName());
-
+        this._nameInput = $("<input>")
+            
             root
             .append(
                 $("<div>").addClass("flex-column").append(
-                    $("<div>").addClass("team-name").text("Name:").append(nameInput),
+                    $("<div>").addClass("team-name").text( this.resolve("Name") + ":").append(this._nameInput),
                     this._teamMemberList.domElement()
                 )
             )
@@ -49,7 +48,13 @@ export class TeamViewer extends ViewComponent {
         this._potentialMember = [];
     }
 
+    setTeam(team){
+        this._team = team;
+    }
+
     update(){
+        this._nameInput.on("input", () => this._team.setName( $(this._nameInput).val() ))
+        this._nameInput.val(this._team.getName());
         this._teamMemberList.setSurvivorlist(this._team.getTeam());
         this._teamStats.setStats(this._team.getAverageCombatStats(...this._potentialMember));
         this._teamMemberList.update();

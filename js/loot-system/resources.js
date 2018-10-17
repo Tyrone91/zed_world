@@ -97,7 +97,7 @@ export class ResourceFood extends Resource{
 }
 
 export class ResourceMetal extends Resource {
-    constructor(amount){
+    constructor(amount = 0){
         super(Resource.Type.METAL, amount);
     }
 }

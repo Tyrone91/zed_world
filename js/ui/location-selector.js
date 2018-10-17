@@ -20,7 +20,7 @@ export class LocationSelector extends ViewComponent {
         this._selectedLocation = null;
 
         this._missionMapView.onclick( loc => {
-            this._locationTitle.text(loc.name);
+            this._locationTitle.text( this.resolve(loc.name));
             this._missionStats.setStats(loc.modifiers);
             this._missionStats.update();
             this._selectedLocation = loc;
