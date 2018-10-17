@@ -15,6 +15,7 @@ import { ActionButton } from "./action-button.js";
 import { SurvivorListDetail } from "./survivor-list-detail.js";
 import { ResourcePanel } from "./resource-panel.js";
 import { AmmoPanel } from "./ammo-panel.js";
+import { TeamCreator } from "./team-creator.js";
 
 const game = ENVIRONMENT;
 const manager = CONTENT_MANAGER;
@@ -61,6 +62,16 @@ function openMissionOverview(){
         const summary = new MissionSummary(m);
         summary.onconfirmation( () => manager.popContent() );
         manager.pushContent( () => summary.domElement());
+    });
+
+    missionOverview.onCreateNewTeam( () => {
+        const creator = new TeamCreator();
+        creator.onNewTeam( team => {
+            //TODO: add to game.
+            openMissionOverview();
+        });
+
+        manager.pushContent( () => creator.domElement());
     });
 
     manager.setContent( () => missionOverview.domElement());

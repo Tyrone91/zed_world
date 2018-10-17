@@ -16,6 +16,10 @@ export class TeamSelector extends ViewComponent {
             this._confirmBttn.rootElement().prop("disable", false);
         });
 
+        this._confirmBttn.onclick( () => {
+            this._onTeamSelected(this._selectedTeam);
+        });
+
         this.init();
     }
 
@@ -30,9 +34,7 @@ export class TeamSelector extends ViewComponent {
 
     update(){
 
-        this._confirmBttn.onclick( () => {
-            this._onTeamSelected(this._selectedTeam);
-        });
+        
         this._teamCreator.update();
     }
 }

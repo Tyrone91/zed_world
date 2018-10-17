@@ -34,6 +34,9 @@ export class LocationSelector extends ViewComponent {
 
     onLocationSelection(callback){
         this._onLocationSelection = callback;
+        this._confirmBttn.onclick( () => {
+            this._onLocationSelection(this._selectedLocation);
+        });
     }
 
     _init(){
@@ -44,10 +47,6 @@ export class LocationSelector extends ViewComponent {
     }
 
     update(){
-        // jquery remove clears events.
-        this._confirmBttn.onclick( () => {
-            this._onLocationSelection(this._selectedLocation);
-        });
         this._missionMapView.update();
     }
 }

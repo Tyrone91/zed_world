@@ -9,11 +9,10 @@ export class ActionButton extends ViewComponent {
 
     onclick(callback){
         this._callback = callback;
+        this._rootElement.on("click", this._callback);
         return this;
     }
 
     update(){
-        this._rootElement.off("click");
-        this._rootElement.on("click", this._callback);
     }
 }

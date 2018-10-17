@@ -74,7 +74,16 @@ export class ContentManager{
         }
         
         const target = $(this._contentTarget);
-        target.html(element);
+        //target.html(element); //this would remove the event listeners from the dom. We don't want that because then we would attach the listener back if we pop the stack.
+        /**@type {HTMLElement} */
+        
+        const plainDom = target[0];
+        while(plainDom.firstChild){
+            plainDom.removeChild(plainDom.firstChild);
+        }
+        target.append(element);
+        //plainDom.appendChild(element()[0]);
+        
     }
 
     addMenuEntry(name, action){

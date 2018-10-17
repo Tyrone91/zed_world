@@ -33,6 +33,11 @@ export class MissionPlaner extends ViewComponent {
     }
 
     _init(){
+
+        this._confirmButton.onclick( () => {
+            const mission = this._missionBuilder.build();
+            this.game.addNewMission(mission);
+        });
         
         this.manager.setContent( () => this._locationSelector.domElement());
         const root = this.rootElement();
@@ -43,9 +48,6 @@ export class MissionPlaner extends ViewComponent {
 
     update(){
         
-        this._confirmButton.onclick( () => {
-            const mission = this._missionBuilder.build();
-            this.game.addNewMission(mission);
-        });
+        
     }
 }

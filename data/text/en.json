@@ -30,5 +30,7 @@
     "STABILITY" : "Stability",
     "ACCURACY" : "Accuracy",
 
-    "AMMO" : "Ammo"
+    "AMMO" : "Ammo",
+    "CREATE_TEAM" : "CREATE TEAM",
+    "VIEW_TEAMS" : "VIEW TEAMS"
 }

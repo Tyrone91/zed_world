@@ -10,6 +10,8 @@ export class MissionOverview extends ViewComponent {
         this._missionList = new MissionList(this.game.getActiveMissions());
         this._newMissionBttn = new ActionButton("NEW");
         this._missionHistory = new ActionButton("HISTORY");
+        this._createTeam = new ActionButton("CREATE_TEAM");
+        this._viewTeams = new ActionButton("VIEW_TEAMS");
 
         this.init();
     }
@@ -28,6 +30,8 @@ export class MissionOverview extends ViewComponent {
         root.append(
             this._missionHistory.domElement(),
             this._newMissionBttn.domElement(),
+            this._createTeam.domElement(),
+            this._viewTeams.domElement(),
             $("<div>").append(listContainer) 
         );
     }
@@ -44,11 +48,24 @@ export class MissionOverview extends ViewComponent {
 
     onMissionSelection(callback){
         this._missionList.onclick(callback);
+        return this;
+    }
+
+    onCreateNewTeam(callback){
+        this._createTeam.onclick(callback);
+        return this;
+    }
+
+    onViewTeams(callback){
+        this._viewTeams.onclick(callback);
+        return this;
     }
 
     update(){
+        this._missionList.update();
         this._missionHistory.update();
         this._newMissionBttn.update();
-        this._missionList.update();
+        this._createTeam.update();
+        this._viewTeams.update();
     }
 }

@@ -18,6 +18,8 @@ export class TeamViewer extends ViewComponent {
         this._potentialMember = [];
         this._nameInput = $("<input>");
         this.init();
+
+        this._nameInput.on("input", () => this._team.setName( $(this._nameInput).val() ))
     }
 
     init(){
@@ -53,7 +55,7 @@ export class TeamViewer extends ViewComponent {
     }
 
     update(){
-        this._nameInput.on("input", () => this._team.setName( $(this._nameInput).val() ))
+        
         this._nameInput.val(this._team.getName());
         this._teamMemberList.setSurvivorlist(this._team.getTeam());
         this._teamStats.setStats(this._team.getAverageCombatStats(...this._potentialMember));

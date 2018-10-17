@@ -45,6 +45,9 @@ export class MissionSummary extends ViewComponent {
 
     onconfirmation(callback){
         this._onConfirmation = callback;
+        this._confirmButton.onclick( () => {
+            this._onConfirmation();
+        });
     }
 
     _init(){
@@ -78,8 +81,6 @@ export class MissionSummary extends ViewComponent {
         this._locationStats.update();
         this._overallMissionStats.update();
         
-        this._confirmButton.onclick( () => {
-            this._onConfirmation();
-        });
+        
     }
 }

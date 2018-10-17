@@ -39,6 +39,11 @@ export class TeamCreator extends ViewComponent {
             this._teamViewer.update();
             this._availableSurvivorList.update();
         });
+
+        this._confirmButton.onclick( () => {
+            this._onNewTeam(this._team);
+        });
+        
         this.init();
     }
 
@@ -61,9 +66,7 @@ export class TeamCreator extends ViewComponent {
     }
 
     update(){
-        this._confirmButton.onclick( () => {
-            this._onNewTeam(this._team);
-        });
+        
         this._availableSurvivorList.update();
         this._teamViewer.update();
     }
