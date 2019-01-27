@@ -16,6 +16,11 @@ import { SurvivorListDetail } from "./survivor-list-detail.js";
 import { ResourcePanel } from "./resource-panel.js";
 import { AmmoPanel } from "./ammo-panel.js";
 import { TeamCreator } from "./team-creator.js";
+import { MissionList } from "./mission-list.js";
+import { TeamViewer } from "./team-viewer.js";
+import { MissionHistory } from "./mission-history.js";
+import { getJSON } from "../util/ajax.js";
+import { SurvivorQuickList } from "./survivor-quick-list.js";
 
 const game = ENVIRONMENT;
 const manager = CONTENT_MANAGER;
@@ -68,10 +73,25 @@ function openMissionOverview(){
         const creator = new TeamCreator();
         creator.onNewTeam( team => {
             //TODO: add to game.
+            game.saveTeam(team);
             openMissionOverview();
         });
 
         manager.pushContent( () => creator.domElement());
+    });
+
+    missionOverview.onMissionHistory( () => {
+        const list = new MissionList(game.getMissionHistory());
+        list.onclick( mission => {
+            const history = new MissionHistory(mission);
+            manager.pushContent( () => history.domElement());
+        });
+        manager.pushContent( () => list.domElement() );
+    });
+
+    missionOverview.onViewTeams( () => {
+        const element = game.getSavedTeams().map( t => new TeamViewer(t).domElement()).reduce( (prev, cur) => prev.append(cur), $("<div>"));
+        manager.pushContent( () => element);
     });
 
     manager.setContent( () => missionOverview.domElement());
@@ -91,18 +111,51 @@ function initResourceBar(){
         foodView.domElement(),
         woodView.domElement(),
         metalView.domElement());
+    
+        return () => {
+            ammoView.update();
+            foodView.update();
+            woodView.update();
+            metalView.update();
+        }
+}
+
+function initQuickList() {
+    const list = new SurvivorQuickList(game);
+    return list;
 }
 
 DEFAULT_TEXT_RESOLVER.load("en.json")
 .then( () => {
+    return getJSON("/data/random_portraits.json");
+})
+.then( data => {
+    game.randomPortraits = data;
     $(document).ready(init);
 });
 function init(){
-    initResourceBar();
+    const resourceUpdater = initResourceBar();
+    const quickList = initQuickList();
     manager.addMenuEntry("Survivors", () => openSurvivorOverview() );
     manager.addMenuEntry("Mission", () => openMissionOverview() );
 
-    $("#side-panel").append( new ActionButton("End Round").onclick( () => game.endRound()).domElement() );
+    $("#side-panel")
+        .append(quickList.domElement())
+        .append( new ActionButton("End Round").onclick( () => game.endRound()).domElement() );
+    game.onroundEnd(g => {
+        manager.update();
+        resourceUpdater();
+        quickList.update();
+    });
+
+    game.onsurvivorStateChange( s => {
+        quickList.update();
+    });
+
+    game.onsurvivorAdded( () => {
+        quickList.update();
+    });
+    game.start();
 }
 
 

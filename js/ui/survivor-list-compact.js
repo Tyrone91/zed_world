@@ -1,5 +1,6 @@
 import { ViewComponent } from "./view-component.js";
 import { Survivor } from "../core/survivor.js";
+import { SurvivorImage } from "./survivor-image.js";
 
 export class SurvivorListCompact extends ViewComponent{
 
@@ -36,16 +37,22 @@ export class SurvivorListCompact extends ViewComponent{
         return this;
     }
 
+    _buildEntry(surv){
+        const img = new SurvivorImage(surv);
+        const container = $("<div>")
+            .addClass("survivor-entry")
+            .text(surv.name() )
+            .on("click", () => this._onClick(surv))
+            .on("mouseenter", () => this._onEnter(surv))
+            .on("mouseleave", () => this._onExit(surv));
+        container.prepend(img.domElement());
+        return container;
+    }
+
     update(){
         this.clear();
         this._survivorList
-            .map( surv => 
-                $("<div>").addClass("survivor-entry")
-                .text(surv.name() )
-                .on("click", () => this._onClick(surv))
-                .on("mouseenter", () => this._onEnter(surv))
-                .on("mouseleave", () => this._onExit(surv))
-            )
+            .map( surv => this._buildEntry(surv))
             .reduce( (prev, current) => prev.append(current), this.rootElement());
     }
 }

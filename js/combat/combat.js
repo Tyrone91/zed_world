@@ -3,12 +3,13 @@ import { Combatant } from "./combatant.js";
 import { AttackAction } from "./combat-action.js";
 import { Random } from "../math/random.js";
 import { ENVIRONMENT } from "../core/game-environment.js";
+import { SurvivorCombatantWrapper } from "../core/survivor.js";
 
 /**
  * @param {Combatant} combatant
  */
 function isAlive(combatant){
-    return combatant.health > 0;
+    return combatant.getHealth() > 0;
 }
 
 /**
@@ -16,7 +17,7 @@ function isAlive(combatant){
  * @param {Combatant} combatant 
  */
 function hitchanceOf(combatant, distance, rng){
-    return ENVIRONMENT.calculator().hitchance(distance, combatant.combatstats, rng);
+    return combatant.accuracyAt(distance, rng);
 }
 
 export class Combat {
@@ -35,7 +36,7 @@ export class Combat {
         this._distanceCoveragePerRound = distanceCoveragePerRound;
         this._distanceToSurvivors = startingDistance;
 
-        /**@type {Combatant[]} */
+        /**@type {SurvivorCombatantWrapper[]} */
         this._surivors = [];
 
         /**@type {Combatant[]} */
@@ -56,7 +57,7 @@ export class Combat {
 
     /**
      * 
-     * @param {...Combatant} survivors 
+     * @param {...SurvivorCombatantWrapper} survivors 
      */
     addSurvivor(...survivors){
         this._surivors.push(...survivors);
@@ -67,7 +68,7 @@ export class Combat {
         if(d < 0){
             d = 0;
         }
-        return 0;
+        return d;
     }
 
     _enemiesInRange(){
@@ -98,20 +99,22 @@ export class Combat {
 
     /**
      * 
-     * @param {Combatant} survivor 
+     * @param {SurvivorCombatantWrapper} wrapper
      */
-    _killSurvivor(survivor){
-        this._currentRound.addKilledSurvivor(survivor);
-        this._deleteEntity(survivor, this._surivors);
+    _killSurvivor(wrapper){
+        this._currentRound.addKilledSurvivor(wrapper.getSurvivor());
+        this._deleteEntity(wrapper, this._surivors);
     }
 
     /**
-     * Returns a random object from the given array taht will be used as target.
-     * @param {Combatant[]} array
-     * @returns {Combatant} 
+     * Returns a random object from the given array that will be used as target.
+     * @template T
+     * @param {T[]} array
+     * @returns {T} 
      */
     _randomTarget(array){   
-        return array[this._rng.inBetween(0, array.length)];
+        const index = this._rng.inBetween(0, array.length);
+        return array[index];
     }
 
     /**
@@ -127,9 +130,9 @@ export class Combat {
      * @param {Combatant} entity 
      */
     _actionOf(entity){
-        for(let i = 0; i < entity.combatstats.actionsPerRound.base(); ++i){
+        for(let i = 0; i < entity.getCombatstats().actionsPerRound.base() && !this.combatIsOver(); ++i){
             const target = this._randomTarget(this._enemies);
-            this.attack(target,c);
+            this.attack(target,entity);
             if(!isAlive(target)){
                 this._killEnemey(target);
             }
@@ -148,9 +151,9 @@ export class Combat {
 
         if(hitchance > this._rng.inBetween(0,100)){
             hit = true;
-            damage = Math.floor(this._rng.inBetween(target.combatstats.damage.min(), target.combatstats.damage.max()));
-            const health = target.health - damage;
-            target.health = health > 0 ? health : 0; 
+            damage = Math.floor(this._rng.inBetween(attacker.getCombatstats().damage.min(), attacker.getCombatstats().damage.max()));
+            const health = target.getHealth() - damage;
+            target.setHealth(health > 0 ? health : 0); 
         }
         //TODO: add bullet consumption
         const action = new AttackAction(attacker, target, damage, hitchance, hit);
@@ -171,7 +174,7 @@ export class Combat {
     processRound(){
         this.processActions();
         this._rounds.push(this._currentRound);
-        this._distanceToSurvivors -= this._calcDistance();
+        this._distanceToSurvivors = this._calcDistance();
         ++this._roundNr;
         this._currentRound = new Round(this._roundNr, this._surivors, this._enemies, this._distanceToSurvivors);
     }
@@ -187,6 +190,7 @@ export class Combat {
         }
 
         for( const z of this._enemies){
+            if(this.combatIsOver()) return;
             const target = this._randomTarget(this._surivors);
             this.attack(target,z);
             if(!isAlive(target)){
@@ -194,6 +198,18 @@ export class Combat {
             }
         }
     
+    }
+
+    rounds(){
+        return this._rounds;
+    }
+
+    enemiesKilled() {
+        return this._rounds.map( r => r.getKilledEnemies().length ).reduce( (p,c) => p + c ,0);
+    }
+
+    killedSurvivors() {
+        return this._rounds.map( r => r.getKilledSurvivors()).reduce( (prev, cur) => prev.concat(cur) ,[]);
     }
 
 

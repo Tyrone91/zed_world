@@ -8,6 +8,9 @@ import {Random} from "../math/random.js"
 import { ENVIRONMENT } from "../core/game-environment.js";
 import { Survivor } from "../core/survivor.js";
 import { AmmoTable } from "../loot-system/ammo-table.js";
+import { LootTable } from "../loot-system-v2/loot-table.js";
+import { Combat } from "../combat/combat.js";
+import { LootWrapper } from "../loot-system-v2/loot-wrapper.js";
 
 
 /**
@@ -61,7 +64,7 @@ class MissionScheduler extends LootReceiver{
     }
 
     _continueTask(){
-        return this._mission.getSurivivors().length > 0 || !this._retread;
+        return this._mission.getActiveSurvivors().length > 0 && !this._retread;
     }
 
     get rng(){
@@ -80,10 +83,7 @@ class MissionScheduler extends LootReceiver{
 
     scouting(){
         const fought = this._checkScoutingBattle();
-
-        this._mission._lootDispatchers.forEach(d => {
-            const dropped = d.checkForDrops(this, this._mission.modifier, this.rng);
-        });
+        this._mission._collectLocationLoot();
         return fought;
     }
 
@@ -125,20 +125,10 @@ class MissionScheduler extends LootReceiver{
                         }
                     }
                 }
-                if(amount > 0){
-                    const diff = this._mission._foundFood - amount;
-                    if(diff >= 0){
-                        amount = 0;
-                        this._mission._foundFood -= amount;
-                    }else{
-                        amount -= this._mission._foundFood;
-                        this._mission._foundFood = 0;
-                    }
-                }
                 const tmp = surv.stats.hunger.current();
                 surv.stats.hunger.current(tmp + (foodWant-amount));
             };
-            this._mission.getSurivivors()
+            this._mission.getActiveSurvivors()
             .sort( (surv1, surv2) => {
                 const h1 = surv1.stats.hunger.current();
                 const h2 = surv2.stats.hunger.current();
@@ -163,6 +153,8 @@ class MissionScheduler extends LootReceiver{
         if(GameConstants.MISSION.SURVIVOR_CONSUME_AMMO){
             console.log("AMMO RFILL NOT YET IMPLEMENTED"); //TODO: finish
         }
+
+        return false;
     }
 
     _isRetreating(){
@@ -181,28 +173,12 @@ class MissionScheduler extends LootReceiver{
             }
 
             const combat = task();
+
             if(combat && this._isRetreating() ){
                 this._retreadFromMission();
                 return;
             }
         }
-    }
-
-    /**
-     * 
-     * @param {AmmoTable} ammoTable 
-     */
-    addAmmo(ammoTable){
-        const newTable = this._mission._foundAmmo.add(ammoTable);
-        this._mission._foundAmmo = newTable;
-    }
-
-    addFood(amount){
-        this._mission._foundEquipment += amount;
-    }
-
-    addEquipment(equipment){
-        this._mission._foundEquipment.push(equipment);
     }
 }
 
@@ -213,7 +189,7 @@ export class SurvivorMission {
         /**@type {Team[]} */
         this._team = [];
 
-        this._baseMissionValues = new MissionParameters();
+        this._baseMissionValues = new MissionParameters().fill(1);
 
         /**@type {MissionParameters[]} */
         this._additionalModifiers = [];
@@ -226,20 +202,50 @@ export class SurvivorMission {
 
         this._targetLocation = null;
 
-        /**@type {LootDispatcher[]} */
-        this._lootDispatchers = [];
-
         /**@type {Random} */
         this._rng = null;
 
         this._combatStarter = null;
 
-        this._foundAmmo = new AmmoTable();;
-        this._foundFood = 0;
-        this._foundEquipment  = [];
+        /**@type {LootWrapper[]} */
+        this._foundLoot = [];
         this._earlyReturn = false;
         this._missionState = SurvivorMission.State.NOT_STARTED;
-    }   
+
+        this._finishedMissionSurvivedMembers = [];
+        this._finishedMissionFallenMembers = [];
+
+        /**@type {{combat: Combat, time: number}[]} */
+        this._combats = [];
+    }
+
+    _collectLocationLoot(){
+        const modfier = this.modifier;
+
+        let pivot = this._rng.inBetween(0,100);
+        if( pivot <= modfier.lootCommon.base() ){
+            this._foundLoot.push(
+                ...this._targetLocation.getLootTables().filter(table => table.type === LootTable.Rarity.COMMON)
+                .map( loot => loot.roll( () => this._rng.next() ))
+            );
+        }
+
+        pivot = this._rng.inBetween(0,100);
+        if( pivot <= modfier.lootRare.base() ){
+            this._foundLoot.push(
+                ...this._targetLocation.getLootTables().filter(table => table.type === LootTable.Rarity.RARE)
+                .map( loot => loot.roll( () => this._rng.next() ))
+            );
+        }
+
+        pivot = this._rng.inBetween(0,100);
+        if( pivot <= modfier.lootExtraOrdinary.base() ){
+            this._foundLoot.push(
+                ...this._targetLocation.getLootTables().filter(table => table.type === LootTable.Rarity.EXTRAORDINARY)
+                .map( loot => loot.roll( () => this._rng.next() ))
+            );
+        }
+    }
 
     /**
      * 
@@ -270,7 +276,7 @@ export class SurvivorMission {
     }
 
     isFinished(){
-        return this.timeLeft() <= 0 || this._earlyReturn || this.getSurivivors().length === 0;
+        return this.timeLeft() <= 0 || this._earlyReturn || this.getActiveSurvivors().length === 0;
     }
 
     /**
@@ -323,18 +329,20 @@ export class SurvivorMission {
 
     start(){
         this._missionState = SurvivorMission.State.RUNNING;
-        this.getSurivivors().forEach( s => s.state = Survivor.States.ON_MISSION);
+        this.getActiveSurvivors().forEach( s => s.state = Survivor.States.ON_MISSION);
     }
 
     passTime(){
         this._onTimePass();
         this._passedTime++;
         if(this.isFinished()){
-            if(this.getSurivivors().length > 0){
+            if(this.getActiveSurvivors().length > 0){
                 this._missionState = SurvivorMission.State.FINISHED;
             } else {
                 this._missionState = SurvivorMission.State.FAILED;
             }
+            this._finishedMissionSurvivedMembers = this._team.map( t => t.getLivingMembers()).reduce( (prev, cur) => prev.concat(cur) , [] );
+            this._finishedMissionFallenMembers = this._team.map( t => t.getFallenMembers()).reduce( (prev,cur) => prev.concat(cur), []);
         }
         return this;
     }
@@ -343,7 +351,7 @@ export class SurvivorMission {
      * Returns the living members of all teams
      * @returns {Survivor[]}
      */
-    getSurivivors(){
+    getActiveSurvivors() {
         return this._team
             .map(team => team.getLivingMembers() )
             .reduce( (prev, current) => prev.concat(current), [] );
@@ -354,10 +362,6 @@ export class SurvivorMission {
      */
     getTeams(){
         return this._team;
-    }
-
-    addLootDispatcher(...dispatchers){
-        this._lootDispatchers.push(...dispatchers);
     }
 
     _onTimePass(){
@@ -375,20 +379,29 @@ export class SurvivorMission {
         return ENVIRONMENT.calculator().calculateFinalMissionValues(this);
     }
 
-    getFoundEquipment(){
-        return this._foundEquipment;
+    getFoundLoot(){
+        return this._foundLoot;
     }
-
-    getFoundAmmo(){
-        return this._foundAmmo;
-    }
-
-    getFoundFood(){
-        return this._foundFood;
-    }
-
+    
     getMissionState(){
         return this._missionState;
+    }
+
+    getFinalFallenMembers(){
+        return this._finishedMissionFallenMembers;
+    }
+
+    getFinalSurvivedMembers(){
+        return this._finishedMissionSurvivedMembers;
+    }
+
+    addCombat(combat){
+        const time = this._passedTime;
+        this._combats.push({combat: combat, time: time});
+    }
+
+    getCombats(){
+        return this._combats
     }
 
 }

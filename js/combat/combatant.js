@@ -10,18 +10,30 @@ export class Combatant {
     /**
      * @returns {CombatStats}
      */
-    get combatstats(){not_yet_implemented();}
+    getCombatstats(){not_yet_implemented();}
 
     /**
      * @returns {string}
      */
-    get name(){not_yet_implemented();}
+    getName(){not_yet_implemented();}
 
-    set health(health){
+    setHealth(health){
         not_yet_implemented();
     }
 
-    get health(){
+    /**
+     * @returns {number}
+     */
+    getHealth(){
+        not_yet_implemented();
+    }
+
+    /**
+     * 
+     * @param {number} distance 
+     * @returns {number}
+     */
+    accuracyAt(distance, rng){
         not_yet_implemented();
     }
 }

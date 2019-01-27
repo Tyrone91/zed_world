@@ -3,7 +3,7 @@ import { CombatAction } from "./combat-action.js";
 import { Survivor } from "../core/survivor.js";
 import { Zombie } from "./zombie.js";
 
-export class Round{
+export class Round {
 
     /**
      * 
@@ -11,7 +11,7 @@ export class Round{
      * @param {Combatant[]} aliveSurvivors 
      * @param {Combatant[]} enemies 
      */
-    constructor(roundNum, aliveSurvivors, enemies, distance){
+    constructor(roundNum, aliveSurvivors, enemies, distance) {
         this._num = roundNum;
         this._actions = [];
         this._aliveSurvivors = aliveSurvivors.slice();
@@ -25,14 +25,14 @@ export class Round{
      * Round number of this round.
      * @returns {number}
      */
-    get number(){
+    get number() {
         return this._num;
     }
 
     /**
      * @returns {number}
      */
-    get distance(){
+    get distance() {
         return this._distance;
     }
 
@@ -40,7 +40,7 @@ export class Round{
      * 
      * @param {CombatAction} actions 
      */
-    addAction(...actions){
+    addAction(...actions) {
         this._actions.push(...actions);
         return this;
     }
@@ -48,21 +48,21 @@ export class Round{
     /**
      * @returns {CombatAction[]}
      */
-    getActions(){
+    getActions() {
         return this._actions;
     }
 
     /**
      * @returns {Survivor[]}
      */
-    getKilledSurvivors(){
+    getKilledSurvivors() {
         return this._killedSurvivors;
     }
 
     /**
      * @returns {Zombie[]} //TODO: Add the moment this are just zombies
      */
-    getKilledEnemies(){
+    getKilledEnemies() {
         return this._killedEnemies;
     }
 
@@ -70,7 +70,7 @@ export class Round{
      * 
      * @param {Survivor} c 
      */
-    addKilledSurvivor(c){
+    addKilledSurvivor(c) {
         this._killedSurvivors.push(c);
     }
 
@@ -78,7 +78,7 @@ export class Round{
      * 
      * @param {Zombie} c //TODO: Add the moment this are just zombies
      */
-    addKilledEnemy(c){
+    addKilledEnemy(c) {
         this._killedEnemies.push(c);
     }
 }

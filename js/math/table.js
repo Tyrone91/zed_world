@@ -62,7 +62,7 @@ export class Table {
      * 
      * @param {Table} table 
      */
-    multipy(table){
+    multiply(table){
         return this.operation(table, (v1,v2) => v1 * v2);
     }
 

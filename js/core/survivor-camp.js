@@ -7,6 +7,7 @@ export class SurvivorCamp {
         this._woodStock = new ResourceWood();
         this._metalStock = new ResourceMetal();
         this._ammoStock = new AmmoTable();
+        this._survivorLimit = 5;
     }
 
     getFoodStock(){
@@ -23,6 +24,15 @@ export class SurvivorCamp {
 
     getAmmoStock(){
         return this._ammoStock;
+    }
+
+    getSurvivorLimit(){
+        return this._survivorLimit;
+    }
+
+    setSurvivorLimit(val){
+        this._survivorLimit = val;
+        return this;
     }
 
 

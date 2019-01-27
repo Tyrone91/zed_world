@@ -5,7 +5,6 @@ import { TextResolver } from "../util/text-resolver.js";
 export const CONTENT_MANAGER = new ContentManager("#content", "#game-menu");
 export const DEFAULT_TEXT_RESOLVER = new TextResolver();
 
-
 export class ViewComponent {
 
     constructor(id = "NO_ID_COMPONENT"){
@@ -42,5 +41,11 @@ export class ViewComponent {
 
     resolve(key){
         return DEFAULT_TEXT_RESOLVER.resolve(key);
+    }
+
+    resolveImg(key){
+        const img = new Image();
+        img.src = "data/images/portraits/" + key;
+        return img;
     }
 }

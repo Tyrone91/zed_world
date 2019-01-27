@@ -33,7 +33,7 @@ export class GameCalculator {
         if(this._options.addativeModifiersOn){
             return tables.reduce( (prev,current) => prev.add(current) );
         }else{
-            return tables.reduce( (prev,current) => prev.multipy(current) );
+            return tables.reduce( (prev,current) => prev.multiply(current) );
         }
     }
 
@@ -42,7 +42,7 @@ export class GameCalculator {
      * @param {...Table} tables 
      */
     _multiplyTablesToOne(...tables){
-        return tables.reduce( (prev,current) => prev.multipy(current) );
+        return tables.reduce( (prev,current) => prev.multiply(current) );
     }
 
     /**

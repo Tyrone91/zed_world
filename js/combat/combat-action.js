@@ -1,9 +1,10 @@
 import { Combatant } from "./combatant.js";
 
 export class CombatAction {
-    constructor(executor, target){
+    constructor(executor, target, type){
         this._executor = executor;
         this._target = target;
+        this._type = type;
     }
 
     /**
@@ -19,11 +20,15 @@ export class CombatAction {
     get target(){
         return this._target;
     }
+
+    get type(){
+        return this._type;
+    }
 }
 
 export class AttackAction extends CombatAction{
     constructor(executor,target, damage, hitchance, hit){
-        super(executor, target);
+        super(executor, target, AttackAction.Type);
         this._inflictedDamage = damage;
         this._hitchance = hitchance;
         this._hit = hit;
@@ -51,4 +56,6 @@ export class AttackAction extends CombatAction{
         return this._hit;
     }
 }
+
+AttackAction.Type = "ATTACK_ACTION";
 

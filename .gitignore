@@ -1,5 +1,7 @@
 .tern-project
 assets/
+data/images
+data/sound
 font-awesome-4.7.0/
 .vscode/
 notes

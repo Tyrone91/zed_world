@@ -3,6 +3,7 @@ import { SurvivorMission } from "./survivor-mission.js";
 import { ENVIRONMENT } from "../core/game-environment.js";
 import { LootDispatcher } from "./loot-dispatcher.js";
 import { Random } from "../math/random.js";
+import { Location } from "./location.js";
 
 export class MissionBuilder{
 
@@ -11,7 +12,6 @@ export class MissionBuilder{
         this._teams = [];
         this._length = 1;
         this._target = null;
-        this._lootDispatchers = [];
         this._rng = null;
         this._combatStarter = null;
     }
@@ -62,9 +62,6 @@ export class MissionBuilder{
         if(!this._target){
             return false;
         }
-        if(this._lootDispatchers.length === 0){
-            return false;
-        }
         if(!this._rng){
             return false;
         }
@@ -85,14 +82,6 @@ export class MissionBuilder{
 
     /**
      * 
-     * @param {LootDispatcher[]} dispatchers 
-     */
-    setLootDispatchers(dispatchers){
-        this._lootDispatchers = dispatchers;
-    }
-
-    /**
-     * 
      * @param {(mission:SurvivorMission, ambush:boolean) => void} starter 
      */
     setCombatStarter(starter){
@@ -107,7 +96,6 @@ export class MissionBuilder{
         this._teams.forEach(team => m.addTeam(team));
         m.setTargetLocation(this._target);
         m.setMissionTime(this._length);
-        m.addLootDispatcher(...this._lootDispatchers);
         m.setRandomNumberGenerator(this._rng);
         if(this._combatStarter){
             m.setCombatStarter(this._combatStarter);

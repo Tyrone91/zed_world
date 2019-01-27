@@ -9,25 +9,29 @@ ZOMBIE_STATS.actionsPerRound.max(1).min(1);
 ZOMBIE_STATS.damage.min(10).max(20);
 
 export class Zombie extends Combatant{
-    constructor(){
+    constructor() {
         super();
         this._health = 50;
     }
 
-    get combatstats(){
+    getCombatstats() {
         return ZOMBIE_STATS;
     }
 
-    get health(){
+    getHealth() {
         return this._health;
     }
 
-    set health(newhealth){
+    setHealth(newhealth) {
         this._health = newhealth;
     }
 
-    get name(){
+    getName() {
         return "Undead";
+    }
+
+    accuracyAt(distance){
+        return distance === 0 ? 100 : 0;
     }
 
     

@@ -6,12 +6,19 @@ export class Equipment {
         this._name = name;
         this._desc = desc;
         this._stats = new CombatStats();
+        this._modifer = new CombatStats().fill(1);
         this._equipmentType = type;
-        this._icon = "";
+        this._icon = icon;
     }
+
+    
 
     get stats(){
         return this._stats;
+    }
+
+    get modifier(){
+        return this._modifer;
     }
 
     get name(){
@@ -38,7 +45,7 @@ export class Equipment {
      */
     penaltyAtDistance(distance, modifier = new CombatStats().fill(1) ){
         /**@type {CombatStats} */
-        const stats = this.stats.multipy(modifier);
+        const stats = this.stats.multiply(modifier);
         const upperRange = stats.optimalRange.max();
         const lowerRange = stats.optimalRange.min();
         const stability = stats.stability.base();
@@ -79,9 +86,18 @@ export class Equipment {
      * @returns {Number} Value between 0 and 100
      */
     accuracyAtDistance(distance, modifier = new CombatStats().fill(1) ){
-        const stats = this.stats.multipy(modifier);
+        const stats = this.stats.multiply(modifier);
         const penalty = this.penaltyAtDistance(distance, modifier);
         const baseAcc = stats.accuracy.base();
         return (baseAcc - penalty) < GameConstants.COMBAT.MINIMUM_ACCURACY ? GameConstants.COMBAT.MINIMUM_ACCURACY : (baseAcc - penalty);
     }
 }
+
+Equipment.Types = {
+    WEAPON: "WEAPON",
+    BODY: "BODY",
+    ARMS: "ARMS",
+    LEGS: "LEGS",
+    HEAD: "HEAD",
+    BELT: "BELT"
+};

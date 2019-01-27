@@ -7,6 +7,7 @@ class LootContainer{
     constructor(loot, weight){
         this._weight = weight;
         this._loot = loot;
+        
     }
 
     get loot(){
@@ -30,7 +31,16 @@ export class LootTable{
         /**@type LootContainer[] */
         this._lootList = [];
         this._receivers = [...lootReceivers];
-        
+        this._name = "COMMON_LOOT_TABLE";
+    }
+
+    setName(name){
+        this._name = name;
+        return this;
+    }
+
+    getName(){
+        return this._name;
     }
 
     _calcTotalWeight(){

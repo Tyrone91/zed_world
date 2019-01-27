@@ -51,12 +51,12 @@ export class ContentManager{
 
     popContent(){   
        this._contentStack.pop();
-       this.render(this._contentStack[this._contentStack.length-1]);
+       this.render(this._contentStack[this._contentStack.length-1]());
     }
 
     setContent(callback){
         this._contentStack = [callback];
-        this.render(callback);
+        this.render(callback());
     }
 
     render(element){
@@ -92,6 +92,13 @@ export class ContentManager{
         bttn.click(action);
         
         $(this._menuTarget).append(bttn);
+    }
+
+    update() {
+        const top = this._contentStack[this._contentStack.length-1];
+        if(top) {
+            this.render(top());
+        }
     }
 
 

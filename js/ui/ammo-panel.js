@@ -16,6 +16,7 @@ export class AmmoPanel extends ViewComponent {
 
     update(){
         const root = this.rootElement();
+        root.empty();
         const ammo = this._ammo;
 
         root.append( $("<span>").text(this.resolve("AMMO")) );

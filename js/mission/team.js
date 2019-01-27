@@ -122,7 +122,7 @@ export class Team {
     }
 
     getContinueAfterCombat(){
-        this._continueAfterCombat;
+        return this._continueAfterCombat;
     }
 
 }

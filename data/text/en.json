@@ -32,5 +32,7 @@
 
     "AMMO" : "Ammo",
     "CREATE_TEAM" : "CREATE TEAM",
-    "VIEW_TEAMS" : "VIEW TEAMS"
+    "VIEW_TEAMS" : "VIEW TEAMS",
+
+    "BATTLE_REPORT_DAY": "Day"
 }
