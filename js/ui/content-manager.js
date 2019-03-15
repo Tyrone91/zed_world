@@ -54,6 +54,10 @@ export class ContentManager{
        this.render(this._contentStack[this._contentStack.length-1]());
     }
 
+    /**
+     * 
+     * @param {() => HTMLElement|JQuery} callback 
+     */
     setContent(callback){
         this._contentStack = [callback];
         this.render(callback());
