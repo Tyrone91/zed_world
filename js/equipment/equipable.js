@@ -7,7 +7,7 @@ export class Equipable {
      * 
      * @param {string} name 
      * @param {string} desc 
-     * @param {string} type 
+     * @param {EquipmentType} type 
      * @param {string} icon 
      */
     constructor(name, desc, type, icon = "default_equipment"){
@@ -99,11 +99,26 @@ export class Equipable {
     }
 }
 
-Equipable.Types = {
-    WEAPON: "WEAPON",
-    BODY: "BODY",
-    ARMS: "ARMS",
-    LEGS: "LEGS",
-    HEAD: "HEAD",
-    BELT: "BELT"
+class EquipmentType {
+
+    /**
+     * @param {string} id 
+     */
+    constructor(id) {
+        this._id = id;
+    }
+
+    get id() {
+        return this._id;
+    }
+}
+
+Equipable.Type = {
+    WEAPON: new EquipmentType("WEAPON"),
+    BODY: new EquipmentType("BODY"),
+    ARMS: new EquipmentType("ARMS"),
+    LEGS: new EquipmentType("LEGS"),
+    HEAD: new EquipmentType("HEAD"),
+    BELT: new EquipmentType("BELT"),
+    NONE: new EquipmentType("NONE")
 };

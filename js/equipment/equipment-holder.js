@@ -4,7 +4,7 @@ import { CombatStats } from "../combat/combat-stats.js";
 class NullEquipment extends Equipable {
 
     constructor(){
-        super("Empty", "Empty slot", "IRRELEVANT", "empty-equipments-slot");
+        super("Empty", "Empty slot", Equipable.Type.NONE, "empty-equipments-slot");
     }
 }
 
@@ -12,8 +12,8 @@ export class EquipmentHolder {
 
     constructor(){
 
-        this._slots = /**@type {Map<string,Equipable>} */(new Map());
-        Object.keys(EquipmentHolder.Slots).forEach( slot => this._slots.set(slot, new NullEquipment() ));
+        this._slots = /**@type {Map<HolderSlot,Equipable>} */(new Map());
+        Object.keys(EquipmentHolder.Slot).forEach( slot => this._slots.set(EquipmentHolder.Slot[slot], new NullEquipment() ));
     }
 
     /**
@@ -22,19 +22,19 @@ export class EquipmentHolder {
      */
     _usedSlot(eq){
         switch(eq.type){
-            case Equipable.Types.HEAD: return EquipmentHolder.Slots.HEAD;
-            case Equipable.Types.BODY: return EquipmentHolder.Slots.BODY;
-            case Equipable.Types.LEGS: return EquipmentHolder.Slots.LEGS;
-            case Equipable.Types.ARMS: return EquipmentHolder.Slots.ARMS;
-            case Equipable.Types.BELT: return EquipmentHolder.Slots.BELT;
-            case Equipable.Types.WEAPON: return EquipmentHolder.Slots.MAIN_WEAPON;
+            case Equipable.Type.HEAD: return EquipmentHolder.Slot.HEAD;
+            case Equipable.Type.BODY: return EquipmentHolder.Slot.BODY;
+            case Equipable.Type.LEGS: return EquipmentHolder.Slot.LEGS;
+            case Equipable.Type.ARMS: return EquipmentHolder.Slot.ARMS;
+            case Equipable.Type.BELT: return EquipmentHolder.Slot.BELT;
+            case Equipable.Type.WEAPON: return EquipmentHolder.Slot.MAIN_WEAPON;
             default: throw new Error("UNKNOWN_SLOT");
         }
     }
 
     /**
      * @param {Equipable} equipment
-     * @param {"HEAD"|"BODY"|"LEGS"|"ARMS"|"BELT"|"MAIN_WEAPON"|string} slot 
+     * @param {HolderSlot} slot 
      */
     equipTo(slot, equipment){
         this._slots.set(slot, equipment);
@@ -43,7 +43,7 @@ export class EquipmentHolder {
 
     /**
      * 
-     * @param {"HEAD"|"BODY"|"LEGS"|"ARMS"|"BELT"|"MAIN_WEAPON"|string} slot 
+     * @param {HolderSlot} slot 
      */
     unequipFrom(slot){
         const val = this._slots.get(slot);
@@ -53,7 +53,7 @@ export class EquipmentHolder {
 
     /**
      * 
-     * @param {"HEAD"|"BODY"|"LEGS"|"ARMS"|"BELT"|"MAIN_WEAPON"|string} slot 
+     * @param {HolderSlot} slot 
      */
     get(slot){
         return this._slots.get(slot);
@@ -61,7 +61,7 @@ export class EquipmentHolder {
 
     /**
      * 
-     * @param {"HEAD"|"BODY"|"LEGS"|"ARMS"|"BELT"|"MAIN_WEAPON"|string} slot 
+     * @param {HolderSlot} slot 
      */
     isFree(slot){
         return this.get(slot) instanceof NullEquipment;
@@ -69,7 +69,7 @@ export class EquipmentHolder {
 
     /**
      * 
-     * @param {(slot:string, item:Equipable) => void} callback 
+     * @param {(slot:HolderSlot, item:Equipable) => void} callback 
      */
     forEach(callback){
         this._slots.forEach( (eq, slot) => callback(slot,eq));
@@ -116,12 +116,25 @@ export class EquipmentHolder {
 
 }
 
-EquipmentHolder.Slots = {
-    HEAD: "HEAD",
-    BODY: "BODY",
-    LEGS: "LEGS",
-    ARMS: "ARMS",
-    BELT: "BELT",
+class HolderSlot {
 
-    MAIN_WEAPON: "MAIN_WEAPON"
+    /**
+     * @param {string} id 
+     */
+    constructor(id) {
+        this._id = id;
+    }
+
+    id() {
+        return this._id;
+    }
+}
+
+EquipmentHolder.Slot = {
+    HEAD: new HolderSlot("HEAD"),
+    BODY: new HolderSlot("BODY"),
+    LEGS: new HolderSlot("LEGS"),
+    ARMS: new HolderSlot("ARMS"),
+    BELT: new HolderSlot("BELT"),
+    MAIN_WEAPON: new HolderSlot("MAIN_WEAPON")
 };
