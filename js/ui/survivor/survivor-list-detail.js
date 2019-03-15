@@ -1,5 +1,6 @@
-import { ViewComponent } from "./view-component.js";
-import { Survivor } from "../core/survivor.js";
+import { ViewComponent } from "../view-component.js";
+import { Survivor } from "../../core/survivor.js";
+import { type } from "os";
 
 export class SurvivorListDetail extends ViewComponent {
 
@@ -21,7 +22,7 @@ export class SurvivorListDetail extends ViewComponent {
         const container = $("<div>");
 
         container.append(
-            survivor.name(),
+            /** @type {string} */(survivor.name()),
             survivor.state
         );
         return container;

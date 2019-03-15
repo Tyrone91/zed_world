@@ -1,5 +1,5 @@
-import { ViewComponent } from "./view-component.js";
-import { ActionButton } from "./action-button.js";
+import { ViewComponent } from "../view-component.js";
+import { ActionButton } from "../action-button.js";
 import { MissionList } from "./mission-list.js";
 
 export class MissionOverview extends ViewComponent {

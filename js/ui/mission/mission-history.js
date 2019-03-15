@@ -1,9 +1,9 @@
-import { ViewComponent } from "./view-component.js";
-import { SurvivorMission } from "../mission/survivor-mission.js";
-import { SurvivorListCompact } from "./survivor-list-compact.js";
-import { ResourcePanel } from "./resource-panel.js";
-import { collectresources } from "../loot-system-v2/loot-collector.js";
-import { BattleReportView } from "./battle-report-view.js";
+import { ViewComponent } from "../view-component.js";
+import { SurvivorMission } from "../../mission/survivor-mission.js";
+import { SurvivorListCompact } from "../survivor/survivor-list-compact.js";
+import { ResourcePanel } from "../resource-panel.js";
+import { collectresources } from "../../loot-system-v2/loot-collector.js";
+import { BattleReportView } from "../battle-report-view.js";
 
 export class MissionHistory extends ViewComponent {
 

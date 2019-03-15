@@ -1,8 +1,8 @@
-import { ViewComponent } from "./view-component.js";
-import { Team } from "../mission/team.js";
-import { SurvivorListCompact } from "./survivor-list-compact.js";
+import { ViewComponent } from "../view-component.js";
+import { Team } from "../../mission/team.js";
+import { SurvivorListCompact } from "../survivor/survivor-list-compact.js";
 import { TeamViewer } from "./team-viewer.js";
-import { ConfirmButton } from "./confirm-button.js";
+import { ConfirmButton } from "../confirm-button.js";
 
 export class TeamCreator extends ViewComponent {
 

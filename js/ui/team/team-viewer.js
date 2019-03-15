@@ -1,7 +1,7 @@
-import { ViewComponent } from "./view-component.js";
-import { SurvivorListCompact } from "./survivor-list-compact.js";
-import { Team } from "../mission/team.js";
-import { StatsViewer } from "./stats-viewer.js";
+import { ViewComponent } from "../view-component.js";
+import { SurvivorListCompact } from "../survivor/survivor-list-compact.js";
+import { Team } from "../../mission/team.js";
+import { StatsViewer } from "../stats-viewer.js";
 
 export class TeamViewer extends ViewComponent {
 

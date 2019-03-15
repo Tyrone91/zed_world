@@ -1,7 +1,7 @@
-import { ViewComponent } from "./view-component.js";
-import { Survivor } from "../core/survivor.js";
+import { ViewComponent } from "../view-component.js";
+import { Survivor } from "../../core/survivor.js";
 import { SurvivorImage } from "./survivor-image.js";
-import { GameEnvironment } from "../core/game-environment.js";
+import { GameEnvironment } from "../../core/game-environment.js";
 
 export class SurvivorQuickList extends ViewComponent {
 

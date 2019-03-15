@@ -1,6 +1,6 @@
 import { ViewComponent } from "./view-component.js";
 import { Combat } from "../combat/combat.js";
-import { SurvivorImage } from "./survivor-image.js";
+import { SurvivorImage } from "./survivor/survivor-image.js";
 import { ActionButton } from "./action-button.js";
 import { Round } from "../combat/round.js";
 import { CombatAction, AttackAction } from "../combat/combat-action.js";

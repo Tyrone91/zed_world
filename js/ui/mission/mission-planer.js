@@ -1,12 +1,12 @@
-import { ViewComponent } from "./view-component.js";
+import { ViewComponent } from "../view-component.js";
 import { MissionMapView } from "./mission-map-view.js";
-import { StatsViewer } from "./stats-viewer.js";
-import { MissionParameters } from "../mission/mission-parameters.js";
-import { ConfirmButton } from "./confirm-button.js";
-import { TeamSelector } from "./team-selector.js";
-import { MissionBuilder } from "../mission/mission-builder.js";
-import { LocationSelector } from "./location-selector.js";
-import { TeamCreator } from "./team-creator.js";
+import { StatsViewer } from "../stats-viewer.js";
+import { MissionParameters } from "../../mission/mission-parameters.js";
+import { ConfirmButton } from "../confirm-button.js";
+import { TeamSelector } from "../team/team-selector.js";
+import { MissionBuilder } from "../../mission/mission-builder.js";
+import { LocationSelector } from "../location-selector.js";
+import { TeamCreator } from "../team/team-creator.js";
 
 export class MissionPlaner extends ViewComponent {
      

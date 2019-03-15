@@ -1,5 +1,5 @@
-import { ViewComponent } from "./view-component.js";
-import { Survivor } from "../core/survivor.js";
+import { ViewComponent } from "../view-component.js";
+import { Survivor } from "../../core/survivor.js";
 import { SurvivorImage } from "./survivor-image.js";
 
 export class SurvivorListCompact extends ViewComponent{

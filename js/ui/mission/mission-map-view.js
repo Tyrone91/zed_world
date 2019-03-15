@@ -1,6 +1,6 @@
-import { ViewComponent } from "./view-component.js";
-import { MissionMap } from "../mission/mission-map.js";
-import { Location } from "../mission/location.js";
+import { ViewComponent } from "../view-component.js";
+import { MissionMap } from "../../mission/mission-map.js";
+import { Location } from "../../mission/location.js";
 
 export class MissionMapView extends ViewComponent {
 

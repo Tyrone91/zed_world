@@ -1,9 +1,9 @@
 import { ViewComponent } from "./view-component.js";
-import { MissionMapView } from "./mission-map-view.js";
+import { MissionMapView } from "./mission/mission-map-view.js";
 import { StatsViewer } from "./stats-viewer.js";
 import { MissionParameters } from "../mission/mission-parameters.js";
 import { ConfirmButton } from "./confirm-button.js";
-import { TeamSelector } from "./team-selector.js";
+import { TeamSelector } from "./team/team-selector.js";
 
 export class LocationSelector extends ViewComponent {
      

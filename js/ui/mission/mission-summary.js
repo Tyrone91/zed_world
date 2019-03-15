@@ -1,14 +1,14 @@
-import { ViewComponent } from "./view-component.js";
+import { ViewComponent } from "../view-component.js";
 import { MissionMapView } from "./mission-map-view.js";
-import { StatsViewer } from "./stats-viewer.js";
-import { MissionParameters } from "../mission/mission-parameters.js";
-import { ConfirmButton } from "./confirm-button.js";
-import { TeamSelector } from "./team-selector.js";
-import { MissionBuilder } from "../mission/mission-builder.js";
-import { LocationSelector } from "./location-selector.js";
-import { TeamCreator } from "./team-creator.js";
-import { TeamViewer } from "./team-viewer.js";
-import { SurvivorMission } from "../mission/survivor-mission.js";
+import { StatsViewer } from "../stats-viewer.js";
+import { MissionParameters } from "../../mission/mission-parameters.js";
+import { ConfirmButton } from "../confirm-button.js";
+import { TeamSelector } from "../team/team-selector.js";
+import { MissionBuilder } from "../../mission/mission-builder.js";
+import { LocationSelector } from "../location-selector.js";
+import { TeamCreator } from "../team/team-creator.js";
+import { TeamViewer } from "../team/team-viewer.js";
+import { SurvivorMission } from "../../mission/survivor-mission.js";
 
 export class MissionSummary extends ViewComponent {
      

@@ -1,6 +1,6 @@
-import { ViewComponent } from "./view-component.js";
+import { ViewComponent } from "../view-component.js";
 import { TeamCreator } from "./team-creator.js";
-import { ConfirmButton } from "./confirm-button.js";
+import { ConfirmButton } from "../confirm-button.js";
 
 export class TeamSelector extends ViewComponent {
     constructor(){
