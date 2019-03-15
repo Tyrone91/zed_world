@@ -4,12 +4,12 @@ import { CharacterStats } from "./character-stats.js";
 import { CombatStats } from "../combat/combat-stats.js";
 import { ENVIRONMENT } from "./game-environment.js";
 import { Combatant } from "../combat/combatant.js";
-import { Equipment } from "../equipment/equipment.js";
+import { Equipable } from "../equipment/equipable.js";
 import { EquipmentHolder } from "../equipment/equipment-holder.js";
 
-class SurvivorFist extends Equipment {
+class SurvivorFist extends Equipable {
     constructor(){
-        super("SURVIVOR_FIST","If you left with nothing more", Equipment.Types.WEAPON, "survivor_fist.jpg");
+        super("SURVIVOR_FIST","If you left with nothing more", Equipable.Types.WEAPON, "survivor_fist.jpg");
         this.stats.accuracy.base(100);
         this.stats.stability.base(0);
         this.stats.optimalRange.min(0).max(0);

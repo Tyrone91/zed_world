@@ -1,5 +1,5 @@
 import { AmmoTable } from "./ammo-table.js";
-import { Equipment } from "../equipment/equipment.js";
+import { Equipable } from "../equipment/equipable.js";
 
 function not_implemented(){
     throw `Did not implement all methods from LootReceiver`;
@@ -25,7 +25,7 @@ export class LootReceiver {
 
     /**
      * 
-     * @param {Equipment} equipment 
+     * @param {Equipable} equipment 
      */
     addEquipment(equipment){
         not_implemented();
