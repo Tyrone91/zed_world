@@ -1,6 +1,5 @@
 import { ViewComponent } from "../view-component.js";
 import { Survivor } from "../../core/survivor.js";
-import { type } from "os";
 
 export class SurvivorListDetail extends ViewComponent {
 
