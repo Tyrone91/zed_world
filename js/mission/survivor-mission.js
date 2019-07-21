@@ -387,10 +387,16 @@ export class SurvivorMission {
         return this._missionState;
     }
 
+    /**
+     * @returns {Survivor[]}
+     */
     getFinalFallenMembers(){
         return this._finishedMissionFallenMembers;
     }
 
+    /**
+     * @returns {Survivor[]}
+     */
     getFinalSurvivedMembers(){
         return this._finishedMissionSurvivedMembers;
     }

@@ -12,7 +12,7 @@ export class SurvivorImage extends ViewComponent {
         this.rootElement().addClass("survivor-image");
         this._survivor = survivor;
         this._canvas = document.createElement("canvas");
-        this._image = this.resolveImg(survivor.portrait);
+        this._image = this.resolveImg("portraits", survivor.portrait);
         this._width = width;
         this._heigt = height;
         this._image.addEventListener("load",e => { // because the img is loaded async it is possible that it not there yet. Update the component if something changes.
@@ -29,7 +29,6 @@ export class SurvivorImage extends ViewComponent {
     }
 
     update(){
-        console.log("update called");
         this.clear();
         const root = this.rootElement();
         const width = this._width;

@@ -1,6 +1,6 @@
 {
     "referenceId" : "rifle1",
-    "name" : "Standart Gewehr",
+    "name" : "Standard Gewehr",
     "stats" : {
         "damage" : {
             "lower" : 10,

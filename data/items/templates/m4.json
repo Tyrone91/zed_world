@@ -1,0 +1,23 @@
+{
+    "name" : "M4 Assault-Rifle",
+    "description" : "A lightweight assault rifle capable of handling multiple enemies at once",
+    "icon" : "M4.jpg",
+
+    "lowerOptimalRangeMin" : 15,
+    "lowerOptimalRangeMax" : 25,
+
+    "upperOptimalRangeMin" : 30,
+    "upperOptimalRangeMax" : 45,
+
+    "lowerAccuracy" : 65,
+    "upperAccuracy" : 75,
+
+    "lowerDamage" : 2,
+    "upperDamage" : 3,
+
+    "lowerActionsPerRound" : 2,
+    "upperActionsPerRound" : 4,
+
+    "lowerStability" : 20,
+    "upperStability" : 45
+}

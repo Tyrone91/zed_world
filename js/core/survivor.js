@@ -7,9 +7,9 @@ import { Combatant } from "../combat/combatant.js";
 import { Equipable } from "../equipment/equipable.js";
 import { EquipmentHolder } from "../equipment/equipment-holder.js";
 
-class SurvivorFist extends Equipable {
+export class SurvivorFist extends Equipable {
     constructor(){
-        super("SURVIVOR_FIST","If you left with nothing more", Equipable.Types.WEAPON, "survivor_fist.jpg");
+        super("SURVIVOR_FIST","If you left with nothing more", Equipable.Type.WEAPON, "survivor_fist.jpg");
         this.stats.accuracy.base(100);
         this.stats.stability.base(0);
         this.stats.optimalRange.min(0).max(0);
@@ -54,7 +54,9 @@ export class Survivor extends Character {
     }
 
     get combatstats() {
-        return this._combatstats;
+        console.log("Base Stats:",this._combatstats.toString());
+        console.log("Equipment Stats:", this._equipment.stats.toString());
+        return /**@type {CombatStats} */(this._combatstats.add(this._equipment.stats));
     }
 
     get health() {
@@ -70,6 +72,9 @@ export class Survivor extends Character {
         return this._currentState;
     }
 
+    /**
+     * @param {string} newState
+     */
     set state(newState) {
         this._currentState = newState;
         this._notifyStateChange();
@@ -116,7 +121,7 @@ export class SurvivorCombatantWrapper extends Combatant {
     }
     
     getCombatstats() {
-        return this._survivor.combatstats;
+        return /**@type {CombatStats} */(this._survivor.combatstats);
     }
 
     getHealth() {
@@ -137,13 +142,14 @@ export class SurvivorCombatantWrapper extends Combatant {
 
     accuracyAt(distance, rng){
         return this._survivor._equipment
-            .get(EquipmentHolder.Slots.MAIN_WEAPON)
-            .accuracyAtDistance(distance, this._survivor.combatstats.multiply(this._survivor.equipment.modifiers) );
+            .get(EquipmentHolder.Slot.MAIN_WEAPON)
+            .accuracyAtDistance(distance, /**@type {CombatStats} */(this._survivor.combatstats.multiply(this._survivor.equipment.modifiers)) );
     }
 }
 
 Survivor.States = {
     IDLE: "IDLE",
     ON_MISSION: "ON_MISSION",
-    TRAINING: "TRAINING"
+    TRAINING: "TRAINING",
+    DEAD: "DEAD"
 }

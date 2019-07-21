@@ -86,6 +86,38 @@ export class LootTable {
     }
 }
 
+export class LootTableID {
+
+    /**
+     * @param {string} id 
+     */
+    constructor(id) {
+        this._id = id;
+    }
+
+    asString() {
+        return this._id;
+    }
+
+    toString() {
+        return `LootTableID[${this._id}]`;
+    }
+
+    /**
+     * 
+     * @param {LootTableID} id 
+     */
+    isEqualTo(id) {
+        return id._id == this._id;
+    }
+
+
+
+    static of(id) {
+        return new LootTableID(id);
+    }
+}
+
 LootTable.Rarity = {
     COMMON: "COMMON",
     RARE: "RARE",

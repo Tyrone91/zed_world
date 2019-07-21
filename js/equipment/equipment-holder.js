@@ -110,10 +110,14 @@ export class EquipmentHolder {
         return [...this._slots.values()].map(e => e.stats).reduce( (prev, cur) => prev.add(cur), new CombatStats() );
     }
 
+    /**
+     * @returns {CombatStats}
+     */
     get modifiers(){
-        return [...this._slots.values()].map(e => e.modifier).reduce( (prev, cur) => prev.add(cur), new CombatStats() );
+        return [...this._slots.values()]
+            .map(e => e.modifier)
+            .reduce( (prev, cur) => /**@type {CombatStats} */(prev.add(cur)), new CombatStats() );
     }
-
 }
 
 class HolderSlot {
@@ -125,10 +129,12 @@ class HolderSlot {
         this._id = id;
     }
 
-    id() {
+    get id() {
         return this._id;
     }
 }
+EquipmentHolder.HolderSlot = HolderSlot;
+
 
 EquipmentHolder.Slot = {
     HEAD: new HolderSlot("HEAD"),

@@ -21,6 +21,7 @@ import { TeamViewer } from "./team/team-viewer.js";
 import { MissionHistory } from "./mission/mission-history.js";
 import { getJSON } from "../util/ajax.js";
 import { SurvivorQuickList } from "./survivor/survivor-quick-list.js";
+import { ArmoryView } from "./equipment/armory-view.js";
 
 const game = ENVIRONMENT;
 const manager = CONTENT_MANAGER;
@@ -50,6 +51,16 @@ function createMission(){
     });
 
     manager.setContent( () => locationSelector.domElement());
+}
+
+function openArmoryView() {
+    const camp = game.getCamp();
+    const armory = camp.getArmory();
+    const view = new ArmoryView(armory);
+    view.onclick( e => {
+        console.log(`Stats of ${e.name}:`, e.stats.toString(), e);
+    })
+    manager.setContent( () => view.domElement() );
 }
 
 function openSurvivorOverview(){
@@ -136,6 +147,8 @@ DEFAULT_TEXT_RESOLVER.load("en.json")
 function init(){
     const resourceUpdater = initResourceBar();
     const quickList = initQuickList();
+    
+    manager.addMenuEntry("Armory", () => openArmoryView() );
     manager.addMenuEntry("Survivors", () => openSurvivorOverview() );
     manager.addMenuEntry("Mission", () => openMissionOverview() );
 

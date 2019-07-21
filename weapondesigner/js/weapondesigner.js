@@ -1,4 +1,4 @@
-import { Equipment } from "../../js/equipment/equipment.js";
+import { Equipable } from "../../js/equipment/equipable.js";
 import { WeaponStatsDrawer } from "./weapon-stats-drawer.js";
 import { CombatStats } from "../../js/combat/combat-stats.js";
 import { AugmentedTableColumnAccessHelper } from "../../js/math/augmented-table.js"
@@ -140,7 +140,7 @@ export class WeaponDesigner {
         this._graph = new WeaponStatsDrawer(canvas, 100, 0);
         this._graph.setPadding(30,30);
         this._graph.setMarkerSteps(10);
-        this._currentWeapon = new Equipment("DEFAULT", "DEFAULT", "DEFAULT");
+        this._currentWeapon = new Equipable("DEFAULT", "DEFAULT", "DEFAULT");
         this._currentWeapon.stats.fill(10);
     }
 
@@ -185,7 +185,7 @@ export class WeaponDesigner {
 
 
 function createDummy(name, acc, stab, min, max){
-    const e = new Equipment();
+    const e = new Equipable();
     e._name = name;
     e.stats.accuracy.base(acc);
     e.stats.stability.base(stab);
@@ -254,7 +254,7 @@ export function test(canvas){
         drawer.draw(...list);
     });
 
-    const equip = new Equipment("name", "ffdg", "fgdfg", "fgdfg");
+    const equip = new Equipable("name", "ffdg", "fgdfg", "fgdfg");
     
 }
 

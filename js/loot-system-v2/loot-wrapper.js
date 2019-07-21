@@ -1,5 +1,12 @@
 export class LootWrapper {
 
+    /**
+     * 
+     * @param {string} type 
+     * @param {number} weight 
+     * @param {string} contentDesc 
+     * @param {...any} content 
+     */
     constructor(type, weight, contentDesc, ...content){
         this._type = type;
         this._weight = weight;

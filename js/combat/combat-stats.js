@@ -42,43 +42,45 @@ export class CombatStats extends AugmentedTable{
      * @returns {Accessor}
      */
     get optimalRange(){
-        return this.getRow(GameConstants.COMBAT_STATS.OPTIMIAL_RANGE);
+        return /**@type {Accessor} */ (this.getRow(GameConstants.COMBAT_STATS.OPTIMIAL_RANGE));
     }
 
     /**
      * @returns {Accessor}
      */
     get damage(){
-        return this.getRow(GameConstants.COMBAT_STATS.DAMAGE);
+        return /**@type {Accessor} */ (this.getRow(GameConstants.COMBAT_STATS.DAMAGE));
     }
 
     /**
      * @returns {Accessor}
      */
     get hitchance(){
-        return this.getRow(GameConstants.COMBAT_STATS.HIT_CHANCE);
+        return /**@type {Accessor} */ (this.getRow(GameConstants.COMBAT_STATS.HIT_CHANCE));
     }
 
     /**
      * @returns {Accessor}
      */
     get actionsPerRound(){
-        return this.getRow(GameConstants.COMBAT_STATS.ACTION_PER_ROUND);
+        return /**@type {Accessor} */ (this.getRow(GameConstants.COMBAT_STATS.ACTION_PER_ROUND));
     }
     
     /**
      * @returns {Accessor}
      */
     get stability(){
-        return this.getRow(GameConstants.COMBAT_STATS.STABILITY);
+        return /**@type {Accessor} */ (this.getRow(GameConstants.COMBAT_STATS.STABILITY));
     }
 
     /**
      * @returns {Accessor}
      */
     get accuracy(){
-        return this.getRow(GameConstants.COMBAT_STATS.ACCURACY);
+        return /**@type {Accessor} */ (this.getRow(GameConstants.COMBAT_STATS.ACCURACY));
     }
 
 
-}   
+}
+
+CombatStats.Accesscor = Accessor;

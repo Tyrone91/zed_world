@@ -47,7 +47,7 @@ export class Equipable {
      * 
      * @param {number} distance
      * @param {CombatStats} modifier
-     * @returns {Number} Value between 0 and 100
+     * @returns {number} Value between 0 and 100
      */
     penaltyAtDistance(distance, modifier = new CombatStats().fill(1) ){
         
@@ -89,7 +89,7 @@ export class Equipable {
      * 
      * @param {number} distance
      * @param {CombatStats} modifier
-     * @returns {Number} Value between 0 and 100
+     * @returns {number} Value between 0 and 100
      */
     accuracyAtDistance(distance, modifier = new CombatStats().fill(1) ){
         const stats = /**@type {CombatStats} */(this.stats.multiply(modifier));
@@ -97,6 +97,7 @@ export class Equipable {
         const baseAcc = /**@type {number} */(stats.accuracy.base());
         return (baseAcc - penalty) < GameConstants.COMBAT.MINIMUM_ACCURACY ? GameConstants.COMBAT.MINIMUM_ACCURACY : (baseAcc - penalty);
     }
+
 }
 
 class EquipmentType {
@@ -112,6 +113,8 @@ class EquipmentType {
         return this._id;
     }
 }
+
+Equipable.EquipmentType = EquipmentType;
 
 Equipable.Type = {
     WEAPON: new EquipmentType("WEAPON"),

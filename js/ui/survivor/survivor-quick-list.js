@@ -2,6 +2,7 @@ import { ViewComponent } from "../view-component.js";
 import { Survivor } from "../../core/survivor.js";
 import { SurvivorImage } from "./survivor-image.js";
 import { GameEnvironment } from "../../core/game-environment.js";
+import { SurvivorDetailOverview } from "./survivor-detail-overview.js";
 
 export class SurvivorQuickList extends ViewComponent {
 
@@ -28,7 +29,7 @@ export class SurvivorQuickList extends ViewComponent {
 
         res.on("click", e => {
             this.manager.setContent( () => {
-                //TODO: Surivovr overview.
+                return new SurvivorDetailOverview(this._game, survivor).domElement();
             });
         });
         return res.append(portrait.domElement(), text);
@@ -38,7 +39,6 @@ export class SurvivorQuickList extends ViewComponent {
         const root = this.rootElement();
         root.addClass("flex-column");
         root.empty();
-        console.log(this._game.getAllAliveSurivors());
         this._game.getAllAliveSurivors()
             .map( s => this._panel(s))
             .forEach( e => {

@@ -15,6 +15,9 @@ import { SurvivorMission } from "../mission/survivor-mission.js";
 import { SurvivorCamp } from "./survivor-camp.js";
 import { LootHander } from "../loot-system/loot-system.js";
 import { collectresources } from "../loot-system-v2/loot-collector.js";
+import { WeaponGenerator } from "../equipment/generator/weapon-generator.js";
+import { Services } from "./services.js";
+import { MissionHandler } from "./mission-handler.js";
 
 export class GameEnvironment {
     constructor(){
@@ -29,9 +32,6 @@ export class GameEnvironment {
         /**@type {Survivor[]} */
         this._survivors = [];
         
-        /**@type {SurvivorMission[]} */
-        this._activeMissions = [];
-
         /**@type {SurvivorMission[]} */
         this._missionHistory = [];
 
@@ -59,34 +59,21 @@ export class GameEnvironment {
         /**@type { ((game:GameEnvironment, survivor:Survivor, listener:function)=>void)[] } */
         this._survivorRemovedListener = [];
 
+        this._equipmentGenerator = new WeaponGenerator(this._randomNumberGenerator);
+
+        this._services = new Services();
+
+        this._missionHandler = new MissionHandler();
+
     }
 
     _updateMissions(){
-        const finishedMissions = this._activeMissions.filter(m => m.isFinished());
-        finishedMissions.forEach(m => {
-            const index = this._activeMissions.indexOf(m);
-            this._activeMissions.splice(index,1);
-
-            if(m.getMissionState() === SurvivorMission.State.FINISHED){
-                const res = collectresources(m.getFoundLoot());
-                console.log("succesful mission");
-                console.log(m.getFoundLoot());
-                this._camp.getFoodStock().add(res.food);
-                this._camp.getMetalStock().add(res.metal);
-                this._camp.getWoodStock().add(res.wood);
-                
-                const lootHandler = new LootHander();
-
-                m.getActiveSurvivors().forEach(s => s.state = Survivor.States.IDLE);
-                
-            } else {
-                console.log("failed mission");
-            }
-            this._missionHistory.push(m);
-        });
-        this._activeMissions.forEach(m => m.passTime());
-        
-        
+        const result = this._missionHandler.update();
+        const resources = collectresources(result.loot);
+        this._camp.getFoodStock().add(resources.food);
+        this._camp.getMetalStock().add(resources.metal);
+        this._camp.getWoodStock().add(resources.wood);
+        this._missionHistory.push(...result.finished);
     }
 
     calculator(){
@@ -95,7 +82,6 @@ export class GameEnvironment {
 
     getRandomPortrait(){
         const index = this._randomNumberGenerator.inBetween(0, this._randomPortraits.length);
-        console.debug(index);
         return this._randomPortraits[index];
     }
 
@@ -105,6 +91,10 @@ export class GameEnvironment {
 
     get randomNumberGenerator(){
         return this._randomNumberGenerator;
+    }
+
+    get services() {
+        return this._services;
     }
 
     /**
@@ -122,14 +112,17 @@ export class GameEnvironment {
      * @param {SurvivorMission} sourceMission 
      */
     startBattle(teams, location, modifiers, ambush = false, sourceMission = null){
-        const startingDist = ambush ? modifiers.range.base()/2 : modifiers.range.base(); //TODO: survivor awareness value
+        const startingDist = ambush ?
+            /**@type {number} */(modifiers.range.base())/2 :
+            /**@type {number} */( modifiers.range.base()); //TODO: survivor awareness value
+
         const combat = new Combat(
             this._randomNumberGenerator,
             startingDist,
             GameConstants.COMBAT.ZOMBIE_DISTANCE_PER_ROUND
         );
         teams.forEach(team => combat.addSurvivor(...team.getLivingMembers().map( s => new SurvivorCombatantWrapper(s)) ));
-        const zeds = this._randomNumberGenerator.inBetween(modifiers.zombies.min(), modifiers.zombies.max() );
+        const zeds = this._randomNumberGenerator.inBetween(modifiers.zombies.min(), /**@type {number} */ (modifiers.zombies.max()) );
         for(let i = 0; i <= zeds; ++i){
             const enemy = new Zombie();
             combat.addEnemy(enemy);
@@ -141,6 +134,7 @@ export class GameEnvironment {
 
         return combat;
     }
+
 
     getMissionMap(){
         return this._missionMap;
@@ -158,7 +152,6 @@ export class GameEnvironment {
      * Returns all survivors that are still alive ignoring their state or if they are on mission.
      */
     getAllAliveSurivors() {
-        console.log("what", this._survivors);
         return this._survivors.filter( s => s.isAlive());
     }
 
@@ -215,12 +208,12 @@ export class GameEnvironment {
      * @param {SurvivorMission} mission 
      */
     addNewMission(mission){
-        this._activeMissions.push(mission);
+        this._missionHandler.addMission(mission);
         mission.start();
     }
 
     getActiveMissions(){
-        return this._activeMissions;
+        return this._missionHandler.missions;
     }
 
     endRound(){
@@ -242,6 +235,10 @@ export class GameEnvironment {
 
     getMissionHistory(){
         return this._missionHistory;
+    }
+
+    getEquipmentGenerator() {
+        return this._equipmentGenerator;
     }
 
     isInit(){

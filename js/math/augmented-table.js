@@ -67,7 +67,7 @@ export class AugmentedTable extends Table {
     
 }
 
-export class AugmentedTableColumnAccessHelper{
+export class AugmentedTableColumnAccessHelper {
 
     /**
      * 

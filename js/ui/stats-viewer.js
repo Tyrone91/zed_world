@@ -37,8 +37,8 @@ export class StatsViewer extends ViewComponent {
             );
             const colums = table.getRow(rowName);
             table.getColumnNames().forEach( name => {
-                /**@type {number} */
-                const value = colums.accessColumn(name);
+                
+                const value = /**@type {number} */(colums.accessColumn(name));
                 
                 row.append(
                     $("<div>")

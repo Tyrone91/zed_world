@@ -43,9 +43,33 @@ export class ViewComponent {
         return DEFAULT_TEXT_RESOLVER.resolve(key);
     }
 
-    resolveImg(key){
+    /**
+     * 
+     * @param {string} path 
+     * @param {string} key 
+     */
+    resolveImg(path, key){
         const img = new Image();
-        img.src = "data/images/portraits/" + key;
+        img.src = "data/images/" + path + "/" + key;
         return img;
+    }
+
+    /**
+     * 
+     * @param  {...string} clazzes 
+     */
+    clazz(...clazzes) {
+        clazzes.forEach(c => {
+            this._rootElement.addClass(c);
+        });
+    }
+
+    /**
+     * 
+     * @param {string} key 
+     * @param {number|string} value 
+     */
+    data(key, value) {
+        this._rootElement.attr("data-" + key, value);
     }
 }

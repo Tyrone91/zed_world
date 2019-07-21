@@ -10,7 +10,7 @@ export class LootObjectNotFoundError extends Error{
     }
 }
 
-export class LootHander{
+export class LootHander {
     constructor(){
         /**@type LootObject[] */
         this._unopened = [];

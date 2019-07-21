@@ -5,6 +5,10 @@
     margin: 0px;
 }
 
+.selectable {
+    cursor: pointer;
+}
+
 .flex-row {
     display: flex;
     flex-direction: row;
@@ -356,3 +360,118 @@ body {
 .battle-report .round-detail-entry span{
     padding: 0.5em;
 }
+
+/* equipment-overview */
+.equipment-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.equipment-panel {
+    width: 100px;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.equipment-overview {
+    display: inline-flex;
+    flex-direction: column;
+    /* max-width: 500px; */
+}
+
+/* survivor-detail-overview */
+.survivor-detail-overview {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5em;
+}
+.survivor-detail-overview-header {
+
+}
+.survivor-detail-overview-body {
+    display: flex;
+    flex-direction: row;
+}
+.survivor-detail-overview-stats-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.survivor-detail-overview-stats-container .stat-viewer {
+    border: 2px solid white;
+    margin: 0.2em;
+    padding: 0.2em;
+}
+
+.survivor-detail-overview-stats-container .stat-viewer > div:first-child {
+    border-bottom: 1px solid black;
+}
+
+
+.survivor-detail-overview .equipment-panel {
+    cursor: pointer;
+}
+
+.armory-view {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.armory-view .equipable-image {
+    margin: 0.5em 0em 0em 0.5em;
+}
+
+/* dev-tools */
+.named-text-input {
+    display: inline-flex;
+    flex-direction: row;
+}
+.named-text-input span {
+    min-width: 6em;
+    margin-right: 0.5em;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.named-text-input .text-input {
+    flex-grow: 1;
+    padding: 0.5em;
+}
+
+/* list-view */
+.list-view {
+    display: inline-flex;
+    flex-direction: column;
+}
+
+/* horizontal-menu */
+.horizontal-menu {
+    display: flex;
+    flex-direction: row;
+}
+
+/* named-range-input */
+
+.named-range-input .range-container {
+    background-color: red;
+    position: relative;
+    width: 200px;
+    height: 2em;
+}
+
+.named-range-input .handle {
+    background-color: yellow;
+    position: absolute;
+    width: 1.5em;
+    height: 2em;
+    -moz-user-select: -moz-none;
+    user-select: none;
+    
+}
+
+

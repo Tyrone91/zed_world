@@ -4,12 +4,9 @@ function ajaxBase(method, url, data){
         const xhttp = new XMLHttpRequest();
         xhttp.overrideMimeType("text/json"); //TODO: make this an option
         xhttp.addEventListener("load", function(){
-            console.log(xhttp);
             if( accepts.find( n => n === xhttp.status) ){
-                console.log("mhhhh");
                 resolve(xhttp);
             }else{
-                console.log("ehm");
                 reject(xhttp);
             }
             
@@ -48,7 +45,6 @@ export function getJSON(url){
     const p = get(url);
     return new Promise((resolve, reject) => {
         p.then( (xhttp) => {
-            console.log("hallo?");
             resolve(JSON.parse(xhttp.responseText));
         }, (xhttp) => {
             reject(xhttp);
@@ -93,4 +89,54 @@ export function getJSONAll(urls, basePath = "", suffix = ""){
         });
 
     });
+}
+
+export class ResponseWrapper {
+    /**
+     * 
+     * @param {any} resp 
+     */
+    constructor(resp) {
+        this._resp = resp;
+        
+        /**@type {string[]} */
+        this._missing = [];
+    }
+
+    /**
+     * 
+     * @param {string} key 
+     * @param {any} fallback 
+     */
+    _read(key, fallback) {
+        if(this._resp[key]) {
+            return this._resp[key];
+        }
+        this._missing.push(key);
+        return fallback;
+    }
+
+    /**
+     * 
+     * @param {string} key 
+     * @param {number} fallback
+     * @returns {number}
+     */
+    readInt(key, fallback  = 0) {
+        return Number.parseInt(this._read(key, fallback));
+    }
+
+    /**
+     * 
+     * @param {string} key 
+     * @param {string} fallback 
+     * @returns {string}
+     */
+    readText(key, fallback = "") {
+        return this._read(key, fallback);
+    }
+
+    getMissing() {
+        return this._missing;
+    }
 }
