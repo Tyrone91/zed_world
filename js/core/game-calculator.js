@@ -1,7 +1,7 @@
 import { Table } from "../math/table.js";
 import { MissionParameters } from "../mission/mission-parameters.js";
 import { Random } from "../math/random.js";
-import { Survivor } from "./survivor.js";
+import { Survivor } from "./character/survivor.js";
 import { Team } from "../mission/team.js";
 import { SurvivorMission } from "../mission/survivor-mission.js";
 import { CombatStats } from "../combat/combat-stats.js";

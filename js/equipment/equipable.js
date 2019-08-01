@@ -14,7 +14,7 @@ export class Equipable {
         this._name = name;
         this._desc = desc;
         this._stats = new CombatStats();
-        this._modifer = new CombatStats().fill(1);
+        this._modifer = new CombatStats();
         this._equipmentType = type;
         this._icon = icon;
     }

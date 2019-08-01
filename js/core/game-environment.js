@@ -7,17 +7,15 @@ import { GameConstants } from "./game-constants.js";
 import { Zombie } from "../combat/zombie.js";
 import { MissionMap } from "../mission/mission-map.js";
 import { Location } from "../mission/location.js";
-import { Survivor, SurvivorCombatantWrapper } from "./survivor.js";
+import { Survivor, SurvivorCombatantWrapper } from "./character/survivor.js";
 import { MissionBuilder } from "../mission/mission-builder.js";
-import { LootDispatcher } from "../mission/loot-dispatcher.js";
-import { LootTable } from "../loot-system/loot-table.js";
 import { SurvivorMission } from "../mission/survivor-mission.js";
 import { SurvivorCamp } from "./survivor-camp.js";
-import { LootHander } from "../loot-system/loot-system.js";
 import { collectresources } from "../loot-system-v2/loot-collector.js";
 import { WeaponGenerator } from "../equipment/generator/weapon-generator.js";
 import { Services } from "./services.js";
 import { MissionHandler } from "./mission-handler.js";
+import { CharacterCreator } from "./character/charactor-creator.js";
 
 export class GameEnvironment {
     constructor(){
@@ -41,7 +39,6 @@ export class GameEnvironment {
 
         this._camp = new SurvivorCamp();
 
-        this._randomPortraits = [];
         this._init = false;
 
         /**@type { ((game:GameEnvironment, listener:function)=>void)[] } */
@@ -65,11 +62,14 @@ export class GameEnvironment {
 
         this._missionHandler = new MissionHandler();
 
+        this._characterCreator = new CharacterCreator(this._randomNumberGenerator);
+
     }
 
     _updateMissions(){
         const result = this._missionHandler.update();
         const resources = collectresources(result.loot);
+        console.log("mission reslult:", result);
         this._camp.getFoodStock().add(resources.food);
         this._camp.getMetalStock().add(resources.metal);
         this._camp.getWoodStock().add(resources.wood);
@@ -78,15 +78,6 @@ export class GameEnvironment {
 
     calculator(){
         return this._calculator;
-    }
-
-    getRandomPortrait(){
-        const index = this._randomNumberGenerator.inBetween(0, this._randomPortraits.length);
-        return this._randomPortraits[index];
-    }
-
-    set randomPortraits(list){
-        this._randomPortraits = list;
     }
 
     get randomNumberGenerator(){
@@ -102,6 +93,10 @@ export class GameEnvironment {
      */
     set randomNumberGenerator(rng){
         this._randomNumberGenerator = rng;
+    }
+
+    get characterCreator() {
+        return this._characterCreator;
     }
 
     /**
@@ -174,18 +169,6 @@ export class GameEnvironment {
             });
      
         });
-    }
-
-    createRandomSurvivor(name){
-        const rng = this._randomNumberGenerator;
-        const s = new Survivor();
-        s.name(name);
-        s.portrait = this.getRandomPortrait();
-        s.getMissionModifiers().fill(1);
-            //.forEach( (x,y) => s.getMissionModifiers().setCell(x,y, rng.inBetween(0.5,2) ) );
-
-        s.combatstats.forEach( (x,y) => s.combatstats.setCell(x,y, rng.inBetween(5, 50) ));
-        return s;
     }
 
     createDefaultMissionBuilder(){

@@ -1,7 +1,9 @@
 import { LootContainer } from "./loot-container.js";
 import { LootWrapper } from "./loot-wrapper.js";
-import { LootCreateResource } from "./loot-create-resource.js";
+import { LootCreateResource } from "./loot-crate-resource.js";
 import { ResourceWood, ResourceMetal, ResourceFood, Resource } from "../loot-system/resources.js";
+import { WeaponGenerator } from "../equipment/generator/weapon-generator.js";
+import { LootCrateEquipment } from "./loot-crate-equipment.js";
 
 /**
  * 
@@ -21,4 +23,21 @@ export function collectresources(lootWrapppers){
     resources.filter( res => res.type === Resource.Type.FOOD).forEach( res => food.add(res));
 
     return {wood: wood, metal: metal, food: food};
+}
+
+/**
+ * 
+ * @param {WeaponGenerator} generator 
+ * @param {LootWrapper[]} wrappers 
+ */
+export function collectequipment(generator, wrappers) {
+    const templates = wrappers.filter( c => c.type === LootCrateEquipment.Type);
+}
+
+/**
+ * 
+ * @param {LootWrapper[]} wrappers 
+ */
+export function collectcrates(wrappers) {
+
 }

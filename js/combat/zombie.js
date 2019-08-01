@@ -11,7 +11,7 @@ ZOMBIE_STATS.damage.min(10).max(20);
 export class Zombie extends Combatant{
     constructor() {
         super();
-        this._health = 50;
+        this._health = 20;
     }
 
     getCombatstats() {

@@ -1,12 +1,12 @@
-import { AugmentedTable, AugmentedTableColumnAccessHelper } from "../math/augmented-table.js";
-import { GameConstants } from "./game-constants.js";
+import { AugmentedTable, AugmentedTableColumnAccessHelper } from "../../math/augmented-table.js";
+import { GameConstants } from "../game-constants.js";
 
 class StatsAccessor extends AugmentedTableColumnAccessHelper {
 
     constructor(parent, rowName){
         super(parent, rowName);
     }
-
+    
     current(optional){
         return this.accessColumn(GameConstants.CHARACTER_STATS_COLUMN_KEYS.CURRENT, optional);
     }
@@ -34,13 +34,13 @@ export class CharacterStats extends AugmentedTable{
      * @returns {StatsAccessor}
      */
     get health(){
-        return this.getRow(GameConstants.CHARACTER_STATS.HEALTH);
+        return /** @type {StatsAccessor} */ (this.getRow(GameConstants.CHARACTER_STATS.HEALTH));
     }
 
     /**
      * @returns {StatsAccessor}
      */
     get hunger(){
-        return this.getRow(GameConstants.CHARACTER_STATS.HUNGER);
+        return /** @type {StatsAccessor} */ (this.getRow(GameConstants.CHARACTER_STATS.HUNGER));
     }
 }

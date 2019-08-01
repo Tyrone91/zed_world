@@ -1,6 +1,6 @@
 import { SurvivorMission } from "../mission/survivor-mission.js";
 import { LootWrapper } from "../loot-system-v2/loot-wrapper.js";
-import { Survivor } from "./survivor.js";
+import { Survivor } from "./character/survivor.js";
 
 export class MissionHandler {
 
@@ -49,6 +49,7 @@ export class MissionHandler {
      * @param {SurvivorMission[]} missions 
      */
     _collectLoot(missions) {
+        console.log(missions);  
         const collect = missions.map(m => m.getFoundLoot() ).reduce( (prev, current) => [...prev, ...current] ,[]);
         return collect;
     }

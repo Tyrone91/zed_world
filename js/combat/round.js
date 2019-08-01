@@ -1,6 +1,6 @@
 import { Combatant } from "./combatant.js";
 import { CombatAction } from "./combat-action.js";
-import { Survivor } from "../core/survivor.js";
+import { Survivor } from "../core/character/survivor.js";
 import { Zombie } from "./zombie.js";
 
 export class Round {

@@ -4,7 +4,7 @@ import { ENVIRONMENT } from "../core/game-environment.js";
 import { AugmentedTable } from "../math/augmented-table.js";
 import { Location } from "../mission/location.js";
 import { Team } from "../mission/team.js";
-import { Survivor } from "../core/survivor.js";
+import { Survivor } from "../core/character/survivor.js";
 import { MissionPlaner } from "./mission/mission-planer.js";
 import { CONTENT_MANAGER, DEFAULT_TEXT_RESOLVER } from "./view-component.js";
 import { MissionSummary } from "./mission/mission-summary.js";
@@ -136,12 +136,12 @@ function initQuickList() {
     return list;
 }
 
-DEFAULT_TEXT_RESOLVER.load("en.json")
+DEFAULT_TEXT_RESOLVER.load("en.json") //TODO: has nothing todo with the UI remove.
 .then( () => {
     return getJSON("/data/random_portraits.json");
 })
 .then( data => {
-    game.randomPortraits = data;
+    game.characterCreator.portraitsList = data;
     $(document).ready(init);
 });
 function init(){

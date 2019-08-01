@@ -1,11 +1,11 @@
 import { Character } from "./character.js";
-import { MissionParameters } from "../mission/mission-parameters.js";
+import { MissionParameters } from "../../mission/mission-parameters.js";
 import { CharacterStats } from "./character-stats.js";
-import { CombatStats } from "../combat/combat-stats.js";
-import { ENVIRONMENT } from "./game-environment.js";
-import { Combatant } from "../combat/combatant.js";
-import { Equipable } from "../equipment/equipable.js";
-import { EquipmentHolder } from "../equipment/equipment-holder.js";
+import { CombatStats } from "../../combat/combat-stats.js";
+import { ENVIRONMENT } from "../game-environment.js";
+import { Combatant } from "../../combat/combatant.js";
+import { Equipable } from "../../equipment/equipable.js";
+import { EquipmentHolder } from "../../equipment/equipment-holder.js";
 
 export class SurvivorFist extends Equipable {
     constructor(){
@@ -54,8 +54,8 @@ export class Survivor extends Character {
     }
 
     get combatstats() {
-        console.log("Base Stats:",this._combatstats.toString());
-        console.log("Equipment Stats:", this._equipment.stats.toString());
+        //console.log("Base Stats:",this._combatstats.toString());
+        //console.log("Equipment Stats:", this._equipment.stats.toString());
         return /**@type {CombatStats} */(this._combatstats.add(this._equipment.stats));
     }
 
@@ -141,9 +141,12 @@ export class SurvivorCombatantWrapper extends Combatant {
     }
 
     accuracyAt(distance, rng){
-        return this._survivor._equipment
+
+        const tmp = /**@type {CombatStats} */(this._survivor._combatstats.multiply(this._survivor.equipment.modifiers)); //TODO: does it make sence that a weapon would still boost something like accuarcy? Just give the weapon more accuary? base will be never that high.
+        const base = /**@type {number} */(tmp.accuracy.base());
+        return base + this._survivor._equipment
             .get(EquipmentHolder.Slot.MAIN_WEAPON)
-            .accuracyAtDistance(distance, /**@type {CombatStats} */(this._survivor.combatstats.multiply(this._survivor.equipment.modifiers)) );
+            .accuracyAtDistance(distance); //TODO: add location modifiers
     }
 }
 

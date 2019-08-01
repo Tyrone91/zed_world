@@ -1,5 +1,5 @@
 import { ViewComponent } from "../view-component.js";
-import { Survivor } from "../../core/survivor.js";
+import { Survivor } from "../../core/character/survivor.js";
 import { SurvivorImage } from "./survivor-image.js";
 import { GameEnvironment } from "../../core/game-environment.js";
 import { SurvivorDetailOverview } from "./survivor-detail-overview.js";

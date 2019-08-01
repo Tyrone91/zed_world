@@ -116,7 +116,7 @@ export class EquipmentHolder {
     get modifiers(){
         return [...this._slots.values()]
             .map(e => e.modifier)
-            .reduce( (prev, cur) => /**@type {CombatStats} */(prev.add(cur)), new CombatStats() );
+            .reduce( (prev, cur) => /**@type {CombatStats} */(prev.add(cur)), new CombatStats().fill(1) );
     }
 }
 

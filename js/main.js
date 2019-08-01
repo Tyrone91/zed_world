@@ -3,7 +3,7 @@ import { Table } from "./math/table.js";
 import { MissionParameters } from "./mission/mission-parameters.js";
 import { GameConstants } from "./core/game-constants.js";
 import { Team } from "./mission/team.js";
-import { Survivor } from "./core/Survivor.js";
+import { Survivor } from "./core/character/survivor.js";
 import { SurvivorMission } from "./mission/survivor-mission.js";
 import { TemplateLoader } from "./loader/template-loader.js";
 import { LootTableLoader } from "./loader/loot-table-loader.js";

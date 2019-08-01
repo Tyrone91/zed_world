@@ -1,4 +1,4 @@
-import {Survivor} from "../core/survivor.js"
+import {Survivor} from "../core/character/survivor.js"
 import { ENVIRONMENT } from "../core/game-environment.js";
 import { MissionParameters } from "./mission-parameters.js";
 import { AmmoTable } from "../loot-system/ammo-table.js";

@@ -3,7 +3,7 @@ import { Combatant } from "./combatant.js";
 import { AttackAction } from "./combat-action.js";
 import { Random } from "../math/random.js";
 import { ENVIRONMENT } from "../core/game-environment.js";
-import { SurvivorCombatantWrapper } from "../core/survivor.js";
+import { SurvivorCombatantWrapper } from "../core/character/survivor.js";
 
 /**
  * @param {Combatant} combatant

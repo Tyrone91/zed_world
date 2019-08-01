@@ -1,14 +1,15 @@
 import { ENVIRONMENT } from "../core/game-environment.js";
-import { Survivor } from "../core/survivor.js";
+import { Survivor } from "../core/character/survivor.js";
 import { MissionMap } from "../mission/mission-map.js";
 import { Location } from "../mission/location.js";
 import { MissionBuilder } from "../mission/mission-builder.js";
 import { Team } from "../mission/team.js";
 import { LootTable } from "../loot-system-v2/loot-table.js";
-import { CreateFood, CreateMetal, CreateWood } from "../loot-system-v2/loot-create-resource.js";
+import { CreateFood, CreateMetal, CreateWood } from "../loot-system-v2/loot-crate-resource.js";
 import { SurvivorCamp } from "../core/survivor-camp.js";
 import { Equipable } from "../equipment/equipable.js";
 import * as Templates from "./setup-templates.js";
+import { EquipmentHolder } from "../equipment/equipment-holder.js";
 
 const game = ENVIRONMENT;
 window.DEBUG_GAME = game;
@@ -61,7 +62,7 @@ function testMission(){
     const builder = game.createDefaultMissionBuilder();
 
     const team = new Team("Test Team Mission Bois");
-    team.addTeamMember( game.createRandomSurvivor("Random Team Member") );
+    team.addTeamMember( game.characterCreator.createRandomCharacter("Random Team Member") );
 
     builder.setTeams([team]);
     builder.setTarget(game.getMissionMap().getPosition(0,0));
@@ -88,13 +89,29 @@ function battleMission() {
 }
 
 function setup(){
+
+    const surv1 = /**@type {Survivor} */ (new Survivor().name("Dev1"));
+    surv1.equipment.unequipFrom(EquipmentHolder.Slot.MAIN_WEAPON);
+    surv1.equipment.equip(game.getEquipmentGenerator().generate(Templates.templateAK()) );
+
+    const surv2 = /**@type {Survivor} */ (new Survivor().name("Dev2"));
+    surv2.equipment.unequipFrom(EquipmentHolder.Slot.MAIN_WEAPON);
+    surv2.equipment.equip(game.getEquipmentGenerator().generate(Templates.templateM4()) );
+
+    const surv3 = /**@type {Survivor} */ (new Survivor().name("Dev3"));
+    surv3.equipment.unequipFrom(EquipmentHolder.Slot.MAIN_WEAPON);
+    surv3.equipment.equip(game.getEquipmentGenerator().generate(Templates.templateMP5()) );
+
     game.addSurvivor(
         new Survivor().name("Bob"),
         new Survivor().name("Francis"),
         new Survivor().name("Alex"),
-        game.createRandomSurvivor("R1"),
-        game.createRandomSurvivor("R2"),
-        game.createRandomSurvivor("R3")
+        game.characterCreator.createRandomCharacter("R1"),
+        game.characterCreator.createRandomCharacter("R2"),
+        game.characterCreator.createRandomCharacter("R3"),
+        surv1,
+        surv2,
+        surv3
     );
 
     game._missionMap = new MissionMap(5,5, [
@@ -137,6 +154,12 @@ function battleEasyLocation() {
     loc.modifiers.encounterChance.min(100).base(100).max(100);
     loc.modifiers.zombies.min(5).base(5).max(5);
     loc.modifiers.range.min(70).base(70).max(70);
+
+    loc.modifiers.lootCommon.base(100);
+    loc.modifiers.lootRare.base(60);
+    loc.modifiers.lootExtraOrdinary.base(30);
+
+    loc.addLootTable(...testLootTables());
     
     return loc;
 }

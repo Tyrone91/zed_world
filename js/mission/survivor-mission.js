@@ -6,7 +6,7 @@ import {LootDispatcher} from "./loot-dispatcher.js";
 import { LootReceiver } from "../loot-system/loot-receiver.js";
 import {Random} from "../math/random.js"
 import { ENVIRONMENT } from "../core/game-environment.js";
-import { Survivor } from "../core/survivor.js";
+import { Survivor } from "../core/character/survivor.js";
 import { AmmoTable } from "../loot-system/ammo-table.js";
 import { LootTable } from "../loot-system-v2/loot-table.js";
 import { Combat } from "../combat/combat.js";

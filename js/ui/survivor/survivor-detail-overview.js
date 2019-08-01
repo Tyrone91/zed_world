@@ -1,6 +1,6 @@
 import { ViewComponent } from "../view-component.js";
 import { GameEnvironment } from "../../core/game-environment.js";
-import { Survivor, SurvivorFist } from "../../core/survivor.js";
+import { Survivor, SurvivorFist } from "../../core/character/survivor.js";
 import { StatsViewer } from "../stats-viewer.js";
 import { EquipablePanel } from "../equipment/equipable-panel.js";
 import { EquipmentOverview } from "../equipment/equipment-overview.js";
