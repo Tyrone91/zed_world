@@ -33,34 +33,34 @@ export class AmmoTable extends AugmentedTable{
      * @returns {AmmoAccessor}
      */
     get small(){
-        return this.getRow(GameConstants.AMMO_TYPES.SMALL);
+        return /**@type {AmmoAccessor} */ (this.getRow(GameConstants.AMMO_TYPES.SMALL));
     }
 
     /**
      * @returns {AmmoAccessor}
      */
     get medium(){
-        return this.getRow(GameConstants.AMMO_TYPES.MEDIUM);
+        return /**@type {AmmoAccessor} */ (this.getRow(GameConstants.AMMO_TYPES.MEDIUM));
     }
 
     /**
      * @returns {AmmoAccessor}
      */
     get heavy(){
-        return this.getRow(GameConstants.AMMO_TYPES.HEAVY);
+        return /**@type {AmmoAccessor} */ (this.getRow(GameConstants.AMMO_TYPES.HEAVY));
     }
 
     /**
      * @returns {AmmoAccessor}
      */
     get special(){
-        return this.getRow(GameConstants.AMMO_TYPES.SPECIAL);
+        return /**@type {AmmoAccessor} */ (this.getRow(GameConstants.AMMO_TYPES.SPECIAL));
     }
 
     /**
      * @returns {AmmoAccessor[]}
      */
     getAllRows(){
-        return super.getAllRows();
+        return /**@type {AmmoAccessor[]} */ (super.getAllRows());
     }
 }

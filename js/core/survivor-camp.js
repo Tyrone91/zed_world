@@ -1,5 +1,5 @@
-import { ResourceFood, ResourceWood, ResourceMetal } from "../loot-system/resources.js";
-import { AmmoTable } from "../loot-system/ammo-table.js";
+import { ResourceFood, ResourceWood, ResourceMetal } from "../loot-system-v3/resources.js";
+import { AmmoTable } from "../loot-system-v3/ammo-table.js";
 import { Armory } from "./armory.js";
 
 export class SurvivorCamp {

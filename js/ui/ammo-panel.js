@@ -1,5 +1,5 @@
 import { ViewComponent } from "./view-component.js";
-import { AmmoTable } from "../loot-system/ammo-table.js";
+import { AmmoTable } from "../loot-system-v3/ammo-table.js";
 
 export class AmmoPanel extends ViewComponent {
     
@@ -22,7 +22,7 @@ export class AmmoPanel extends ViewComponent {
         root.append( $("<span>").text(this.resolve("AMMO")) );
         ammo.getAllRows().map( a => {
             const name = a.name;
-            const value = a.amount();
+            const value = /**@type {number} */ (a.amount());
             return $("<span>").append($("<span>").text( this.resolve(name) ), $("<span>").text(value) );
         })
         .forEach( e => root.append(e));

@@ -3,14 +3,13 @@ import { MissionParameters } from "./mission-parameters.js";
 import { Location } from "./location.js";
 import { GameConstants } from "../core/game-constants.js";
 import {LootDispatcher} from "./loot-dispatcher.js";
-import { LootReceiver } from "../loot-system/loot-receiver.js";
 import {Random} from "../math/random.js"
 import { ENVIRONMENT } from "../core/game-environment.js";
 import { Survivor } from "../core/character/survivor.js";
-import { AmmoTable } from "../loot-system/ammo-table.js";
-import { LootTable } from "../loot-system-v2/loot-table.js";
+import { AmmoTable } from "../loot-system-v3/ammo-table.js";
+import { LootTable } from "../loot-system-v3/loot-table.js";
 import { Combat } from "../combat/combat.js";
-import { LootWrapper } from "../loot-system-v2/loot-wrapper.js";
+import { LootWrapper } from "../loot-system-v3/loot-wrapper.js";
 
 
 /**
@@ -46,13 +45,12 @@ function passingTimeIn(mission){
  * 
  * consume/refill phase
  */
-class MissionScheduler extends LootReceiver{
+class MissionScheduler {
 
     /**
      * @param {SurvivorMission} mission 
      */
     constructor(mission){
-        super();
         this._mission = mission;
         this._shedule = [
             () => this.ambush(),
@@ -125,7 +123,7 @@ class MissionScheduler extends LootReceiver{
                         }
                     }
                 }
-                const tmp = surv.stats.hunger.current();
+                const tmp = /**@type {number} */ (surv.stats.hunger.current());
                 surv.stats.hunger.current(tmp + (foodWant-amount));
             };
             this._mission.getActiveSurvivors()
@@ -144,8 +142,8 @@ class MissionScheduler extends LootReceiver{
                 return 0;
             })
             .forEach(surv => {
-                const current = surv.stats.hunger.current();
-                const max = surv.stats.hunger.max();
+                const current = /**@type {number} */ (surv.stats.hunger.current());
+                const max = /**@type {number} */ (surv.stats.hunger.max());
                 consumeFood(surv, max - current); //TODO: give team an average consume if not enough
             });
         }

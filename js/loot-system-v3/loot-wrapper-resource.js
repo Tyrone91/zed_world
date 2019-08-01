@@ -1,6 +1,6 @@
 import { BaseLoot } from "./base-loot.js";
 import { LootCollector } from "./loot-collector.js";
-import { Resource } from "../loot-system/resources.js";
+import { Resource } from "./resources.js";
 
 export class LootWrapperResource extends BaseLoot {
 
