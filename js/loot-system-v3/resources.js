@@ -76,6 +76,18 @@ export class Resource{
         }
         return false;
     }
+
+    /**
+     * 
+     * @param {Resource} holder 
+     * @param  {...Resource} resources 
+     */
+    static combine(holder, ...resources) {
+        resources.forEach(res => {
+            holder.add(res);
+        });
+        return holder;
+    }
 }
 
 Resource.Type = Object.freeze({

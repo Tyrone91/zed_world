@@ -1,4 +1,4 @@
-import { LootTableService } from "../loot-system-v2/loot-table-service.js";
+import { LootTableService } from "../loot-system-v3/loot-table-service.js";
 
 export class Services {
 

@@ -1,3 +1,5 @@
+import { BaseLoot } from "./base-loot.js";
+
 export class LootWrapper {
 
     /**
@@ -5,7 +7,7 @@ export class LootWrapper {
      * @param {string} type 
      * @param {number} weight 
      * @param {string} contentDesc 
-     * @param {...any} content 
+     * @param {...BaseLoot} content 
      */
     constructor(type, weight, contentDesc, ...content){
         this._type = type;

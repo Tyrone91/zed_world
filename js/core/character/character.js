@@ -1,10 +1,10 @@
 export class Character {
-    constructor(){
+    constructor() {
         this._name = "";
     }
 
-    name(newName){
-        if(!newName){
+    name(newName) {
+        if(!newName) {
             return this._name;
         }
         this._name = newName;

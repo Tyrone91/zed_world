@@ -1,4 +1,3 @@
-import { LootCollector } from "./loot-collector.js";
 
 export class BaseLoot {
 
@@ -11,9 +10,9 @@ export class BaseLoot {
     /**
      * Visitor-Pattern.
      * Calls the representive function of the collector.
-     * @param {LootCollector} collector 
+     *
      */
-    receive(collector) {
+    receive(collector) { // I CAN NOT ADD A REFERENCE HERE BECAUSE THAT WOULD LEAD TO AN CIRCULAR IMPORT.
         throw "Must be implemented by derived classes"
     }
 

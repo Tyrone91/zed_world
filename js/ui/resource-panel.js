@@ -1,5 +1,5 @@
 import { ViewComponent } from "./view-component.js";
-import { Resource } from "../loot-system/resources.js";
+import { Resource } from "../loot-system-v3/resources.js";
 
 export class ResourcePanel extends ViewComponent {
 

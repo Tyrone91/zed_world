@@ -11,11 +11,11 @@ import { Survivor, SurvivorCombatantWrapper } from "./character/survivor.js";
 import { MissionBuilder } from "../mission/mission-builder.js";
 import { SurvivorMission } from "../mission/survivor-mission.js";
 import { SurvivorCamp } from "./survivor-camp.js";
-import { collectresources } from "../loot-system-v2/loot-collector.js";
 import { WeaponGenerator } from "../equipment/generator/weapon-generator.js";
 import { Services } from "./services.js";
 import { MissionHandler } from "./mission-handler.js";
 import { CharacterCreator } from "./character/charactor-creator.js";
+import { LootCollector } from "../loot-system-v3/loot-collector.js";
 
 export class GameEnvironment {
     constructor(){
@@ -68,11 +68,17 @@ export class GameEnvironment {
 
     _updateMissions(){
         const result = this._missionHandler.update();
-        const resources = collectresources(result.loot);
+        const collector = new LootCollector();
+        collector.receive(...result.loot.map(wrapper => wrapper.content).reduce( (prev,cur) => [...prev, ...cur], [] ));
         console.log("mission reslult:", result);
-        this._camp.getFoodStock().add(resources.food);
-        this._camp.getMetalStock().add(resources.metal);
-        this._camp.getWoodStock().add(resources.wood);
+        console.log("collecting resources: ", collector.resources);
+        collector.resources.food.forEach( res => this._camp.getFoodStock().add(res));
+        collector.resources.wood.forEach( res => this._camp.getWoodStock().add(res));
+        collector.resources.metal.forEach( res => this._camp.getMetalStock().add(res));
+
+        const equipment = collector.equipment;
+        this._camp.getArmory().addEquipment(...equipment);
+        
         this._missionHistory.push(...result.finished);
     }
 

@@ -1,5 +1,4 @@
 import { BaseLoot } from "./base-loot.js";
-import { LootCollector } from "./loot-collector.js";
 import { Resource } from "./resources.js";
 
 export class LootWrapperResource extends BaseLoot {
@@ -15,11 +14,8 @@ export class LootWrapperResource extends BaseLoot {
         this._content = resources;
     }
 
-    /**
-     * 
-     * @param {LootCollector} collector 
-     */
-    receive(collector) {
+
+    receive(collector) { // I CAN NOT ADD A REFERENCE HERE BECAUSE THAT WOULD LEAD TO AN CIRCULAR IMPORT.
         collector.receiveResource(this);
     }
 

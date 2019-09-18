@@ -4,12 +4,13 @@ import { MissionMap } from "../mission/mission-map.js";
 import { Location } from "../mission/location.js";
 import { MissionBuilder } from "../mission/mission-builder.js";
 import { Team } from "../mission/team.js";
-import { LootTable } from "../loot-system-v2/loot-table.js";
-import { CreateFood, CreateMetal, CreateWood } from "../loot-system-v2/loot-crate-resource.js";
+import { LootTable } from "../loot-system-v3/loot-table.js";
 import { SurvivorCamp } from "../core/survivor-camp.js";
 import { Equipable } from "../equipment/equipable.js";
 import * as Templates from "./setup-templates.js";
 import { EquipmentHolder } from "../equipment/equipment-holder.js";
+import { LootWrapperResource } from "../loot-system-v3/loot-wrapper-resource.js";
+import { ResourceWood, ResourceFood, ResourceMetal } from "../loot-system-v3/resources.js";
 
 const game = ENVIRONMENT;
 window.DEBUG_GAME = game;
@@ -42,18 +43,42 @@ function weaponSetup() {
     );
 }
 
+function lootFood(number, name = "FOOD_RESOURCE_TITLE", desc = "FOOD_RESOURCE_CRATE_DESC") {
+    return new LootWrapperResource(name, desc, new ResourceFood(number));
+}
+
+function lootMetal(number, name = "METAL_RESOURCE_TITLE", desc = "METAL_RESOURCE_CRATE_DESC") {
+    return new LootWrapperResource(name, desc, new ResourceMetal(number));
+}
+
+function lootWood(number = 100, name = "WOOD_RESOURCE_TITLE", desc = "WOOD_RESOURCE_CRATE_DESC") {
+    return new LootWrapperResource(name, desc, new ResourceWood(number));
+}
+
 function testLootTables(){
 
     const common = new LootTable(LootTable.Rarity.COMMON).setName("COMMON_LOOT_TABLE")
-        .addWrapper(new CreateFood(10,200), new CreateMetal(10,100), new CreateWood(10, 150) );
+        .addLoot(lootFood(200), 10)
+        .addLoot(lootWood(150), 10)
+        .addLoot(lootMetal(100), 10);
     
     const rare = new LootTable(LootTable.Rarity.RARE).setName("RARE_LOOT_TABLE")
-        .addWrapper(new CreateFood(10,400), new CreateMetal(10,200), new CreateWood(10, 300) )
-        .addWrapper(new CreateFood(5, 600), new CreateMetal(5, 300), new CreateWood( 5, 400) );
+        .addLoot(lootFood(400), 10)
+        .addLoot(lootWood(300), 10)
+        .addLoot(lootMetal(200), 10)
+
+        .addLoot(lootFood(600), 5)
+        .addLoot(lootWood(400), 5)
+        .addLoot(lootMetal(300), 5);
 
     const extraordinary = new LootTable(LootTable.Rarity.EXTRAORDINARY).setName("EXTRAORDINARY_LOOT_TABLE")
-        .addWrapper(new CreateFood(10,800), new CreateMetal(10,400), new CreateWood(10, 600) )
-        .addWrapper(new CreateFood(5,1000), new CreateMetal(5, 750), new CreateWood( 5, 900) );
+        .addLoot(lootFood(800), 10)
+        .addLoot(lootWood(600), 10)
+        .addLoot(lootMetal(400), 10)
+
+        .addLoot(lootFood(1000), 5)
+        .addLoot(lootWood(900), 5)
+        .addLoot(lootMetal(750), 5);
 
     return [common, rare, extraordinary];
 }

@@ -1,6 +1,6 @@
 import { Range } from "../../util/range.js";
 import { Equipable } from "../equipable.js";
-import { LootTable } from "../../loot-system-v2/loot-table.js";
+import { LootTable } from "../../loot-system-v3/loot-table.js";
 
 export class EquipmentTemplate {
 

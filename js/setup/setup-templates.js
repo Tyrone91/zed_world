@@ -1,5 +1,5 @@
 import { EquipmentTemplate } from "../equipment/generator/equipment-template.js";
-import { LootTable } from "../loot-system-v2/loot-table.js";
+import { LootTable } from "../loot-system-v3/loot-table.js";
 
 //TODO: move this into a JSON file that can be loaded.
 

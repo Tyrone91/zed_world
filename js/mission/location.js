@@ -1,6 +1,6 @@
 import { MissionParameters } from "./mission-parameters.js";
-import { LootTable } from "../loot-system-v2/loot-table.js";
-import { LootWrapper } from "../loot-system-v2/loot-wrapper.js";
+import { LootTable } from "../loot-system-v3/loot-table.js";
+import { LootWrapper } from "../loot-system-v3/loot-wrapper.js";
 
 export class Location{
 

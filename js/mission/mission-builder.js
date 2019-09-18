@@ -1,7 +1,6 @@
 import { Team } from "./team.js";
 import { SurvivorMission } from "./survivor-mission.js";
 import { ENVIRONMENT } from "../core/game-environment.js";
-import { LootDispatcher } from "./loot-dispatcher.js";
 import { Random } from "../math/random.js";
 import { Location } from "./location.js";
 

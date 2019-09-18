@@ -2,7 +2,6 @@ import { Team } from "./team.js";
 import { MissionParameters } from "./mission-parameters.js";
 import { Location } from "./location.js";
 import { GameConstants } from "../core/game-constants.js";
-import {LootDispatcher} from "./loot-dispatcher.js";
 import {Random} from "../math/random.js"
 import { ENVIRONMENT } from "../core/game-environment.js";
 import { Survivor } from "../core/character/survivor.js";

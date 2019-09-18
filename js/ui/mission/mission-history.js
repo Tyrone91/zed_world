@@ -2,8 +2,9 @@ import { ViewComponent } from "../view-component.js";
 import { SurvivorMission } from "../../mission/survivor-mission.js";
 import { SurvivorListCompact } from "../survivor/survivor-list-compact.js";
 import { ResourcePanel } from "../resource-panel.js";
-import { collectresources } from "../../loot-system-v2/loot-collector.js";
 import { BattleReportView } from "../battle-report-view.js";
+import { LootCollector } from "../../loot-system-v3/loot-collector.js";
+import { Resource, ResourceFood, ResourceWood, ResourceMetal } from "../../loot-system-v3/resources.js";
 
 export class MissionHistory extends ViewComponent {
 
@@ -32,8 +33,14 @@ export class MissionHistory extends ViewComponent {
         const root = this.rootElement();
         const m = this._mission;
         const teamNameLabel = $("<div>").append( $("<span>").text(this._mission.getTeams().map(t=>t.getName()).join(",")) );
-        const res = collectresources(m.getFoundLoot());
-        const resources = [ ["FOOD", res.food.amout ], ["WOOD", res.wood.amout], ["METAL", res.metal.amout] ];
+        const collector = new LootCollector();
+        collector.receive(...m.getFoundLoot().map(wrapper => wrapper.content).reduce( (prev,cur) => [...prev, ...cur],[]) );
+        const res = collector.resources;
+        const resources = [ 
+            ["FOOD", Resource.combine(new ResourceFood(), ...res.food).amout ],
+            ["WOOD", Resource.combine(new ResourceWood(), ...res.wood).amout],
+            ["METAL", Resource.combine(new ResourceMetal(), ...res.metal).amout]
+        ];
         const resourceElements = resources.map( arg => this._resourceEntry(...arg));
 
         const combatContainer = $("<div>");

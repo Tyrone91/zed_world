@@ -1,7 +1,7 @@
 import {Survivor} from "../core/character/survivor.js"
 import { ENVIRONMENT } from "../core/game-environment.js";
 import { MissionParameters } from "./mission-parameters.js";
-import { AmmoTable } from "../loot-system/ammo-table.js";
+import { AmmoTable } from "../loot-system-v3/ammo-table.js";
 import { Table } from "../math/table.js";
 import { CombatStats } from "../combat/combat-stats.js";
 

@@ -1,5 +1,7 @@
 import { BaseLoot } from "./base-loot.js";
 import { LootCollector } from "./loot-collector.js";
+import { LootTable } from "./loot-table.js";
+import { Random } from "../math/random.js";
 
 export class LootCrate extends BaseLoot {
 
@@ -53,5 +55,24 @@ export class FixedContentLootCrate extends LootCrate {
      */
     onopen(any) {
         throw "This method is not allowed for the FixedContentLootCrate";
+    }
+}
+
+export class LootTableCrate extends LootCrate {
+
+    /**
+     * 
+     * @param {string} name 
+     * @param {string} description 
+     * @param {LootTable} lootTable 
+     * @param {Random} rng 
+     */
+    constructor(name, description, rollTimes, lootTable, rng) {
+        super(name, description, () => {
+            return lootTable
+                .rollTimes(rollTimes, () => rng.next() )
+                .map(wrapper => wrapper.content)
+                .reduce( (prev,cur) => [...prev, ...cur],[]);
+        });
     }
 }

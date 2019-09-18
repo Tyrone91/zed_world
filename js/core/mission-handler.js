@@ -1,5 +1,5 @@
 import { SurvivorMission } from "../mission/survivor-mission.js";
-import { LootWrapper } from "../loot-system-v2/loot-wrapper.js";
+import { LootWrapper } from "../loot-system-v3/loot-wrapper.js";
 import { Survivor } from "./character/survivor.js";
 
 export class MissionHandler {
