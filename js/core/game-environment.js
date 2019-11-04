@@ -16,6 +16,7 @@ import { Services } from "./services.js";
 import { MissionHandler } from "./mission-handler.js";
 import { CharacterCreator } from "./character/charactor-creator.js";
 import { LootCollector } from "../loot-system-v3/loot-collector.js";
+import { CombatHandler } from "./combat-handler.js";
 
 export class GameEnvironment {
     constructor(){
@@ -64,6 +65,8 @@ export class GameEnvironment {
 
         this._characterCreator = new CharacterCreator(this._randomNumberGenerator);
 
+        this._combatHandler = new CombatHandler(this);
+
     }
 
     _updateMissions(){
@@ -92,6 +95,10 @@ export class GameEnvironment {
 
     get services() {
         return this._services;
+    }
+
+    get combatHandler() {
+        return this._combatHandler;
     }
 
     /**
