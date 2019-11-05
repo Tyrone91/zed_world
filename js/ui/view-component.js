@@ -7,39 +7,46 @@ export const DEFAULT_TEXT_RESOLVER = new TextResolver();
 
 export class ViewComponent {
 
-    constructor(id = "NO_ID_COMPONENT"){
+    constructor(id = "NO_ID_COMPONENT") {
         this._id = id;
         this._rootElement = $("<div>");
     }
 
-    get manager(){
+    get manager() {
         return CONTENT_MANAGER;
     }
 
-    get game(){
+    get game() {
         return ENVIRONMENT;
     }
 
-    get id(){
+    get id() {
         return this._id;
     }
 
-    clear(){
-        this._rootElement.empty();
-    }
-
-    rootElement(){
+    /**
+     * Like domElemet() without update
+     */
+    get element() {
         return this._rootElement;
     }
 
-    update(){}
+    clear() {
+        this._rootElement.empty();
+    }
 
-    domElement(){
+    rootElement() {
+        return this._rootElement;
+    }
+
+    update() { }
+
+    domElement() {
         this.update();
         return this.rootElement();
     }
 
-    resolve(key){
+    resolve(key) {
         return DEFAULT_TEXT_RESOLVER.resolve(key);
     }
 
@@ -48,7 +55,7 @@ export class ViewComponent {
      * @param {string} path 
      * @param {string} key 
      */
-    resolveImg(path, key){
+    resolveImg(path, key) {
         const img = new Image();
         img.src = "data/images/" + path + "/" + key;
         return img;
